@@ -6,10 +6,17 @@
  */
 
 import React from 'react';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import {RootNav} from './src/navigation';
 
 function App(): JSX.Element {
-  return <SafeAreaProvider></SafeAreaProvider>;
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView style={{flex: 1}}>
+        <RootNav />
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
 }
 
 export default App;
