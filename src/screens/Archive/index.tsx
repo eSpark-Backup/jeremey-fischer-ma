@@ -3,8 +3,8 @@ import {StyleSheet, Text, View} from 'react-native';
 
 export default function App() {
   return (
-    <View>
-      <Text>index</Text>
+    <View style={{flex: 1}}>
+      <Text>Archive</Text>
     </View>
   );
 }

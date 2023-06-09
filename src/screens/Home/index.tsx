@@ -5,8 +5,8 @@ import {ArchiveSvg} from '../../assets';
 
 export default function App() {
   return (
-    <View>
-      <Text style={{color: 'red'}}>index</Text>
+    <View style={{flex: 1}}>
+      <Text>Home</Text>
     </View>
   );
 }
