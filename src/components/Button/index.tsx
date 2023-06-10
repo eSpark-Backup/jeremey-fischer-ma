@@ -16,27 +16,30 @@ const Button = ({
   title = 'Title',
   disabled = false,
   icon = null,
+  onPress,
 }: {
   btnStyle?: ViewStyle;
   titleStyle?: TextStyle;
   title?: string;
   disabled?: boolean;
   icon?: React.ReactNode;
+  onPress?: () => void;
 }) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
+      onPress={onPress}
       disabled={disabled}
-      style={[styles.btnContainer, btnStyle, disabled && {opacity: 0.6}]}>
-      {icon && (
-        <>
-          {icon}
-          <GapView length={5} mode="horizontal" />
-        </>
-      )}
+      style={[
+        styles.btnContainer,
+        btnStyle,
+        disabled && {opacity: 0.6},
+        icon != null && {flexDirection: 'row', paddingHorizontal: 20},
+      ]}>
       <View>
         <Text style={[styles.titleStyle, titleStyle]}>{title}</Text>
       </View>
+      {icon && <>{icon}</>}
     </TouchableOpacity>
   );
 };
