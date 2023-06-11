@@ -13,7 +13,7 @@ export default function RootNav() {
   return (
     <NavigationContainer theme={MyTheme}>
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName="Tab"
         screenOptions={{headerShown: false}}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Tab" component={TabNav} />

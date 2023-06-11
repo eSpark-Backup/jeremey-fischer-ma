@@ -5,6 +5,7 @@ import {Icon, Avatar} from '@rneui/themed';
 
 import {Archive, Home, Profile} from '../screens';
 import {ArchiveOutlineSvg, ArchiveSvg} from '../assets';
+import {MyHeader} from '../components';
 
 export default function TabNav() {
   const Tab = createBottomTabNavigator();
@@ -20,7 +21,10 @@ export default function TabNav() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      screenOptions={{headerShown: false, tabBarShowLabel: false}}>
+      screenOptions={{
+        tabBarShowLabel: false,
+        header: ({route}) => <MyHeader route={route} />,
+      }}>
       <Tab.Screen
         name="Home"
         component={Home}

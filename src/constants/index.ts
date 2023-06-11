@@ -3,8 +3,31 @@ import {Dimensions} from 'react-native';
 const {width, height} = Dimensions.get('screen');
 export {width as SCREEN_WIDTH, height as SCREEN_HEIGHT};
 
-export const themeColor = {
-  primary: '#4B807F',
-  background: '#323031',
-  card: '#47494C',
+const date = new Date();
+
+export const fakeFeedData: FakeFeedType[] = [
+  {
+    id: 1,
+    title: '',
+    description: '',
+    seen: false,
+    imageURI: '',
+    senders: [
+      {id: 1, name: 'John Doe', imageURI: ''},
+      {id: 2, name: 'Adam Wish', imageURI: ''},
+    ],
+    timeStamp: date,
+    mediaType: 'Audio',
+  },
+];
+
+export type FakeFeedType = {
+  id: number;
+  title: string;
+  description: string;
+  seen: boolean;
+  imageURI: string;
+  senders: {id: number; name: string; imageURI: string}[];
+  timeStamp: Date;
+  mediaType: 'Audio' | 'Video' | 'Podcast' | 'Article';
 };
