@@ -6,16 +6,16 @@
  */
 
 import React from 'react';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {Login} from './src/screens';
 import {View, SafeAreaView} from 'react-native';
-import {themeColor} from './src/constants';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+
+import {RootNav} from './src/navigation';
 
 function App(): JSX.Element {
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{flex: 1, backgroundColor: themeColor.primary}}>
-        <Login />
+      <SafeAreaView style={{flex: 1}}>
+        <RootNav />
       </SafeAreaView>
     </SafeAreaProvider>
   );
