@@ -40,7 +40,7 @@ export default function App() {
           </MyText>
           <GapView mode="horizontal" />
           <Icon
-            name={Platform.OS == 'ios' ? 'logo-google' : 'logo-apple'}
+            name={Platform.OS == 'android' ? 'logo-google' : 'logo-apple'}
             type="ionicon"
             style={{opacity: 0.2}}
             color={colors.text}

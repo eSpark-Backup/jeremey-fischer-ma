@@ -3,9 +3,11 @@ import {StyleSheet, Text, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Icon, Avatar} from '@rneui/themed';
 
-import {Archive, Home, Profile} from '../screens';
+import {Archive, Profile} from '../screens';
 import {ArchiveOutlineSvg, ArchiveSvg} from '../assets';
 import {MyHeader} from '../components';
+
+import HomeNav from './HomeNav';
 
 export default function TabNav() {
   const Tab = createBottomTabNavigator();
@@ -26,9 +28,10 @@ export default function TabNav() {
         header: ({route}) => <MyHeader route={route} />,
       }}>
       <Tab.Screen
-        name="Home"
-        component={Home}
+        name="HomeNav"
+        component={HomeNav}
         options={{
+          headerShown: false,
           tabBarIcon: ({color, focused, size}) => (
             <Icon
               name={focused ? 'ios-home' : 'ios-home-outline'}
