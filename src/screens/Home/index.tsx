@@ -1,6 +1,13 @@
 import React from 'react';
-import {StyleSheet, Text, View, FlatList, Image} from 'react-native';
-import {useTheme} from '@react-navigation/native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import {useNavigation, useTheme} from '@react-navigation/native';
 import {Avatar} from '@rneui/themed';
 
 import {
@@ -12,6 +19,7 @@ import {
   OutlineBtn,
 } from '../../components';
 import {FakeFeedType, fakeFeedData} from '../../constants';
+import {HomeNavProps, NavProps} from '../../types';
 
 export default function App() {
   return (
@@ -23,6 +31,7 @@ export default function App() {
 
 const MyFeed = () => {
   const {colors} = useTheme();
+  const navigation = useNavigation<HomeNavProps['navigation']>();
   const renderFeedList = ({
     item,
     index,
@@ -41,7 +50,9 @@ const MyFeed = () => {
           -- today --
         </MyText>
         <MyCard>
-          <View style={{flexDirection: 'row', padding: 10}}>
+          <TouchableOpacity
+            style={{flexDirection: 'row', padding: 10}}
+            onPress={() => navigation.navigate('Details', {item})}>
             <View style={{alignSelf: 'flex-start', marginTop: 5}}>
               <Image
                 source={{uri: 'https://picsum.photos/300/200'}}
@@ -96,7 +107,7 @@ const MyFeed = () => {
               </View>
             </View>
             <Dot show={true} />
-          </View>
+          </TouchableOpacity>
         </MyCard>
       </View>
     );
