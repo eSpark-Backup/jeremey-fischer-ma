@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "213956113520",
+    "project_id": "seaglass-app",
+    "storage_bucket": "seaglass-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213956113520:android:1efa0d584c7c15429af0b5",
+        "android_client_info": {
+          "package_name": "com.seaglass"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "213956113520-gi05827o9el9uc20a946pp2juatpk8q1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1soTt6tnB1XvnKNQ50-YVe3jnBw3UVbU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "213956113520-gi05827o9el9uc20a946pp2juatpk8q1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "213956113520-i2nsdltmir2vm86ab75ahmu0idgnj1f7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.seaglass"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
