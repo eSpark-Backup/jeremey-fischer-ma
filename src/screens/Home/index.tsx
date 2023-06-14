@@ -20,6 +20,13 @@ import {
 } from '../../components';
 import {FakeFeedType, fakeFeedData} from '../../constants';
 import {HomeNavProps, NavProps} from '../../types';
+import {
+  acceptRequest,
+  getAllRequest,
+  rejectRequest,
+  sendRequest,
+} from '../../api/friendRequest.controller';
+import {getAllFreinds, searchUser} from '../../api/user.controller';
 
 export default function App() {
   return (
@@ -39,6 +46,30 @@ const MyFeed = () => {
     item: FakeFeedType;
     index: number;
   }) => {
+    // sendRequest({
+    //   senderId: '1686658135025',
+    //   receiverId: '1686658085577',
+    //   status: 'pending',
+    // }).then(res => {
+    //   console.log('all sendRequest', res);
+    // });
+
+    // getAllRequest('1686658085577').then(res => {
+    //   console.log('all requests', res);
+    // });
+
+    // searchUser('', '1686658135025', '1686658085577').then(res => {
+    //   console.log('all searchUser', res);
+    // });
+
+    // rejectRequest('HqAL0A4fDiG79oCwgtg9').then(res => {
+    //   console.log('all acceptRequest', res);
+    // });
+
+    getAllFreinds('1686658085577').then(res => {
+      console.log('all getAllFreinds', res);
+    });
+
     return (
       <View>
         <MyText
