@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, Platform} from 'react-native';
+import {StyleSheet, Text, View, Platform, Alert} from 'react-native';
 import {Avatar} from '@rneui/base';
 import {useNavigation, useTheme} from '@react-navigation/native';
 import {Divider, Icon} from '@rneui/themed';
@@ -7,10 +7,34 @@ import {Divider, Icon} from '@rneui/themed';
 import {GapView, MyCanvas, MyText, NormalBtn} from '../../components';
 import {SCREEN_WIDTH} from '../../constants';
 import {NavProps} from '../../types';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 export default function App() {
   const navigation = useNavigation<NavProps['navigation']>();
   const {colors} = useTheme();
+
+  const onLogout = () => {
+    Alert.alert('Hold on!', 'Are you sure you want to log out?', [
+      {
+        text: 'Cancel',
+        onPress: () => null,
+        style: 'cancel',
+      },
+      {text: 'YES', onPress: signOut},
+    ]);
+  };
+
+  const signOut = async () => {
+    try {
+      await GoogleSignin.signOut();
+      console.log('Success');
+      // setState({ user: null }); // Remember to remove the user from your app's state as well
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <MyCanvas style={{justifyContent: 'space-between'}}>
       <View style={{alignItems: 'center'}}>
@@ -62,7 +86,7 @@ export default function App() {
         <NormalBtn
           title="Log out Account"
           btnStyle={{justifyContent: 'space-between'}}
-          onPress={() => navigation.navigate('Login')}
+          onPress={onLogout}
           icon={<Icon name="log-out" type="feather" color={'#ffffff'} />}
         />
       </View>
