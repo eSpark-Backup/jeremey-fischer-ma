@@ -12,6 +12,11 @@ export type HomeStackParamList = {
   Details: {item: FakeFeedType};
 };
 
+export type ProfileStackParamList = {
+  Profile: undefined;
+  Settings: undefined;
+};
+
 export type NavProps = NativeStackScreenProps<RootStackParamList>;
 
 export type HomeNavProps = NativeStackScreenProps<HomeStackParamList>;
