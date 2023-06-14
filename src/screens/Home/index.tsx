@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,6 +6,7 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import {useNavigation, useTheme} from '@react-navigation/native';
 import {Avatar} from '@rneui/themed';
@@ -35,6 +36,13 @@ import {
 import {shareContentToGroup} from '../../api/content.controller';
 
 export default function App() {
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => true,
+    );
+    return () => backHandler.remove();
+  }, []);
   return (
     <MyCanvas>
       <MyFeed />

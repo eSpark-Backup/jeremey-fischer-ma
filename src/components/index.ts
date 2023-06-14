@@ -5,3 +5,4 @@ export {default as MyHeader} from './MyHeader';
 export {default as MyCanvas} from './MyCanvas';
 export {default as MyCard} from './MyCard';
 export {default as Dot} from './Dot';
+export {default as ScreenLoader} from './Dot';
