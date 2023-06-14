@@ -8,6 +8,7 @@ import {Icon} from '@rneui/themed';
 interface Props {
   route: RouteProp<ParamListBase>;
   icon?: boolean;
+  rightIcon?: React.ReactNode;
   onPressIcon?: () => void;
 }
 
@@ -27,6 +28,7 @@ export default function MyHeader(props: Props) {
         />
       )}
       <MyText textStyle={styles.text}>{props.route.name}</MyText>
+      {props?.rightIcon && props?.rightIcon}
     </View>
   );
 }
