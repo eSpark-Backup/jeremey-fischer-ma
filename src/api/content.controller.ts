@@ -1,6 +1,6 @@
-import {db} from '.';
-import {NewsFeed} from '../types';
-import {collections} from './constants';
+import { db } from '.';
+import { NewsFeed } from '../types';
+import { collections } from './constants';
 import firestore from '@react-native-firebase/firestore';
 
 /**
@@ -27,17 +27,17 @@ export const shareContentToGroup = async (
     await db()
       .collection(collections.contents)
       .doc(response.id)
-      .update({id: response.id});
+      .update({ id: response.id });
     await db()
       .collection(collections.groups)
       .doc(groupId)
       .update({
         contents: firestore.FieldValue.arrayUnion(response.id),
       });
-    return {data: null, message: 'Post Shared Successfully'};
+    return { data: null, message: 'Post Shared Successfully' };
   } catch (error) {
     console.log('error shareContentToGroup', error);
-    return {data: null, message: 'Something went wrong'};
+    return { data: null, message: 'Something went wrong' };
   }
 };
 
