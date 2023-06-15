@@ -26,20 +26,10 @@ export default function ProfileNav() {
           header: ({route, navigation}) => (
             <MyHeader
               route={route}
-              rightIcon={
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: 'flex-end',
-                  }}>
-                  <Icon
-                    name="ios-settings-outline"
-                    type="ionicon"
-                    color={colors.primary}
-                    onPress={() => navigation.navigate('Settings')}
-                  />
-                </View>
-              }
+              rightIcon
+              rightIconName='ios-settings-outline'
+              rightIconType='ionicon'
+              onPressRightIcon={() => navigation.navigate('Settings')}
             />
           ),
         }}
@@ -51,8 +41,8 @@ export default function ProfileNav() {
           header: ({route, navigation}) => (
             <MyHeader
               route={route}
-              icon={true}
-              onPressIcon={() => navigation.goBack()}
+              leftIcon={true}
+              onPressLeftIcon={() => navigation.goBack()}
             />
           ),
         }}

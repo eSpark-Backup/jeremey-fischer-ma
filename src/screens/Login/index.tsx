@@ -1,21 +1,18 @@
-import React, {useEffect} from 'react';
-import {View, Text, BackHandler} from 'react-native';
-import {useNavigation, useTheme} from '@react-navigation/native';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import React, { useEffect } from 'react';
+import { View, Text } from 'react-native';
+import { useNavigation, useTheme } from '@react-navigation/native';
+import { Icon } from '@rneui/themed';
+import { useHookstate, State } from '@hookstate/core';
 
-import {NormalBtn, GapView} from '../../components';
-import {Icon} from '@rneui/themed';
-import {NavProps} from '../../types';
+import { NormalBtn, GapView } from '../../components';
+import { NavProps } from '../../types';
+import { _signIn } from './utils/funtions';
+import store from '../../store/store';
+import { colors } from '../../theme';
 
 const Login = () => {
   const navigation = useNavigation<NavProps['navigation']>();
-  const {colors} = useTheme();
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId:
-        '323035731716-vcf0el7eebonhmpqj90nis6q8gl96rbi.apps.googleusercontent.com',
-    });
-  }, []);
+  const { screenLoading } = useHookstate(store);
 
   const _signIn = async () => {
     try {
@@ -37,17 +34,19 @@ const Login = () => {
         justifyContent: 'space-around',
       }}>
       <View>
-        <Text style={{color: '#fff', fontSize: 20}}>LOGO GOES HERE</Text>
+        <Text style={{ color: '#fff', fontSize: 20 }}>LOGO GOES HERE</Text>
       </View>
       <GapView length={50} />
       <View>
-        <Text style={{color: '#fff', fontSize: 20}}>Login to your account</Text>
+        <Text style={{ color: '#fff', fontSize: 20 }}>
+          Login to your account
+        </Text>
       </View>
       <GapView length={50} />
       <NormalBtn
         title="Login with Google"
-        btnStyle={{justifyContent: 'space-between'}}
-        onPress={_signIn}
+        btnStyle={{ justifyContent: 'space-between' }}
+        onPress={() => _signIn(navigation, screenLoading)}
         icon={<Icon name="logo-google" type="ionicon" color={'#ffffff'} />}
       />
     </View>
