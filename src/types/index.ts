@@ -10,6 +10,9 @@ export type RootStackParamList = {
 export type HomeStackParamList = {
   Home: undefined;
   Details: {item: FakeFeedType};
+  FriendsList: undefined;
+  GroupsList: undefined;
+  AddNewGroup: undefined;
 };
 
 export type NavProps = NativeStackScreenProps<RootStackParamList>;

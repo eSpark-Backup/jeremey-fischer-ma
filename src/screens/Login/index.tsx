@@ -1,14 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text} from 'react-native';
 import {useNavigation, useTheme} from '@react-navigation/native';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {Icon} from '@rneui/themed';
 
 import {NormalBtn, GapView} from '../../components';
-import {Icon} from '@rneui/themed';
 import {NavProps} from '../../types';
+import {_signIn} from './utils/funtions';
+// import {_signIn} from './utils/funtions';
 
 const Login = () => {
   const navigation = useNavigation<NavProps['navigation']>();
   const {colors} = useTheme();
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '213956113520-4e23h6t7tc4279r64t5r0vdrmt5j80va.apps.googleusercontent.com',
+    });
+  }, []);
 
   return (
     <View
@@ -29,7 +38,7 @@ const Login = () => {
       <NormalBtn
         title="Login with Google"
         btnStyle={{justifyContent: 'space-between'}}
-        onPress={() => navigation.navigate('Tab')}
+        onPress={() => _signIn(navigation)}
         icon={<Icon name="logo-google" type="ionicon" color={'#ffffff'} />}
       />
     </View>
