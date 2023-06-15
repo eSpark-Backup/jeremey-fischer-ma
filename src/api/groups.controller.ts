@@ -9,10 +9,18 @@ import {collections} from './constants';
  */
 export const createGroup = async (data: Group) => {
   try {
-    const response = (
-      await (await db().collection(collections.groups).add(data)).get()
-    ).data();
-    return {data: response, message: 'Group Created Successfully'};
+    const response = await (
+      await db()
+        .collection(collections.groups)
+        .add({...data, contents: []})
+    ).get();
+    await db().collection(collections.groups).doc(response.id).update({
+      id: response.id,
+    });
+    return {
+      data: {...response.data(), id: response.id},
+      message: 'Group Created Successfully',
+    };
   } catch (error) {
     return {data: null, message: 'Something went wrong'};
   }
@@ -39,6 +47,7 @@ export const getMyGroups = async (myUid: string) => {
       response.forEach(async res => {
         const data: any = res.data();
         const Members: any[] = [];
+        const contents: any[] = [];
         let groupCreator = null;
 
         const membersPromise = db()
@@ -51,6 +60,22 @@ export const getMyGroups = async (myUid: string) => {
             });
           });
 
+        const contentPromise = db()
+          .collection(collections.contents)
+          .where(
+            'id',
+            'in',
+            Boolean(data?.contents?.length) ? data?.contents : [''],
+          )
+          .get()
+          .then(contentSnapshot => {
+            if (!contentSnapshot.empty) {
+              contentSnapshot.forEach(content => {
+                contents.push(content.data());
+              });
+            }
+          });
+
         const groupCreatorPromise = db()
           .collection(collections.users)
           .where('uid', '==', data?.groupCreatorId)
@@ -61,12 +86,17 @@ export const getMyGroups = async (myUid: string) => {
             });
           });
 
-        promises.push(membersPromise, groupCreatorPromise);
+        promises.push(membersPromise, groupCreatorPromise, contentPromise);
 
-        await Promise.all([membersPromise, groupCreatorPromise]);
+        await Promise.all([
+          membersPromise,
+          groupCreatorPromise,
+          contentPromise,
+        ]);
 
         data.Members = Members;
         data.groupCreator = groupCreator;
+        data.contents = contents;
         groups.push(data);
       });
 
@@ -75,6 +105,90 @@ export const getMyGroups = async (myUid: string) => {
     }
   } catch (error) {
     console.log('error getAllGroups', error);
+    return {data: null, message: 'Something went wrong'};
+  }
+};
+
+/**
+ * Get Groups of specific user
+ * @param {groupId} groupId - `groupId` for retriving group
+ * @returns {Group} `Group` - return the required group.
+ */
+export const getGroupById = async (groupId: string) => {
+  try {
+    const response = await db()
+      .collection(collections.groups)
+      .where('id', '==', groupId)
+      .get();
+
+    if (response.empty) {
+      return {data: null, message: 'You have not add in any group'};
+    } else {
+      const promises: Promise<void>[] = [];
+      const groups: Group[] = [];
+      response.forEach(async res => {
+        const data: any = res.data();
+        const Members: any[] = [];
+        const contents: any[] = [];
+        let groupCreator = null;
+
+        const membersPromise = db()
+          .collection(collections.users)
+          .where('uid', 'in', data?.Members)
+          .get()
+          .then(memberSnapshot => {
+            memberSnapshot.forEach(member => {
+              Members.push(member.data());
+            });
+          });
+
+        console.log('data?.contents', data?.contents);
+
+        const contentPromise = db()
+          .collection(collections.contents)
+          .where(
+            'id',
+            'in',
+            Boolean(data?.contents?.length) ? data?.contents : [''],
+          )
+          .get()
+          .then(contentSnapshot => {
+            if (!contentSnapshot.empty) {
+              contentSnapshot.forEach(content => {
+                contents.push(content.data());
+              });
+            }
+          });
+
+        const groupCreatorPromise = db()
+          .collection(collections.users)
+          .where('uid', '==', data?.groupCreatorId)
+          .get()
+          .then(gcSnapshot => {
+            gcSnapshot.forEach(gc => {
+              groupCreator = gc.data();
+            });
+          });
+
+        promises.push(membersPromise, groupCreatorPromise, contentPromise);
+
+        await Promise.all([
+          membersPromise,
+          groupCreatorPromise,
+          contentPromise,
+        ]);
+
+        data.Members = Members;
+        data.groupCreator = groupCreator;
+        data.contents = contents;
+        groups.push(data);
+      });
+
+      await Promise.all(promises);
+      return {data: groups?.[0], message: 'Required Group'};
+    }
+  } catch (error) {
+    console.log('error getGroupById', error);
     return {data: null, message: 'Something went wrong'};
   }
 };

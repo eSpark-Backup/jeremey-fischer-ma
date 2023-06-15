@@ -27,7 +27,12 @@ import {
   sendRequest,
 } from '../../api/friendRequest.controller';
 import {getAllFreinds, searchUser} from '../../api/user.controller';
-import {createGroup, getMyGroups} from '../../api/groups.controller';
+import {
+  createGroup,
+  getGroupById,
+  getMyGroups,
+} from '../../api/groups.controller';
+import {shareContentToGroup} from '../../api/content.controller';
 
 export default function App() {
   return (
@@ -73,12 +78,18 @@ const MyFeed = () => {
 
     // createGroup({
     //   groupCreatorId: '89372jfgsda823',
-    //   groupName: 'Second Group',
+    //   groupName: 'First Group',
     //   Members: ['1686658085577', '89372jfgsda823'],
+    // }).then(res => {
+    //   console.log('all createGroup', res);
     // });
 
-    getMyGroups('1686658085577').then(res => {
-      console.log('all getMyGroups', res);
+    // getMyGroups('1686658085577').then(res => {
+    //   console.log('all getMyGroups', res);
+    // });
+
+    getGroupById('5gz5N3CCtfgTGlZgJ08q').then(res => {
+      console.log('all shareContentToGroup', JSON.stringify(res));
     });
 
     return (
