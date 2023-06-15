@@ -21,7 +21,7 @@ export default function FriendsList() {
       <SubHeader title="Friend Requests" />
       <CommunityCard
         name="John"
-        details="7 Friends"
+        details="john@email.com"
         image="https://randomuser.me/api/portraits/men/22.jpg"
         requestBtn={true}
       />
@@ -29,13 +29,13 @@ export default function FriendsList() {
       <ScrollView>
         <CommunityCard
           name="John"
-          details="7 Friends"
+          details="john@email.com"
           image="https://randomuser.me/api/portraits/men/22.jpg"
           addBtn={true}
         />
         <CommunityCard
           name="John"
-          details="7 Friends"
+          details="john@email.com"
           image="https://randomuser.me/api/portraits/men/22.jpg"
         />
       </ScrollView>

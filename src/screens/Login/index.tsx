@@ -1,23 +1,18 @@
-import React, {useEffect} from 'react';
-import {View, Text} from 'react-native';
-import {useNavigation, useTheme} from '@react-navigation/native';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {Icon} from '@rneui/themed';
+import React, { useEffect } from 'react';
+import { View, Text } from 'react-native';
+import { useNavigation, useTheme } from '@react-navigation/native';
+import { Icon } from '@rneui/themed';
+import { useHookstate, State } from '@hookstate/core';
 
-import {NormalBtn, GapView} from '../../components';
-import {NavProps} from '../../types';
-import {_signIn} from './utils/funtions';
-// import {_signIn} from './utils/funtions';
+import { NormalBtn, GapView } from '../../components';
+import { NavProps } from '../../types';
+import { _signIn } from './utils/funtions';
+import store from '../../store/store';
+import { colors } from '../../theme';
 
 const Login = () => {
   const navigation = useNavigation<NavProps['navigation']>();
-  const {colors} = useTheme();
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId:
-        '213956113520-4e23h6t7tc4279r64t5r0vdrmt5j80va.apps.googleusercontent.com',
-    });
-  }, []);
+  const { screenLoading } = useHookstate(store);
 
   return (
     <View
@@ -28,17 +23,19 @@ const Login = () => {
         justifyContent: 'space-around',
       }}>
       <View>
-        <Text style={{color: '#fff', fontSize: 20}}>LOGO GOES HERE</Text>
+        <Text style={{ color: '#fff', fontSize: 20 }}>LOGO GOES HERE</Text>
       </View>
       <GapView length={50} />
       <View>
-        <Text style={{color: '#fff', fontSize: 20}}>Login to your account</Text>
+        <Text style={{ color: '#fff', fontSize: 20 }}>
+          Login to your account
+        </Text>
       </View>
       <GapView length={50} />
       <NormalBtn
         title="Login with Google"
-        btnStyle={{justifyContent: 'space-between'}}
-        onPress={() => _signIn(navigation)}
+        btnStyle={{ justifyContent: 'space-between' }}
+        onPress={() => _signIn(navigation, screenLoading)}
         icon={<Icon name="logo-google" type="ionicon" color={'#ffffff'} />}
       />
     </View>
