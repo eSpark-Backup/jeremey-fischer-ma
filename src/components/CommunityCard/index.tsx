@@ -1,0 +1,133 @@
+import React, {useState} from 'react';
+import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
+import {Avatar, CheckBox, Icon} from '@rneui/themed';
+
+import {colors} from '../../theme';
+import MyText from '../MyText';
+import {OutlineBtn} from '../Button';
+
+export default function CommunityCard({
+  name,
+  details,
+  image,
+  requestBtn,
+  addBtn,
+  checkbox,
+  group,
+}: {
+  name: string;
+  details: string;
+  image: string;
+  requestBtn?: boolean;
+  addBtn?: boolean;
+  checkbox?: boolean;
+  group?: boolean;
+}) {
+  const [check, setcheck] = useState(false);
+  return (
+    <TouchableOpacity style={styles.container}>
+      <View style={styles.row}>
+        <Avatar
+          rounded
+          containerStyle={{
+            borderWidth: 2,
+            borderColor: colors.primary,
+          }}
+          size={'medium'}
+          source={{uri: image}}
+        />
+        <View style={styles.contentContainer}>
+          <MyText children={name} textStyle={{fontSize: 16}} />
+          <MyText children={details} />
+        </View>
+      </View>
+      {requestBtn && (
+        <View style={styles.row}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={{...styles.requestBtns, borderColor: colors.danger}}>
+            <Icon name="close" color={colors.danger} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={{...styles.requestBtns, borderColor: colors.primary}}>
+            <Icon name="check" color={colors.primary} />
+          </TouchableOpacity>
+        </View>
+      )}
+      {addBtn && <OutlineBtn title="Add" btnStyle={styles.addBtn} />}
+      {checkbox && (
+        <View
+          style={{flexDirection: 'row', alignItems: 'center', marginRight: 10}}>
+          <CheckBox
+            checked={check}
+            size={30}
+            onPress={() => setcheck(!check)}
+            iconType="material-community"
+            checkedIcon="checkbox-outline"
+            uncheckedIcon={'checkbox-blank-outline'}
+            checkedColor={colors.primary}
+            uncheckedColor={colors.primary}
+            containerStyle={{
+              padding: 0,
+              backgroundColor: 'transparent',
+            }}
+          />
+          <MyText children="Add" />
+        </View>
+      )}
+      {group && (
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <Avatar
+            rounded
+            containerStyle={{
+              borderWidth: 2,
+            }}
+            source={{uri: 'https://randomuser.me/api/portraits/men/22.jpg'}}
+          />
+          <Avatar
+            rounded
+            containerStyle={{
+              borderWidth: 2,
+              right: 5,
+            }}
+            source={{uri: 'https://randomuser.me/api/portraits/men/21.jpg'}}
+          />
+          <Avatar
+            rounded
+            containerStyle={{
+              borderWidth: 2,
+              right: 10,
+            }}
+            source={{uri: 'https://randomuser.me/api/portraits/men/29.jpg'}}
+          />
+          <MyText textStyle={{right: 10}} children="+ 2" />
+        </View>
+      )}
+    </TouchableOpacity>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    width: '95%',
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
+    marginVertical: 5,
+    borderRadius: 10,
+    backgroundColor: colors.card,
+  },
+  row: {flexDirection: 'row'},
+  contentContainer: {marginLeft: 10, justifyContent: 'center'},
+  requestBtns: {marginRight: 10, padding: 5, borderRadius: 5, borderWidth: 1},
+  addBtn: {
+    marginRight: 10,
+  },
+});

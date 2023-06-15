@@ -1,34 +1,50 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {ParamListBase, RouteProp, useTheme} from '@react-navigation/native';
+import { StyleSheet, View } from 'react-native';
+import { ParamListBase, RouteProp, useTheme } from '@react-navigation/native';
 
 import MyText from '../MyText';
-import {Icon} from '@rneui/themed';
+import { Icon } from '@rneui/themed';
 
 interface Props {
   route: RouteProp<ParamListBase>;
-  icon?: boolean;
-  rightIcon?: React.ReactNode;
-  onPressIcon?: () => void;
+  title?: string;
+  leftIcon?: boolean;
+  rightIcon?: boolean;
+  leftIconName?: string;
+  rightIconName?: string;
+  leftIconType?: string;
+  rightIconType?: string;
+  onPressLeftIcon?: () => void;
+  onPressRightIcon?: () => void;
 }
 
 export default function MyHeader(props: Props) {
-  console.log('props', props);
-  const {colors} = useTheme();
+  const { colors } = useTheme();
 
   return (
     <View style={styles.container}>
-      {props?.icon && (
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        {props?.leftIcon && (
+          <Icon
+            name={props?.leftIconName ? props?.leftIconName : 'arrow-back'}
+            type={props?.leftIconType ? props?.leftIconType : 'ionicon'}
+            color={colors.primary}
+            onPress={props?.onPressLeftIcon}
+            style={{ marginRight: 10 }}
+          />
+        )}
+        <MyText textStyle={styles.text}>
+          {props.title ?? props.route.name}
+        </MyText>
+      </View>
+      {props?.rightIcon && (
         <Icon
-          name="arrow-back"
-          type="ionicon"
+          name={props?.rightIconName ? props?.rightIconName : 'arrow-back'}
+          type={props?.rightIconType ? props?.rightIconType : 'ionicon'}
           color={colors.primary}
-          onPress={props?.onPressIcon}
-          style={{marginRight: 10}}
+          onPress={props?.onPressRightIcon}
         />
       )}
-      <MyText textStyle={styles.text}>{props.route.name}</MyText>
-      {props?.rightIcon && props?.rightIcon}
     </View>
   );
 }
@@ -38,6 +54,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 20,
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   text: {
     fontSize: 32,

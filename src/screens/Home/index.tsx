@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,6 +6,7 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import {useNavigation, useTheme} from '@react-navigation/native';
 import {Avatar} from '@rneui/themed';
@@ -20,8 +21,12 @@ import {
 } from '../../components';
 import {FakeFeedType, fakeFeedData} from '../../constants';
 import {HomeNavProps, NavProps} from '../../types';
+import {disableBackButton} from '../../utils';
 
 export default function App() {
+  useEffect(() => {
+    disableBackButton();
+  }, []);
   return (
     <MyCanvas>
       <MyFeed />
