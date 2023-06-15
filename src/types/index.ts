@@ -42,7 +42,7 @@ export type FriendRequest = {
 export type Content = {
   id?: string; // DocId
   contentId: string;
-  mediaType: string;
+  mediaType: 'Audio' | 'Video' | 'Podcast' | 'Article';
   createdAt: string;
   title: string;
   image: string;

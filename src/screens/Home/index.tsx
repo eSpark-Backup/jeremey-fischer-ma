@@ -27,6 +27,7 @@ import {
   sendRequest,
 } from '../../api/friendRequest.controller';
 import {getAllFreinds, searchUser} from '../../api/user.controller';
+import {createGroup, getMyGroups} from '../../api/groups.controller';
 
 export default function App() {
   return (
@@ -66,8 +67,18 @@ const MyFeed = () => {
     //   console.log('all acceptRequest', res);
     // });
 
-    getAllFreinds('1686658085577').then(res => {
-      console.log('all getAllFreinds', res);
+    // getAllFreinds('1686658085577').then(res => {
+    //   console.log('all getAllFreinds', res);
+    // });
+
+    // createGroup({
+    //   groupCreatorId: '89372jfgsda823',
+    //   groupName: 'Second Group',
+    //   Members: ['1686658085577', '89372jfgsda823'],
+    // });
+
+    getMyGroups('1686658085577').then(res => {
+      console.log('all getMyGroups', res);
     });
 
     return (

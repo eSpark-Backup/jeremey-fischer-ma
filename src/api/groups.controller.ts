@@ -2,6 +2,11 @@ import {db} from '.';
 import {FriendRequest, Group, User} from '../types';
 import {collections} from './constants';
 
+/**
+ * Create Group with members
+ * @param {Group} Group - Must Include *groupCreatorId* also in members array.
+ * @returns {Group} return the create `Group` object if it successfully.
+ */
 export const createGroup = async (data: Group) => {
   try {
     const response = (
@@ -13,6 +18,11 @@ export const createGroup = async (data: Group) => {
   }
 };
 
+/**
+ * Get Groups of specific user
+ * @param {myUid} myUid - Send UID of a current user or a user which groups you need to fetch
+ * @returns {Group[]} `Group[]` - return all groups of that user.
+ */
 export const getMyGroups = async (myUid: string) => {
   try {
     const groups: Group[] = [];
@@ -22,34 +32,45 @@ export const getMyGroups = async (myUid: string) => {
       .get();
 
     if (response.empty) {
-      return {data: null, message: 'Something went wrong'};
+      return {data: null, message: 'You have not add in any group'};
     } else {
+      const promises: Promise<void>[] = [];
+
       response.forEach(async res => {
         const data: any = res.data();
-        var Members: any = [];
-        var groupCreator = null;
+        const Members: any[] = [];
+        let groupCreator = null;
 
-        (
-          await db()
-            .collection(collections.users)
-            .where('uid', 'in', data?.Members)
-            .get()
-        ).forEach(member => {
-          Members.push(member.data());
-        });
+        const membersPromise = db()
+          .collection(collections.users)
+          .where('uid', 'in', data?.Members)
+          .get()
+          .then(memberSnapshot => {
+            memberSnapshot.forEach(member => {
+              Members.push(member.data());
+            });
+          });
 
-        (
-          await db()
-            .collection(collections.users)
-            .where('uid', '==', data?.groupCreatorId)
-            .get()
-        ).forEach(gc => {
-          groupCreator = gc.data();
-        });
+        const groupCreatorPromise = db()
+          .collection(collections.users)
+          .where('uid', '==', data?.groupCreatorId)
+          .get()
+          .then(gcSnapshot => {
+            gcSnapshot.forEach(gc => {
+              groupCreator = gc.data();
+            });
+          });
+
+        promises.push(membersPromise, groupCreatorPromise);
+
+        await Promise.all([membersPromise, groupCreatorPromise]);
+
         data.Members = Members;
         data.groupCreator = groupCreator;
         groups.push(data);
       });
+
+      await Promise.all(promises);
       return {data: groups, message: 'All Groups'};
     }
   } catch (error) {
