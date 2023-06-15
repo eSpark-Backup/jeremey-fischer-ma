@@ -5,6 +5,7 @@ export const colors = {
   text: 'rgb(255, 255, 255)',
   border: 'rgb(75, 128, 127)',
   notification: 'rgb(255, 69, 58)',
+  danger: 'rgb(220,53,69)',
 };
 
 export const MyTheme = {

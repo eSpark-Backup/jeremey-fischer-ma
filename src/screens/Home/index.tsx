@@ -21,14 +21,11 @@ import {
 } from '../../components';
 import {FakeFeedType, fakeFeedData} from '../../constants';
 import {HomeNavProps, NavProps} from '../../types';
+import {disableBackButton} from '../../utils';
 
 export default function App() {
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => true,
-    );
-    return () => backHandler.remove();
+    disableBackButton();
   }, []);
   return (
     <MyCanvas>

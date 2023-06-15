@@ -1,42 +1,50 @@
 {
   "project_info": {
-    "project_number": "323035731716",
-    "project_id": "seaglass-oauth",
-    "storage_bucket": "seaglass-oauth.appspot.com"
+    "project_number": "213956113520",
+    "firebase_url": "https://seaglass-app-default-rtdb.firebaseio.com",
+    "project_id": "seaglass-app",
+    "storage_bucket": "seaglass-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:323035731716:android:99a1d354d7acdabab36251",
+        "mobilesdk_app_id": "1:213956113520:android:1efa0d584c7c15429af0b5",
         "android_client_info": {
           "package_name": "com.seaglass"
         }
       },
       "oauth_client": [
         {
-          "client_id": "323035731716-pguvnuc1gh3rnb400n7f4gs0iomtglng.apps.googleusercontent.com",
+          "client_id": "213956113520-e656fue1ibpmhb2lh3deqg1nlol7pqoh.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.seaglass",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+            "certificate_hash": "0ca857136ae24651f27e9ce5d8e9bc043d0b6340"
           }
         },
         {
-          "client_id": "323035731716-6kc2glfijqa3ms21rp9m7ar3i438ksck.apps.googleusercontent.com",
+          "client_id": "213956113520-4e23h6t7tc4279r64t5r0vdrmt5j80va.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCtUjIygznEmlVTAz4Va2q4eLr5WGEkckc"
+          "current_key": "AIzaSyD1soTt6tnB1XvnKNQ50-YVe3jnBw3UVbU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "323035731716-6kc2glfijqa3ms21rp9m7ar3i438ksck.apps.googleusercontent.com",
+              "client_id": "213956113520-4e23h6t7tc4279r64t5r0vdrmt5j80va.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "213956113520-i2nsdltmir2vm86ab75ahmu0idgnj1f7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.seaglass"
+              }
             }
           ]
         }

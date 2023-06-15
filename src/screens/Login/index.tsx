@@ -1,11 +1,13 @@
 import React, {useEffect} from 'react';
-import {View, Text, BackHandler} from 'react-native';
+import {View, Text} from 'react-native';
 import {useNavigation, useTheme} from '@react-navigation/native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {Icon} from '@rneui/themed';
 
 import {NormalBtn, GapView} from '../../components';
-import {Icon} from '@rneui/themed';
 import {NavProps} from '../../types';
+import {_signIn} from './utils/funtions';
+// import {_signIn} from './utils/funtions';
 
 const Login = () => {
   const navigation = useNavigation<NavProps['navigation']>();
@@ -13,20 +15,9 @@ const Login = () => {
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
-        '323035731716-vcf0el7eebonhmpqj90nis6q8gl96rbi.apps.googleusercontent.com',
+        '213956113520-4e23h6t7tc4279r64t5r0vdrmt5j80va.apps.googleusercontent.com',
     });
   }, []);
-
-  const _signIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      console.log('UserInfo', userInfo);
-      navigation.navigate('Tab');
-    } catch (error: any) {
-      console.error(error);
-    }
-  };
 
   return (
     <View
@@ -47,7 +38,7 @@ const Login = () => {
       <NormalBtn
         title="Login with Google"
         btnStyle={{justifyContent: 'space-between'}}
-        onPress={_signIn}
+        onPress={() => _signIn(navigation)}
         icon={<Icon name="logo-google" type="ionicon" color={'#ffffff'} />}
       />
     </View>
