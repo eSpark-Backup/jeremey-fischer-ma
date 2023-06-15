@@ -1,13 +1,13 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {ParamListBase, RouteProp, useTheme} from '@react-navigation/native';
+import { StyleSheet, View } from 'react-native';
+import { ParamListBase, RouteProp, useTheme } from '@react-navigation/native';
 
 import MyText from '../MyText';
-import {Icon} from '@rneui/themed';
+import { Icon } from '@rneui/themed';
 
 interface Props {
   route: RouteProp<ParamListBase>;
-  title?: string,
+  title?: string;
   leftIcon?: boolean;
   rightIcon?: boolean;
   leftIconName?: string;
@@ -19,21 +19,23 @@ interface Props {
 }
 
 export default function MyHeader(props: Props) {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
 
   return (
     <View style={styles.container}>
-      <View style={{flexDirection: 'row', alignItems: 'center'}} >
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         {props?.leftIcon && (
           <Icon
             name={props?.leftIconName ? props?.leftIconName : 'arrow-back'}
             type={props?.leftIconType ? props?.leftIconType : 'ionicon'}
             color={colors.primary}
             onPress={props?.onPressLeftIcon}
-            style={{marginRight: 10}}
+            style={{ marginRight: 10 }}
           />
         )}
-        <MyText textStyle={styles.text}>{props.title ?? props.route.name}</MyText>
+        <MyText textStyle={styles.text}>
+          {props.title ?? props.route.name}
+        </MyText>
       </View>
       {props?.rightIcon && (
         <Icon

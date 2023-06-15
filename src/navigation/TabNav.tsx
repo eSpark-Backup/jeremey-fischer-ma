@@ -1,16 +1,19 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet} from 'react-native';
+import {useTheme} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Icon, Avatar} from '@rneui/themed';
 
-import {Archive, Profile} from '../screens';
+import {Archive} from '../screens';
 import {ArchiveOutlineSvg, ArchiveSvg} from '../assets';
 import {MyHeader} from '../components';
 
 import HomeNav from './HomeNav';
+import ProfileNav from './ProfileNav';
 
 export default function TabNav() {
   const Tab = createBottomTabNavigator();
+  const {colors} = useTheme();
 
   const renderArchive = (focused: boolean, color: string) => {
     return focused ? (
@@ -22,7 +25,7 @@ export default function TabNav() {
 
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="HomeNav"
       screenOptions={{
         tabBarShowLabel: false,
         header: ({route}) => <MyHeader route={route} />,
@@ -52,9 +55,10 @@ export default function TabNav() {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="ProfileNav"
+        component={ProfileNav}
         options={{
+          headerShown: false,
           tabBarIcon: ({color, focused, size}) => {
             return (
               <Avatar

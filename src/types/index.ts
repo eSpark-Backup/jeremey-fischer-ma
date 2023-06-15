@@ -1,18 +1,24 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import {FakeFeedType} from '../constants';
+import { FakeFeedType } from '../constants';
 
 export type RootStackParamList = {
   Login: undefined;
   Tab: undefined;
+  Share: undefined;
 };
 
 export type HomeStackParamList = {
   Home: undefined;
-  Details: {item: FakeFeedType};
+  Details: { item: FakeFeedType };
   FriendsList: undefined;
   GroupsList: undefined;
   AddNewGroup: undefined;
+};
+
+export type ProfileStackParamList = {
+  Profile: undefined;
+  Settings: undefined;
 };
 
 export type NavProps = NativeStackScreenProps<RootStackParamList>;

@@ -5,16 +5,39 @@
  * @format
  */
 
-import React from 'react';
-import {View, SafeAreaView} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import React, { useCallback, useEffect } from 'react';
+import { SafeAreaView, Linking } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import {RootNav} from './src/navigation';
+// @ts-ignore
+import ShareMenu from 'react-native-share-menu';
+import { RootNav } from './src/navigation';
 
 function App(): JSX.Element {
+  useEffect(() => {
+    ShareMenu.getInitialShare(handleShare);
+  }, []);
+
+  useEffect(() => {
+    const listener = ShareMenu.addNewShareListener(handleShare);
+
+    return () => {
+      listener.remove();
+    };
+  }, []);
+
+  const handleShare = useCallback((item?: any) => {
+    if (!item) {
+      return;
+    }
+    Linking.openURL('seaglass://share');
+    // You can receive extra data from your custom Share View
+    console.log(item);
+  }, []);
+
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{ flex: 1 }}>
         <RootNav />
       </SafeAreaView>
     </SafeAreaProvider>
