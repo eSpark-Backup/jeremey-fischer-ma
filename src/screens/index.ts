@@ -6,3 +6,4 @@ export { default as Share } from './Share';
 export { default as FriendsList } from './Home/Community/FriendsList';
 export { default as GroupsList } from './Home/Community/GroupsList';
 export { default as AddNewGroup } from './Home/Community/AddNewGroup';
+export { default as GroupDetails } from './Home/Community/GroupDetails';
