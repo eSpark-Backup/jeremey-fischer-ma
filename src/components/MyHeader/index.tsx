@@ -4,6 +4,7 @@ import { ParamListBase, RouteProp, useTheme } from '@react-navigation/native';
 
 import MyText from '../MyText';
 import { Icon } from '@rneui/themed';
+import { colors } from '../../theme';
 
 interface Props {
   route: RouteProp<ParamListBase>;
@@ -51,6 +52,7 @@ export default function MyHeader(props: Props) {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: colors.background,
     flexDirection: 'row',
     padding: 20,
     alignItems: 'center',

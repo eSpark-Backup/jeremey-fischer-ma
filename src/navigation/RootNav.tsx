@@ -6,6 +6,7 @@ import TabNav from './TabNav';
 import { MyTheme } from '../theme';
 import { Login, Share } from '../screens';
 import { RootStackParamList } from '../types';
+import { MyHeader } from '../components';
 
 const linking: LinkingOptions<RootStackParamList> = {
   prefixes: ['seaglass://'], // Specify the custom URL scheme for your app
@@ -20,12 +21,33 @@ export default function RootNav() {
   const Stack = createNativeStackNavigator<RootStackParamList>();
   return (
     <NavigationContainer linking={linking} theme={MyTheme}>
-      <Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Tab" component={TabNav} />
-        <Stack.Screen name="Share" component={Share} options={{}} />
+      <Stack.Navigator initialRouteName="Share">
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Tab"
+          component={TabNav}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Share"
+          component={Share}
+          options={{
+            header: ({ route, navigation }) => (
+              <MyHeader
+                route={route}
+                title="New Share"
+                leftIcon
+                onPressLeftIcon={() => navigation.navigate('Tab')}
+                leftIconName="close"
+                leftIconType="ionicon"
+              />
+            ),
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

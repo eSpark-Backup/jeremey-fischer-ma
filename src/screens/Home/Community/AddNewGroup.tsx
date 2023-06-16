@@ -1,10 +1,10 @@
 import React from 'react';
-import {StyleSheet, Text, View, TextInput, ScrollView} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {Icon} from '@rneui/themed';
+import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Icon } from '@rneui/themed';
 
-import {HomeNavProps} from '../../../types';
-import {colors} from '../../../theme';
+import { HomeNavProps } from '../../../types';
+import { colors } from '../../../theme';
 import {
   CommunityCard,
   GapView,
@@ -18,7 +18,7 @@ export default function AddNewGroup() {
   const navigation = useNavigation<HomeNavProps['navigation']>();
   return (
     <MyCanvas>
-      <View style={{alignSelf: 'center', width: '95%'}}>
+      <View style={{ alignSelf: 'center', width: '95%' }}>
         <MyText children="Enter Group Name" />
         <GapView />
         <TextInput
@@ -34,12 +34,15 @@ export default function AddNewGroup() {
         />
       </View>
       <GapView length={30} />
-      <View style={{alignSelf: 'center', width: '100%'}}>
-        <MyText children="Add Friends to Group" textStyle={{marginLeft: 20}} />
+      <View style={{ alignSelf: 'center', width: '100%' }}>
+        <MyText
+          children="Add Friends to Group"
+          textStyle={{ marginLeft: 20 }}
+        />
         <GapView />
         <SearchBar placeholder="Seach by email" />
       </View>
-      <ScrollView  style={{flex: 1}} >
+      <ScrollView style={{ flex: 1 }}>
         <CommunityCard
           name="John"
           details="7 Friends"
@@ -61,7 +64,7 @@ export default function AddNewGroup() {
       </ScrollView>
       <GapView length={20} />
       <NormalBtn
-        title="Add Group"
+        title="Create Group"
         btnStyle={{
           justifyContent: 'space-between',
           alignSelf: 'center',
