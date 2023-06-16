@@ -11,6 +11,10 @@ export type RootStackParamList = {
 export type HomeStackParamList = {
   Home: undefined;
   Details: { item: FakeFeedType };
+  FriendsList: undefined;
+  GroupsList: undefined;
+  GroupDetails: { title: string };
+  AddNewGroup: undefined;
 };
 
 export type ProfileStackParamList = {

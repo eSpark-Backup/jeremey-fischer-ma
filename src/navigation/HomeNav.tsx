@@ -1,10 +1,16 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import {Home} from '../screens';
+import {
+  AddNewGroup,
+  FriendsList,
+  GroupDetails,
+  GroupsList,
+  Home,
+} from '../screens';
 import Details from '../screens/Home/Details';
-import {HomeNavProps, HomeStackParamList} from '../types';
-import {MyHeader} from '../components';
+import { HomeStackParamList } from '../types';
+import { MyHeader } from '../components';
 
 export default function HomeNav() {
   const Stack = createNativeStackNavigator<HomeStackParamList>();
@@ -12,18 +18,86 @@ export default function HomeNav() {
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{
-        header: ({route}) => <MyHeader route={route} />,
+        header: ({ route, navigation }) => (
+          <MyHeader
+            route={route}
+            rightIcon={true}
+            rightIconType={'font-awesome-5'}
+            rightIconName="users"
+            onPressRightIcon={() => navigation.navigate('FriendsList')}
+          />
+        ),
       }}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen
         name="Details"
         component={Details}
         options={{
-          header: ({route, navigation}) => (
+          header: ({ route, navigation }) => (
             <MyHeader
               route={route}
-              icon={true}
-              onPressIcon={() => navigation.goBack()}
+              leftIcon={true}
+              onPressLeftIcon={() => navigation.goBack()}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="FriendsList"
+        component={FriendsList}
+        options={{
+          title: 'Friends List',
+          header: ({ route, navigation, options }) => (
+            <MyHeader
+              route={route}
+              title={options.title}
+              leftIcon={true}
+              onPressLeftIcon={() => navigation.navigate('Home')}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="GroupsList"
+        component={GroupsList}
+        options={{
+          title: 'Groups List',
+          header: ({ route, navigation, options }) => (
+            <MyHeader
+              route={route}
+              title={options.title}
+              leftIcon={true}
+              onPressLeftIcon={() => navigation.navigate('Home')}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="GroupDetails"
+        component={GroupDetails}
+        options={({ route }) => ({
+          title: route.params.title,
+          header: ({ route, navigation, options }) => (
+            <MyHeader
+              route={route}
+              title={options.title}
+              leftIcon={true}
+              onPressLeftIcon={() => navigation.goBack()}
+            />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="AddNewGroup"
+        component={AddNewGroup}
+        options={{
+          title: 'Add New Group',
+          header: ({ route, navigation, options }) => (
+            <MyHeader
+              route={route}
+              title={options.title}
+              leftIcon={true}
+              onPressLeftIcon={() => navigation.goBack()}
             />
           ),
         }}
