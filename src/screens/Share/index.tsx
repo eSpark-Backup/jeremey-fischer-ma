@@ -113,6 +113,7 @@ export default function Share() {
         }}>
         <MyText textStyle={{ fontSize: 18 }}>Select: </MyText>
         <Dropdown
+          defaultLabel="Friends"
           dataSource={[
             { name: 'Friends', id: 'f' },
             { name: 'Groups', id: 'g' },
