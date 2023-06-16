@@ -65,7 +65,7 @@ const Dropdown = ({
 
   return (
     <View style={{ minWidth: minWidth }}>
-      {title != '' && (
+      {title && (
         <Text
           style={{
             color: colors.text,
