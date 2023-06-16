@@ -1,6 +1,6 @@
 export const collections = {
   users: 'users',
-  freindRequests: 'freindRequests',
+  friendRequests: 'friendRequests',
   groups: 'groups',
   contents: 'contents',
   postViews: 'postViews',

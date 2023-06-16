@@ -7,7 +7,7 @@ export const getAllRequest = async (uid: string) => {
   try {
     const requests: FriendRequest[] = [];
     const result = await db()
-      .collection(collections.freindRequests)
+      .collection(collections.friendRequests)
       .where('receiverId', '==', uid)
       .get();
 
@@ -30,7 +30,7 @@ export const getAllRequest = async (uid: string) => {
 export const sendRequest = async (data: FriendRequest) => {
   try {
     const res: any = await db()
-      .collection(collections.freindRequests)
+      .collection(collections.friendRequests)
       .add({...data, status: 'pending'});
     const requestData: FriendRequest = (await res.get()).data();
     requestData.id = (await res.get()).id;
@@ -44,12 +44,12 @@ export const sendRequest = async (data: FriendRequest) => {
 export const acceptRequest = async (id: string) => {
   try {
     const isRequestExist = await db()
-      .collection(collections.freindRequests)
+      .collection(collections.friendRequests)
       .doc(id)
       .get();
     if (isRequestExist.exists) {
       const result = await db()
-        .collection(collections.freindRequests)
+        .collection(collections.friendRequests)
         .doc(id)
         .update({status: 'accept'});
       var senderRef;
@@ -100,12 +100,12 @@ export const acceptRequest = async (id: string) => {
 export const rejectRequest = async (id: string) => {
   try {
     const isRequestExist = await db()
-      .collection(collections.freindRequests)
+      .collection(collections.friendRequests)
       .doc(id)
       .get();
     if (isRequestExist.exists) {
       const result = await db()
-        .collection(collections.freindRequests)
+        .collection(collections.friendRequests)
         .doc(id)
         .update({status: 'reject'});
       return {data: null, message: 'Request rejected'};

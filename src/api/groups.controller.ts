@@ -1,3 +1,4 @@
+import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {db} from '.';
 import {FriendRequest, Group, User} from '../types';
 import {collections} from './constants';
@@ -68,11 +69,24 @@ export const getMyGroups = async (myUid: string) => {
             Boolean(data?.contents?.length) ? data?.contents : [''],
           )
           .get()
-          .then(contentSnapshot => {
+          .then(async contentSnapshot => {
+            const innerPromises: any[] = [];
             if (!contentSnapshot.empty) {
-              contentSnapshot.forEach(content => {
-                contents.push(content.data());
+              contentSnapshot.forEach(async content => {
+                const contentData = content.data();
+                var sender: FirebaseFirestoreTypes.DocumentData | null = null;
+                const senderPromise = db()
+                  .collection(collections.users)
+                  .where('uid', '==', contentData?.senderId ?? '')
+                  .get()
+                  .then(senderSnap => {
+                    senderSnap.forEach(res => (sender = res.data()));
+                    contentData.sender = sender;
+                    contents.push(contentData);
+                  });
+                innerPromises.push(senderPromise);
               });
+              await Promise.all(innerPromises);
             }
           });
 
@@ -142,8 +156,6 @@ export const getGroupById = async (groupId: string) => {
             });
           });
 
-        console.log('data?.contents', data?.contents);
-
         const contentPromise = db()
           .collection(collections.contents)
           .where(
@@ -152,11 +164,24 @@ export const getGroupById = async (groupId: string) => {
             Boolean(data?.contents?.length) ? data?.contents : [''],
           )
           .get()
-          .then(contentSnapshot => {
+          .then(async contentSnapshot => {
+            const innerPromises: any[] = [];
             if (!contentSnapshot.empty) {
-              contentSnapshot.forEach(content => {
-                contents.push(content.data());
+              contentSnapshot.forEach(async content => {
+                const contentData = content.data();
+                var sender: FirebaseFirestoreTypes.DocumentData | null = null;
+                const senderPromise = db()
+                  .collection(collections.users)
+                  .where('uid', '==', contentData?.senderId ?? '')
+                  .get()
+                  .then(senderSnap => {
+                    senderSnap.forEach(res => (sender = res.data()));
+                    contentData.sender = sender;
+                    contents.push(contentData);
+                  });
+                innerPromises.push(senderPromise);
               });
+              await Promise.all(innerPromises);
             }
           });
 

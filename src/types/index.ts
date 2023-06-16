@@ -41,17 +41,13 @@ export type FriendRequest = {
 // Content type
 export type Content = {
   id?: string; // DocId
-  contentId: string;
   mediaType: 'Audio' | 'Video' | 'Podcast' | 'Article';
-  createdAt: string;
+  createdAt?: string;
   title: string;
   image: string;
   description: string;
-  channel: string;
-  duration: number;
-  artist: string;
-  album: string;
-  author: string;
+  senderId: string;
+  sender?: User;
 };
 
 // Group type
@@ -77,4 +73,7 @@ export type NewsFeed = {
   contentId: string;
   senderId: string;
   receiverId: string;
+  content: Content;
+  sender: User;
+  receiver: User;
 };

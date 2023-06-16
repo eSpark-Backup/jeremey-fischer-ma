@@ -1,22 +1,29 @@
 import {db} from '.';
+import {NewsFeed} from '../types';
 import {collections} from './constants';
 import firestore from '@react-native-firebase/firestore';
 
-export const shareContentToGroup = async (groupId: string) => {
+/**
+ * Share Content to specific group
+ * @param {groupId}  groupId - `groupId` for sending content to group
+ * @param {senderId}  senderId - `senderId` to track which user send this post
+ * @returns {message} `message` return message wheter it succesfull or not .
+ */
+export const shareContentToGroup = async (
+  groupId: string,
+  senderId: string,
+) => {
   try {
-    const response = await db().collection(collections.contents).add({
-      contentId: '',
-      mediaType: 'Audio',
-      createdAt: new Date(),
-      title: 'title',
-      image: 'image',
-      description: 'description',
-      channel: 'channel',
-      duration: '09:30',
-      artist: '',
-      album: '',
-      author: '',
-    });
+    const response = await db()
+      .collection(collections.contents)
+      .add({
+        mediaType: 'Audio',
+        createdAt: new Date(),
+        title: 'title',
+        image: 'image',
+        description: 'description',
+        senderId: senderId ?? '',
+      });
     await db()
       .collection(collections.contents)
       .doc(response.id)
@@ -32,4 +39,14 @@ export const shareContentToGroup = async (groupId: string) => {
     console.log('error shareContentToGroup', error);
     return {data: null, message: 'Something went wrong'};
   }
+};
+
+/**
+ * Fetch User Newsfeed
+ * @param {myUid}  myUid - `myUid` is uid of a user which newsfeed needs to be fetch
+ * @returns {NewsFeed[]} `NewsFeed[]` Return Newsfeed contents
+ */
+export const getNewsFeedContent = async (myUid: string) => {
+  try {
+  } catch (error) {}
 };
