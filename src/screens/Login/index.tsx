@@ -4,11 +4,11 @@ import { useNavigation, useTheme } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
 import { useHookstate, State } from '@hookstate/core';
 
+import store from '../../store/store';
+import { colors } from '../../theme';
 import { NormalBtn, GapView } from '../../components';
 import { NavProps } from '../../types';
 import { _signIn } from './utils/funtions';
-import store from '../../store/store';
-import { colors } from '../../theme';
 
 const Login = () => {
   const navigation = useNavigation<NavProps['navigation']>();

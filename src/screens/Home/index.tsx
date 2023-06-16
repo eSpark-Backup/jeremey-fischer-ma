@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,20 +8,21 @@ import {
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
-import {useNavigation, useTheme} from '@react-navigation/native';
-import {Avatar} from '@rneui/themed';
+import { useNavigation, useTheme } from '@react-navigation/native';
+import { Avatar } from '@rneui/themed';
 
 import {
   Dot,
+  Dropdown,
   GapView,
   MyCanvas,
   MyCard,
   MyText,
   OutlineBtn,
 } from '../../components';
-import {FakeFeedType, fakeFeedData} from '../../constants';
-import {HomeNavProps, NavProps} from '../../types';
-import {disableBackButton} from '../../utils';
+import { FakeFeedType, fakeFeedData } from '../../constants';
+import { HomeNavProps, NavProps } from '../../types';
+import { disableBackButton } from '../../utils';
 
 export default function App() {
   useEffect(() => {
@@ -35,8 +36,10 @@ export default function App() {
 }
 
 const MyFeed = () => {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const navigation = useNavigation<HomeNavProps['navigation']>();
+  const [toggleVal, setToggleVal] = useState(false);
+
   const renderFeedList = ({
     item,
     index,
@@ -46,6 +49,27 @@ const MyFeed = () => {
   }) => {
     return (
       <View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignSelf: 'flex-end',
+          }}>
+          <Dropdown
+            defaultLabel="Select Item..."
+            minWidth={150}
+            dataSource={[
+              { name: 'Article', id: 'art' },
+              { name: 'Video', id: 'vid' },
+              { name: 'Podcast', id: 'pod' },
+              { name: 'Audio', id: 'aud' },
+              { name: 'Sender', id: 'sen' },
+            ]}
+            toggleValue={toggleVal}
+            type="sort"
+            handleToggle={() => setToggleVal(!toggleVal)}
+            title="Sort By..."
+          />
+        </View>
         <MyText
           textStyle={{
             alignSelf: 'flex-end',
@@ -56,12 +80,12 @@ const MyFeed = () => {
         </MyText>
         <MyCard>
           <TouchableOpacity
-            style={{flexDirection: 'row', padding: 10}}
-            onPress={() => navigation.navigate('Details', {item})}>
-            <View style={{alignSelf: 'flex-start', marginTop: 5}}>
+            style={{ flexDirection: 'row', padding: 10 }}
+            onPress={() => navigation.navigate('Details', { item })}>
+            <View style={{ alignSelf: 'flex-start', marginTop: 5 }}>
               <Image
-                source={{uri: 'https://picsum.photos/300/200'}}
-                style={{width: 150, height: 100}}
+                source={{ uri: 'https://picsum.photos/300/200' }}
+                style={{ width: 150, height: 100 }}
               />
               <Avatar
                 rounded
@@ -71,7 +95,9 @@ const MyFeed = () => {
                   left: 5,
                   position: 'absolute',
                 }}
-                source={{uri: 'https://randomuser.me/api/portraits/men/22.jpg'}}
+                source={{
+                  uri: 'https://randomuser.me/api/portraits/men/22.jpg',
+                }}
               />
               <Avatar
                 rounded
@@ -81,7 +107,9 @@ const MyFeed = () => {
                   left: 30,
                   position: 'absolute',
                 }}
-                source={{uri: 'https://randomuser.me/api/portraits/men/21.jpg'}}
+                source={{
+                  uri: 'https://randomuser.me/api/portraits/men/21.jpg',
+                }}
               />
               <Avatar
                 rounded
@@ -91,15 +119,17 @@ const MyFeed = () => {
                   left: 30 + 25,
                   position: 'absolute',
                 }}
-                source={{uri: 'https://randomuser.me/api/portraits/men/29.jpg'}}
+                source={{
+                  uri: 'https://randomuser.me/api/portraits/men/29.jpg',
+                }}
               />
             </View>
-            <View style={{marginLeft: 10, flex: 1, justifyContent: 'center'}}>
+            <View style={{ marginLeft: 10, flex: 1, justifyContent: 'center' }}>
               <MyText children="Title" />
               <MyText children="SubTitle" />
               <MyText
                 children="Qui deserunt ut ex non irure veniam tempor sunt ipsum cillum?"
-                textStyle={{marginTop: 20}}
+                textStyle={{ marginTop: 20 }}
               />
               <View
                 style={{
@@ -108,7 +138,7 @@ const MyFeed = () => {
                   alignItems: 'center',
                 }}>
                 <OutlineBtn title="READ" />
-                <MyText textStyle={{right: -15}}>3h</MyText>
+                <MyText textStyle={{ right: -15 }}>3h</MyText>
               </View>
             </View>
             <Dot show={true} />
