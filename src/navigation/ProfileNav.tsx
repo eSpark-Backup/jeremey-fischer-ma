@@ -24,7 +24,7 @@ export default function ProfileNav() {
           header: ({ route, navigation }) => (
             <MyHeader
               route={route}
-              rightIcon={true}
+              rightIcon
               rightIconName="ios-settings-outline"
               rightIconType="ionicon"
               onPressRightIcon={() => navigation.navigate('Settings')}

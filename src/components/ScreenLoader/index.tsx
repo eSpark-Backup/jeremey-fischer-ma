@@ -3,9 +3,10 @@ import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 
 import {SCREEN_HEIGHT, SCREEN_WIDTH} from '../../constants';
+import { colors } from '../../theme';
 
 export default function ScreenLoader({show}: {show: boolean}) {
-  const {colors} = useTheme();
+  
   return (
     show ? <View style={styles.container}>
       <ActivityIndicator size={'large'} color={colors.primary} />
@@ -16,6 +17,7 @@ export default function ScreenLoader({show}: {show: boolean}) {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#00000044',
     position: 'absolute',
     top: 0,
     height: SCREEN_HEIGHT,

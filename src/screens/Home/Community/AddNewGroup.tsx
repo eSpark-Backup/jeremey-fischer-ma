@@ -45,19 +45,19 @@ export default function AddNewGroup() {
       <ScrollView style={{ flex: 1 }}>
         <CommunityCard
           name="John"
-          details="7 Friends"
+          details="john@email.com"
           image="https://randomuser.me/api/portraits/men/22.jpg"
           checkbox
         />
         <CommunityCard
           name="John"
-          details="7 Friends"
+          details="john@email.com"
           image="https://randomuser.me/api/portraits/men/22.jpg"
           checkbox
         />
         <CommunityCard
           name="John"
-          details="7 Friends"
+          details="john@email.com"
           image="https://randomuser.me/api/portraits/men/22.jpg"
           checkbox
         />
