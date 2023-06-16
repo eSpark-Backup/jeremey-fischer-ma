@@ -1,10 +1,16 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import {AddNewGroup, FriendsList, GroupsList, Home} from '../screens';
+import {
+  AddNewGroup,
+  FriendsList,
+  GroupDetails,
+  GroupsList,
+  Home,
+} from '../screens';
 import Details from '../screens/Home/Details';
-import {HomeStackParamList} from '../types';
-import {MyHeader} from '../components';
+import { HomeStackParamList } from '../types';
+import { MyHeader } from '../components';
 
 export default function HomeNav() {
   const Stack = createNativeStackNavigator<HomeStackParamList>();
@@ -12,7 +18,7 @@ export default function HomeNav() {
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{
-        header: ({route, navigation}) => (
+        header: ({ route, navigation }) => (
           <MyHeader
             route={route}
             rightIcon={true}
@@ -27,7 +33,7 @@ export default function HomeNav() {
         name="Details"
         component={Details}
         options={{
-          header: ({route, navigation}) => (
+          header: ({ route, navigation }) => (
             <MyHeader
               route={route}
               leftIcon={true}
@@ -41,7 +47,7 @@ export default function HomeNav() {
         component={FriendsList}
         options={{
           title: 'Friends List',
-          header: ({route, navigation, options}) => (
+          header: ({ route, navigation, options }) => (
             <MyHeader
               route={route}
               title={options.title}
@@ -56,7 +62,7 @@ export default function HomeNav() {
         component={GroupsList}
         options={{
           title: 'Groups List',
-          header: ({route, navigation, options}) => (
+          header: ({ route, navigation, options }) => (
             <MyHeader
               route={route}
               title={options.title}
@@ -67,11 +73,26 @@ export default function HomeNav() {
         }}
       />
       <Stack.Screen
+        name="GroupDetails"
+        component={GroupDetails}
+        options={({ route }) => ({
+          title: route.params.title,
+          header: ({ route, navigation, options }) => (
+            <MyHeader
+              route={route}
+              title={options.title}
+              leftIcon={true}
+              onPressLeftIcon={() => navigation.goBack()}
+            />
+          ),
+        })}
+      />
+      <Stack.Screen
         name="AddNewGroup"
         component={AddNewGroup}
         options={{
           title: 'Add New Group',
-          header: ({route, navigation, options}) => (
+          header: ({ route, navigation, options }) => (
             <MyHeader
               route={route}
               title={options.title}

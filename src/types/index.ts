@@ -13,6 +13,7 @@ export type HomeStackParamList = {
   Details: { item: FakeFeedType };
   FriendsList: undefined;
   GroupsList: undefined;
+  GroupDetails: { title: string };
   AddNewGroup: undefined;
 };
 

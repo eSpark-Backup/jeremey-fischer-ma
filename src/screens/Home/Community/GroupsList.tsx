@@ -1,7 +1,7 @@
 import React from 'react';
-import {StyleSheet, ScrollView} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {Icon} from '@rneui/themed';
+import { StyleSheet, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Icon } from '@rneui/themed';
 
 import {
   CommunityCard,
@@ -11,7 +11,7 @@ import {
   SearchBar,
   Tabs,
 } from '../../../components';
-import {HomeNavProps} from '../../../types';
+import { HomeNavProps } from '../../../types';
 
 export default function GroupsList() {
   const navigation = useNavigation<HomeNavProps['navigation']>();
@@ -20,24 +20,33 @@ export default function GroupsList() {
       <SearchBar placeholder="Search by group name" />
       <Tabs selectedTabId={2} />
       {/* <GapView /> */}
-      <ScrollView style={{flex: 1}}>
+      <ScrollView style={{ flex: 1 }}>
         <CommunityCard
           name="Group 1"
           details="5 Members"
           image="https://randomuser.me/api/portraits/men/22.jpg"
           group
+          onPress={() =>
+            navigation.navigate('GroupDetails', { title: 'Group 1' })
+          }
         />
         <CommunityCard
           name="Group 2"
           details="5 Members"
           image="https://randomuser.me/api/portraits/men/22.jpg"
           group
+          onPress={() =>
+            navigation.navigate('GroupDetails', { title: 'Group 2' })
+          }
         />
         <CommunityCard
           name="Group 3"
           details="5 Members"
           image="https://randomuser.me/api/portraits/men/22.jpg"
           group
+          onPress={() =>
+            navigation.navigate('GroupDetails', { title: 'Group 3' })
+          }
         />
       </ScrollView>
       <GapView />

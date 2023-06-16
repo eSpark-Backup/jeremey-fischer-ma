@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
-import {Avatar, CheckBox, Icon} from '@rneui/themed';
+import React, { useState } from 'react';
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
+import { Avatar, CheckBox, Icon } from '@rneui/themed';
 
-import {colors} from '../../theme';
+import { colors } from '../../theme';
 import MyText from '../MyText';
-import {OutlineBtn} from '../Button';
+import { OutlineBtn } from '../Button';
 
 export default function CommunityCard({
   name,
@@ -14,6 +14,7 @@ export default function CommunityCard({
   addBtn,
   checkbox,
   group,
+  onPress,
 }: {
   name: string;
   details: string;
@@ -22,10 +23,11 @@ export default function CommunityCard({
   addBtn?: boolean;
   checkbox?: boolean;
   group?: boolean;
+  onPress?: () => void;
 }) {
   const [check, setcheck] = useState(false);
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.row}>
         <Avatar
           rounded
@@ -34,10 +36,10 @@ export default function CommunityCard({
             borderColor: colors.primary,
           }}
           size={'medium'}
-          source={{uri: image}}
+          source={{ uri: image }}
         />
         <View style={styles.contentContainer}>
-          <MyText children={name} textStyle={{fontSize: 16}} />
+          <MyText children={name} textStyle={{ fontSize: 16 }} />
           <MyText children={details} />
         </View>
       </View>
@@ -45,12 +47,12 @@ export default function CommunityCard({
         <View style={styles.row}>
           <TouchableOpacity
             activeOpacity={0.8}
-            style={{...styles.requestBtns, borderColor: colors.danger}}>
+            style={{ ...styles.requestBtns, borderColor: colors.danger }}>
             <Icon name="close" color={colors.danger} />
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
-            style={{...styles.requestBtns, borderColor: colors.primary}}>
+            style={{ ...styles.requestBtns, borderColor: colors.primary }}>
             <Icon name="check" color={colors.primary} />
           </TouchableOpacity>
         </View>
@@ -58,7 +60,11 @@ export default function CommunityCard({
       {addBtn && <OutlineBtn title="Add" btnStyle={styles.addBtn} />}
       {checkbox && (
         <View
-          style={{flexDirection: 'row', alignItems: 'center', marginRight: 10}}>
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginRight: 10,
+          }}>
           <CheckBox
             checked={check}
             size={30}
@@ -87,7 +93,7 @@ export default function CommunityCard({
             containerStyle={{
               borderWidth: 2,
             }}
-            source={{uri: 'https://randomuser.me/api/portraits/men/22.jpg'}}
+            source={{ uri: 'https://randomuser.me/api/portraits/men/22.jpg' }}
           />
           <Avatar
             rounded
@@ -95,7 +101,7 @@ export default function CommunityCard({
               borderWidth: 2,
               right: 5,
             }}
-            source={{uri: 'https://randomuser.me/api/portraits/men/21.jpg'}}
+            source={{ uri: 'https://randomuser.me/api/portraits/men/21.jpg' }}
           />
           <Avatar
             rounded
@@ -103,9 +109,9 @@ export default function CommunityCard({
               borderWidth: 2,
               right: 10,
             }}
-            source={{uri: 'https://randomuser.me/api/portraits/men/29.jpg'}}
+            source={{ uri: 'https://randomuser.me/api/portraits/men/29.jpg' }}
           />
-          <MyText textStyle={{right: 10}} children="+ 2" />
+          <MyText textStyle={{ right: 10 }} children="+ 2" />
         </View>
       )}
     </TouchableOpacity>
@@ -124,9 +130,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: colors.card,
   },
-  row: {flexDirection: 'row'},
-  contentContainer: {marginLeft: 10, justifyContent: 'center'},
-  requestBtns: {marginRight: 10, padding: 5, borderRadius: 5, borderWidth: 1},
+  row: { flexDirection: 'row' },
+  contentContainer: { marginLeft: 10, justifyContent: 'center' },
+  requestBtns: { marginRight: 10, padding: 5, borderRadius: 5, borderWidth: 1 },
   addBtn: {
     marginRight: 10,
   },

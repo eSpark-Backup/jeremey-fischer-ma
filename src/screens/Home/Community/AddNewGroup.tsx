@@ -39,22 +39,22 @@ export default function AddNewGroup() {
         <GapView />
         <SearchBar placeholder="Seach by email" />
       </View>
-      <ScrollView  style={{flex: 1}} >
+      <ScrollView style={{flex: 1}}>
         <CommunityCard
           name="John"
-          details="7 Friends"
+          details="john@email.com"
           image="https://randomuser.me/api/portraits/men/22.jpg"
           checkbox
         />
         <CommunityCard
           name="John"
-          details="7 Friends"
+          details="john@email.com"
           image="https://randomuser.me/api/portraits/men/22.jpg"
           checkbox
         />
         <CommunityCard
           name="John"
-          details="7 Friends"
+          details="john@email.com"
           image="https://randomuser.me/api/portraits/men/22.jpg"
           checkbox
         />
