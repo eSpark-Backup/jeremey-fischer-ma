@@ -4,7 +4,7 @@ import { FakeFeedType } from '../constants';
 
 export type RootStackParamList = {
   Login: undefined;
-  Tab: undefined;
+  Tab: { screen: 'Archive' | 'Home' | 'Profile'; params?: undefined };
   Share: undefined;
 };
 
@@ -25,6 +25,10 @@ export type ProfileStackParamList = {
 export type NavProps = NativeStackScreenProps<RootStackParamList>;
 
 export type HomeNavProps = NativeStackScreenProps<HomeStackParamList>;
+
+export type ProfileProps = NativeStackScreenProps<
+  ProfileStackParamList & RootStackParamList
+>;
 
 // User type
 export type User = {

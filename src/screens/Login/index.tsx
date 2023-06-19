@@ -6,7 +6,7 @@ import { useHookstate, State } from '@hookstate/core';
 
 import store from '../../store/store';
 import { colors } from '../../theme';
-import { NormalBtn, GapView } from '../../components';
+import { NormalBtn, GapView, MyCanvas } from '../../components';
 import { NavProps } from '../../types';
 import { _signIn } from './utils/funtions';
 
@@ -15,10 +15,8 @@ const Login = () => {
   const { screenLoading } = useHookstate(store);
 
   return (
-    <View
+    <MyCanvas
       style={{
-        flex: 1,
-        backgroundColor: colors.background,
         alignItems: 'center',
         justifyContent: 'space-around',
       }}>
@@ -38,7 +36,7 @@ const Login = () => {
         onPress={() => _signIn(navigation, screenLoading)}
         icon={<Icon name="logo-google" type="ionicon" color={'#ffffff'} />}
       />
-    </View>
+    </MyCanvas>
   );
 };
 
