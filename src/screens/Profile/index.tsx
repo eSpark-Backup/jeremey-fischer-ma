@@ -73,17 +73,6 @@ export default function App() {
       </View>
       <View style={{ alignItems: 'center' }}>
         <NormalBtn
-          title="Delete Account"
-          btnStyle={{
-            justifyContent: 'space-between',
-            backgroundColor: '#eb0000',
-          }}
-          icon={
-            <Icon name="delete" type="material-community" color={'#ffffff'} />
-          }
-        />
-        <GapView />
-        <NormalBtn
           title="Log out Account"
           btnStyle={{ justifyContent: 'space-between' }}
           onPress={onLogout}
