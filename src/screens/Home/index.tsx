@@ -23,6 +23,7 @@ import {
 import { FakeFeedType, fakeFeedData } from '../../constants';
 import { HomeNavProps, NavProps } from '../../types';
 import { disableBackButton } from '../../utils';
+import { getGroupById } from '../../api/groups.controller';
 
 export default function App() {
   useEffect(() => {
@@ -47,6 +48,46 @@ const MyFeed = () => {
     item: FakeFeedType;
     index: number;
   }) => {
+    // sendRequest({
+    //   senderId: '1686658135025',
+    //   receiverId: '1686658085577',
+    //   status: 'pending',
+    // }).then(res => {
+    //   console.log('all sendRequest', res);
+    // });
+
+    // getAllRequest('1686658085577').then(res => {
+    //   console.log('all requests', res);
+    // });
+
+    // searchUser('', '1686658135025', '1686658085577').then(res => {
+    //   console.log('all searchUser', res);
+    // });
+
+    // rejectRequest('HqAL0A4fDiG79oCwgtg9').then(res => {
+    //   console.log('all acceptRequest', res);
+    // });
+
+    // getAllFreinds('1686658085577').then(res => {
+    //   console.log('all getAllFreinds', res);
+    // });
+
+    // createGroup({
+    //   groupCreatorId: '89372jfgsda823',
+    //   groupName: 'First Group',
+    //   Members: ['1686658085577', '89372jfgsda823'],
+    // }).then(res => {
+    //   console.log('all createGroup', res);
+    // });
+
+    // getMyGroups('1686658085577').then(res => {
+    //   console.log('all getMyGroups', res);
+    // });
+
+    getGroupById('5gz5N3CCtfgTGlZgJ08q').then(res => {
+      console.log('all shareContentToGroup', JSON.stringify(res));
+    });
+
     return (
       <View>
         <View
