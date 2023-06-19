@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,6 +13,7 @@ import { Avatar } from '@rneui/themed';
 
 import {
   Dot,
+  Dropdown,
   GapView,
   MyCanvas,
   MyCard,
@@ -21,27 +22,11 @@ import {
 } from '../../components';
 import { FakeFeedType, fakeFeedData } from '../../constants';
 import { HomeNavProps, NavProps } from '../../types';
-import {
-  acceptRequest,
-  getAllRequest,
-  rejectRequest,
-  sendRequest,
-} from '../../api/friendRequest.controller';
-import { getAllFreinds, searchUser } from '../../api/user.controller';
-import {
-  createGroup,
-  getGroupById,
-  getMyGroups,
-} from '../../api/groups.controller';
-import { shareContentToGroup } from '../../api/content.controller';
+import { disableBackButton } from '../../utils';
 
 export default function App() {
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => true,
-    );
-    return () => backHandler.remove();
+    disableBackButton();
   }, []);
   return (
     <MyCanvas>
@@ -53,6 +38,8 @@ export default function App() {
 const MyFeed = () => {
   const { colors } = useTheme();
   const navigation = useNavigation<HomeNavProps['navigation']>();
+  const [toggleVal, setToggleVal] = useState(false);
+
   const renderFeedList = ({
     item,
     index,
@@ -102,6 +89,27 @@ const MyFeed = () => {
 
     return (
       <View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignSelf: 'flex-end',
+          }}>
+          <Dropdown
+            defaultLabel="Select Item..."
+            minWidth={150}
+            dataSource={[
+              { name: 'Article', id: 'art' },
+              { name: 'Video', id: 'vid' },
+              { name: 'Podcast', id: 'pod' },
+              { name: 'Audio', id: 'aud' },
+              { name: 'Sender', id: 'sen' },
+            ]}
+            toggleValue={toggleVal}
+            type="sort"
+            handleToggle={() => setToggleVal(!toggleVal)}
+            title="Sort By..."
+          />
+        </View>
         <MyText
           textStyle={{
             alignSelf: 'flex-end',

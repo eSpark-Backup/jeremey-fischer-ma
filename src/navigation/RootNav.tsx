@@ -7,6 +7,7 @@ import TabNav from './TabNav';
 import { MyTheme } from '../theme';
 import { Login, Share } from '../screens';
 import { RootStackParamList } from '../types';
+import { MyHeader } from '../components';
 import { getUserData } from '../utils';
 import store from '../store/store';
 
@@ -26,11 +27,34 @@ export default function RootNav() {
   return (
     <NavigationContainer linking={linking} theme={MyTheme}>
       <Stack.Navigator
-        initialRouteName={userData.get() ? 'Tab' : 'Login'}
-        screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Tab" component={TabNav} />
-        <Stack.Screen name="Share" component={Share} options={{}} />
+        // initialRouteName="Share"
+        initialRouteName={userData.get() ? 'Tab' : 'Login'}>
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Tab"
+          component={TabNav}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Share"
+          component={Share}
+          options={{
+            header: ({ route, navigation }) => (
+              <MyHeader
+                route={route}
+                title="New Share"
+                leftIcon
+                onPressLeftIcon={() => navigation.navigate('Tab')}
+                leftIconName="close"
+                leftIconType="ionicon"
+              />
+            ),
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -6,12 +6,13 @@ import { Divider, Icon } from '@rneui/themed';
 
 import { GapView, MyCanvas, MyText, NormalBtn } from '../../components';
 import { SCREEN_WIDTH } from '../../constants';
-import { NavProps } from '../../types';
+import { NavProps, ProfileProps } from '../../types';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { storeUserData } from '../../utils';
+import { ArchiveOutlineSvg } from '../../assets';
 
 export default function App() {
-  const navigation = useNavigation<NavProps['navigation']>();
+  const navigation = useNavigation<ProfileProps['navigation']>();
   const { colors } = useTheme();
 
   const onLogout = () => {
@@ -73,19 +74,24 @@ export default function App() {
       </View>
       <View style={{ alignItems: 'center' }}>
         <NormalBtn
-          title="Delete Account"
-          btnStyle={{
-            justifyContent: 'space-between',
-            backgroundColor: '#eb0000',
-          }}
+          title="View Archive"
+          btnStyle={{ justifyContent: 'space-between', marginVertical: 5 }}
+          onPress={() => navigation.navigate('Tab', { screen: 'Archive' })}
           icon={
-            <Icon name="delete" type="material-community" color={'#ffffff'} />
+            <ArchiveOutlineSvg color={colors.text} width={25} height={25} />
           }
         />
-        <GapView />
+        <NormalBtn
+          title="Settings"
+          btnStyle={{ justifyContent: 'space-between', marginVertical: 5 }}
+          onPress={() => navigation.navigate('Settings')}
+          icon={
+            <Icon name="settings-outline" type="ionicon" color={'#ffffff'} />
+          }
+        />
         <NormalBtn
           title="Log out Account"
-          btnStyle={{ justifyContent: 'space-between' }}
+          btnStyle={{ justifyContent: 'space-between', marginVertical: 5 }}
           onPress={onLogout}
           icon={<Icon name="log-out" type="feather" color={'#ffffff'} />}
         />

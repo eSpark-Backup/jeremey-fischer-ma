@@ -49,7 +49,7 @@ function App(): JSX.Element {
       console.log('Data not found on share', item);
       return;
     }
-
+    Linking.openURL('seaglass://share');
     console.log('Data found on share', item);
     // Linking.openURL('seaglass://share');
     // You can receive extra data from your custom Share View
