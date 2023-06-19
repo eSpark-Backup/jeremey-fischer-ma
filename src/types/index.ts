@@ -15,6 +15,7 @@ export type HomeStackParamList = {
   GroupsList: undefined;
   GroupDetails: { title: string };
   AddNewGroup: undefined;
+  Search: undefined;
 };
 
 export type ProfileStackParamList = {

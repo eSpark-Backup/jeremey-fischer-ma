@@ -64,7 +64,10 @@ const Dropdown = ({
   };
 
   return (
-    <View style={{ minWidth: minWidth }}>
+    <View
+      style={{
+        minWidth: minWidth,
+      }}>
       {title && (
         <Text
           style={{
@@ -109,7 +112,6 @@ const Dropdown = ({
           </ScrollView>
         </View>
       )}
-      <View style={{ height: 10 }} />
     </View>
   );
 };

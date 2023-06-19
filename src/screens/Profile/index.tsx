@@ -41,7 +41,7 @@ export default function App() {
       <View style={{ alignItems: 'center' }}>
         <Avatar
           rounded
-          containerStyle={{ borderWidth: 2, borderColor: colors.primary }}
+          containerStyle={{ borderWidth: 0.6, borderColor: 'grey' }}
           source={{ uri: 'https://randomuser.me/api/portraits/men/36.jpg' }}
           size={120}
         />
