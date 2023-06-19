@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
-import {useNavigation, useTheme} from '@react-navigation/native';
-import {Avatar} from '@rneui/themed';
+import { useNavigation, useTheme } from '@react-navigation/native';
+import { Avatar } from '@rneui/themed';
 
 import {
   Dot,
@@ -19,21 +19,21 @@ import {
   MyText,
   OutlineBtn,
 } from '../../components';
-import {FakeFeedType, fakeFeedData} from '../../constants';
-import {HomeNavProps, NavProps} from '../../types';
+import { FakeFeedType, fakeFeedData } from '../../constants';
+import { HomeNavProps, NavProps } from '../../types';
 import {
   acceptRequest,
   getAllRequest,
   rejectRequest,
   sendRequest,
 } from '../../api/friendRequest.controller';
-import {getAllFreinds, searchUser} from '../../api/user.controller';
+import { getAllFreinds, searchUser } from '../../api/user.controller';
 import {
   createGroup,
   getGroupById,
   getMyGroups,
 } from '../../api/groups.controller';
-import {shareContentToGroup} from '../../api/content.controller';
+import { shareContentToGroup } from '../../api/content.controller';
 
 export default function App() {
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function App() {
 }
 
 const MyFeed = () => {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const navigation = useNavigation<HomeNavProps['navigation']>();
   const renderFeedList = ({
     item,
@@ -112,12 +112,12 @@ const MyFeed = () => {
         </MyText>
         <MyCard>
           <TouchableOpacity
-            style={{flexDirection: 'row', padding: 10}}
-            onPress={() => navigation.navigate('Details', {item})}>
-            <View style={{alignSelf: 'flex-start', marginTop: 5}}>
+            style={{ flexDirection: 'row', padding: 10 }}
+            onPress={() => navigation.navigate('Details', { item })}>
+            <View style={{ alignSelf: 'flex-start', marginTop: 5 }}>
               <Image
-                source={{uri: 'https://picsum.photos/300/200'}}
-                style={{width: 150, height: 100}}
+                source={{ uri: 'https://picsum.photos/300/200' }}
+                style={{ width: 150, height: 100 }}
               />
               <Avatar
                 rounded
@@ -127,7 +127,9 @@ const MyFeed = () => {
                   left: 5,
                   position: 'absolute',
                 }}
-                source={{uri: 'https://randomuser.me/api/portraits/men/22.jpg'}}
+                source={{
+                  uri: 'https://randomuser.me/api/portraits/men/22.jpg',
+                }}
               />
               <Avatar
                 rounded
@@ -137,7 +139,9 @@ const MyFeed = () => {
                   left: 30,
                   position: 'absolute',
                 }}
-                source={{uri: 'https://randomuser.me/api/portraits/men/21.jpg'}}
+                source={{
+                  uri: 'https://randomuser.me/api/portraits/men/21.jpg',
+                }}
               />
               <Avatar
                 rounded
@@ -147,15 +151,17 @@ const MyFeed = () => {
                   left: 30 + 25,
                   position: 'absolute',
                 }}
-                source={{uri: 'https://randomuser.me/api/portraits/men/29.jpg'}}
+                source={{
+                  uri: 'https://randomuser.me/api/portraits/men/29.jpg',
+                }}
               />
             </View>
-            <View style={{marginLeft: 10, flex: 1, justifyContent: 'center'}}>
+            <View style={{ marginLeft: 10, flex: 1, justifyContent: 'center' }}>
               <MyText children="Title" />
               <MyText children="SubTitle" />
               <MyText
                 children="Qui deserunt ut ex non irure veniam tempor sunt ipsum cillum?"
-                textStyle={{marginTop: 20}}
+                textStyle={{ marginTop: 20 }}
               />
               <View
                 style={{
@@ -164,7 +170,7 @@ const MyFeed = () => {
                   alignItems: 'center',
                 }}>
                 <OutlineBtn title="READ" />
-                <MyText textStyle={{right: -15}}>3h</MyText>
+                <MyText textStyle={{ right: -15 }}>3h</MyText>
               </View>
             </View>
             <Dot show={true} />

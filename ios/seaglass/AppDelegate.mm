@@ -1,5 +1,7 @@
 #import "AppDelegate.h"
 #import <Firebase.h>
+#import <RNShareMenu/ShareMenuManager.h>
+#import <RNGoogleSignin/RNGoogleSignin.h>
 
 #import <React/RCTBundleURLProvider.h>
 
@@ -34,5 +36,14 @@
 {
   return true;
 }
+
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  return ([ShareMenuManager application:app openURL:url options:options] ||
+          [RNGoogleSignin application:app openURL:url options:options]);
+}
+
 
 @end

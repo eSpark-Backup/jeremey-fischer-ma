@@ -1,7 +1,7 @@
-import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
-import {db} from '.';
-import {FriendRequest, Group, User} from '../types';
-import {collections} from './constants';
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import { db } from '.';
+import { FriendRequest, Group, User } from '../types';
+import { collections } from './constants';
 
 /**
  * Create Group with members
@@ -13,17 +13,17 @@ export const createGroup = async (data: Group) => {
     const response = await (
       await db()
         .collection(collections.groups)
-        .add({...data, contents: []})
+        .add({ ...data, contents: [] })
     ).get();
     await db().collection(collections.groups).doc(response.id).update({
       id: response.id,
     });
     return {
-      data: {...response.data(), id: response.id},
+      data: { ...response.data(), id: response.id },
       message: 'Group Created Successfully',
     };
   } catch (error) {
-    return {data: null, message: 'Something went wrong'};
+    return { data: null, message: 'Something went wrong' };
   }
 };
 
@@ -41,7 +41,7 @@ export const getMyGroups = async (myUid: string) => {
       .get();
 
     if (response.empty) {
-      return {data: null, message: 'You have not add in any group'};
+      return { data: null, message: 'You have not add in any group' };
     } else {
       const promises: Promise<void>[] = [];
 
@@ -115,11 +115,11 @@ export const getMyGroups = async (myUid: string) => {
       });
 
       await Promise.all(promises);
-      return {data: groups, message: 'All Groups'};
+      return { data: groups, message: 'All Groups' };
     }
   } catch (error) {
     console.log('error getAllGroups', error);
-    return {data: null, message: 'Something went wrong'};
+    return { data: null, message: 'Something went wrong' };
   }
 };
 
@@ -136,7 +136,7 @@ export const getGroupById = async (groupId: string) => {
       .get();
 
     if (response.empty) {
-      return {data: null, message: 'You have not add in any group'};
+      return { data: null, message: 'You have not add in any group' };
     } else {
       const promises: Promise<void>[] = [];
       const groups: Group[] = [];
@@ -210,10 +210,10 @@ export const getGroupById = async (groupId: string) => {
       });
 
       await Promise.all(promises);
-      return {data: groups?.[0], message: 'Required Group'};
+      return { data: groups?.[0], message: 'Required Group' };
     }
   } catch (error) {
     console.log('error getGroupById', error);
-    return {data: null, message: 'Something went wrong'};
+    return { data: null, message: 'Something went wrong' };
   }
 };

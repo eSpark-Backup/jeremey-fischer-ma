@@ -1,7 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
-import {db} from '.';
-import {FriendRequest, User} from '../types';
-import {collections} from './constants';
+import { db } from '.';
+import { FriendRequest, User } from '../types';
+import { collections } from './constants';
 
 export const getAllRequest = async (uid: string) => {
   try {
@@ -12,18 +12,18 @@ export const getAllRequest = async (uid: string) => {
       .get();
 
     if (result.empty) {
-      return {data: null, message: 'You have not any pending request!'};
+      return { data: null, message: 'You have not any pending request!' };
     } else {
       result.forEach(res => {
         const responseData: any = res.data();
         responseData.id = res.id;
         requests.push(responseData);
       });
-      return {data: requests, message: 'All Requests'};
+      return { data: requests, message: 'All Requests' };
     }
   } catch (error) {
     console.log('getAllRequest', error);
-    return {data: null, message: 'Something went wrong!'};
+    return { data: null, message: 'Something went wrong!' };
   }
 };
 
@@ -31,13 +31,13 @@ export const sendRequest = async (data: FriendRequest) => {
   try {
     const res: any = await db()
       .collection(collections.friendRequests)
-      .add({...data, status: 'pending'});
+      .add({ ...data, status: 'pending' });
     const requestData: FriendRequest = (await res.get()).data();
     requestData.id = (await res.get()).id;
-    return {data: requestData, message: 'Request Send Successfully'};
+    return { data: requestData, message: 'Request Send Successfully' };
   } catch (error) {
     console.log('sendRequest', error);
-    return {data: null, message: 'Something went wrong!'};
+    return { data: null, message: 'Something went wrong!' };
   }
 };
 
@@ -51,7 +51,7 @@ export const acceptRequest = async (id: string) => {
       const result = await db()
         .collection(collections.friendRequests)
         .doc(id)
-        .update({status: 'accept'});
+        .update({ status: 'accept' });
       var senderRef;
       var receiverRef;
 
@@ -87,13 +87,13 @@ export const acceptRequest = async (id: string) => {
           ),
         });
 
-      return {data: null, message: 'Request accepted'};
+      return { data: null, message: 'Request accepted' };
     } else {
-      return {data: null, message: 'Request not found'};
+      return { data: null, message: 'Request not found' };
     }
   } catch (error) {
     console.log('acceptRequest error', error);
-    return {data: null, message: 'Something went wrong!'};
+    return { data: null, message: 'Something went wrong!' };
   }
 };
 
@@ -107,13 +107,13 @@ export const rejectRequest = async (id: string) => {
       const result = await db()
         .collection(collections.friendRequests)
         .doc(id)
-        .update({status: 'reject'});
-      return {data: null, message: 'Request rejected'};
+        .update({ status: 'reject' });
+      return { data: null, message: 'Request rejected' };
     } else {
-      return {data: null, message: 'Request not found'};
+      return { data: null, message: 'Request not found' };
     }
   } catch (error) {
     console.log('rejectRequest error', error);
-    return {data: null, message: 'Something went wrong!'};
+    return { data: null, message: 'Something went wrong!' };
   }
 };
