@@ -11,9 +11,14 @@ import {
 import Details from '../screens/Home/Details';
 import { HomeStackParamList } from '../types';
 import { MyHeader } from '../components';
+import { getFriends } from '../screens/Home/utils/function';
+import { useHookstate } from '@hookstate/core';
+import store from '../store/store';
 
 export default function HomeNav() {
   const Stack = createNativeStackNavigator<HomeStackParamList>();
+  const { friends, loadFriends } = useHookstate(store);
+
   return (
     <Stack.Navigator
       initialRouteName="Home"
@@ -24,7 +29,9 @@ export default function HomeNav() {
             rightIcon={true}
             rightIconType={'font-awesome-5'}
             rightIconName="users"
-            onPressRightIcon={() => navigation.navigate('FriendsList')}
+            onPressRightIcon={() =>
+              getFriends(navigation, loadFriends, friends)
+            }
           />
         ),
       }}>

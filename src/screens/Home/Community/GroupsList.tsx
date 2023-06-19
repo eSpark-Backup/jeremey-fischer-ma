@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
 
@@ -7,20 +7,55 @@ import {
   CommunityCard,
   GapView,
   MyCanvas,
+  MyText,
   NormalBtn,
   SearchBar,
   Tabs,
 } from '../../../components';
 import { HomeNavProps } from '../../../types';
+import { useHookstate } from '@hookstate/core';
+import store from '../../../store/store';
+import { colors } from '../../../theme';
 
 export default function GroupsList() {
   const navigation = useNavigation<HomeNavProps['navigation']>();
+  const { groups, loadGroups } = useHookstate(store);
+
   return (
     <MyCanvas>
       <SearchBar placeholder="Search by group name" />
       <Tabs selectedTabId={2} />
-      {/* <GapView /> */}
-      <ScrollView style={{ flex: 1 }}>
+      {loadGroups.get() ? (
+        <View style={{ flex: 1 }}>
+          <ActivityIndicator
+            size={'large'}
+            color={colors.primary}
+            style={{ marginTop: 10 }}
+          />
+        </View>
+      ) : (
+        <FlatList
+          data={groups.get()}
+          renderItem={({ item }) => (
+            <CommunityCard
+              group
+              name={item.groupName}
+              details={`${item.Members.length} Members`}
+              image="https://randomuser.me/api/portraits/men/22.jpg"
+              onPress={() =>
+                navigation.navigate('GroupDetails', { title: item.groupName })
+              }
+            />
+          )}
+          ListEmptyComponent={
+            <MyText
+              textStyle={{ textAlign: 'center', marginTop: 10 }}
+              children="No Friends to Show"
+            />
+          }
+        />
+      )}
+      {/* <ScrollView style={{ flex: 1 }}>
         <CommunityCard
           name="Group 1"
           details="5 Members"
@@ -48,7 +83,7 @@ export default function GroupsList() {
             navigation.navigate('GroupDetails', { title: 'Group 3' })
           }
         />
-      </ScrollView>
+      </ScrollView> */}
       <GapView />
       <NormalBtn
         title="Add Group"

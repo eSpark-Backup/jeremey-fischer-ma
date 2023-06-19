@@ -8,7 +8,11 @@ import {
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
-import { useNavigation, useTheme } from '@react-navigation/native';
+import {
+  getActionFromState,
+  useNavigation,
+  useTheme,
+} from '@react-navigation/native';
 import { Avatar } from '@rneui/themed';
 
 import {
@@ -20,9 +24,13 @@ import {
   MyText,
   OutlineBtn,
 } from '../../components';
+
 import { FakeFeedType, fakeFeedData } from '../../constants';
 import { HomeNavProps, NavProps } from '../../types';
 import { disableBackButton } from '../../utils';
+
+import { getGroupById, getMyGroups } from '../../api/groups.controller';
+import { getAllFreinds } from '../../api/user.controller';
 
 export default function App() {
   useEffect(() => {
@@ -47,6 +55,16 @@ const MyFeed = () => {
     item: FakeFeedType;
     index: number;
   }) => {
+    // getGroupById('5gz5N3CCtfgTGlZgJ08q').then(res => {
+    //   console.log('all shareContentToGroup', JSON.stringify(res));
+    // });
+    getMyGroups('1686658085577').then(res => {
+      console.log('get all groups', JSON.stringify(res));
+    });
+    // getAllFreinds('1686658085577').then(res => {
+    //   console.log('get all friends', res.data);
+    // });
+
     return (
       <View>
         <View

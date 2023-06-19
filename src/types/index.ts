@@ -34,6 +34,7 @@ export type User = {
   image: string;
   fcmToken: string;
   createdAt?: string;
+  isFriend?: boolean;
   Friends?: string[]; // Array of friend UIDs
   Group?: string[]; // Array of GroupIds
   Notifications?: string[]; // Array of notification IDs
@@ -43,41 +44,46 @@ export type User = {
 export type FriendRequest = {
   senderId: string;
   receiverId: string;
-  status: string;
+  status: 'pending' | 'accept' | 'reject';
+  id?: string; // DocId
 };
 
 // Content type
 export type Content = {
-  contentId: string;
-  mediaType: string;
-  createdAt: string;
+  id?: string; // DocId
+  mediaType: 'Audio' | 'Video' | 'Podcast' | 'Article';
+  createdAt?: string;
   title: string;
   image: string;
   description: string;
-  channel: string;
-  duration: number;
-  artist: string;
-  album: string;
-  author: string;
+  senderId: string;
+  sender?: User;
 };
 
 // Group type
 export type Group = {
+  id?: string; // DocId
   groupName: string;
   Members: string[]; // Array of member UIDs
-  groupCreator: string;
-  contents: string[]; // Array of content IDs
+  groupCreatorId: string;
+  groupCreator?: User;
+  contents?: string[]; // Array of content IDs
 };
 
 // PostView type
 export type PostView = {
+  id?: string; // DocId
   contentId: string;
   viewerId: string;
 };
 
 // NewsFeed type
 export type NewsFeed = {
+  id?: string; // DocId
   contentId: string;
   senderId: string;
   receiverId: string;
+  content: Content;
+  sender: User;
+  receiver: User;
 };
