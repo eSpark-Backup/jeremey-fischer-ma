@@ -23,6 +23,7 @@ import {
 import { FakeFeedType, fakeFeedData } from '../../constants';
 import { HomeNavProps, NavProps } from '../../types';
 import { disableBackButton } from '../../utils';
+import { getGroupById } from '../../api/groups.controller';
 
 export default function App() {
   useEffect(() => {
