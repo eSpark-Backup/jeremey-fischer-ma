@@ -24,6 +24,12 @@ import { FakeFeedType, fakeFeedData } from '../../constants';
 import { HomeNavProps, NavProps } from '../../types';
 import { disableBackButton } from '../../utils';
 import { getGroupById } from '../../api/groups.controller';
+import {
+  addToArchive,
+  getAllArchive,
+  removeToArchive,
+} from '../../api/archive.controller';
+import { LinkPreview } from '@flyerhq/react-native-link-preview';
 
 export default function App() {
   useEffect(() => {
@@ -84,9 +90,24 @@ const MyFeed = () => {
     //   console.log('all getMyGroups', res);
     // });
 
-    getGroupById('5gz5N3CCtfgTGlZgJ08q').then(res => {
-      console.log('all shareContentToGroup', JSON.stringify(res));
-    });
+    // getGroupById('5gz5N3CCtfgTGlZgJ08q').then(res => {
+    //   console.log('all shareContentToGroup', JSON.stringify(res));
+    // });
+
+    // addToArchive({
+    //   userId: '89372jfgsda823',
+    //   contentId: 'VWU5Ldh2GboXlYKg84CF',
+    // }).then(res => {
+    //   console.log('all addToArchive', JSON.stringify(res));
+    // });
+
+    // getAllArchive('').then(res => {
+    //   console.log('getAllArchive', JSON.stringify(res));
+    // });
+
+    // removeToArchive().then(res => {
+    //   console.log('removeToArchive', JSON.stringify(res));
+    // });
 
     return (
       <View>

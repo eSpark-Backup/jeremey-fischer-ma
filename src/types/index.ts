@@ -37,7 +37,7 @@ export type User = {
   uid: string;
   image: string;
   fcmToken: string;
-  createdAt?: string;
+  createdAt?: string | Date;
   isFriend?: boolean;
   Friends?: string[]; // Array of friend UIDs
   Group?: string[]; // Array of GroupIds
@@ -56,7 +56,7 @@ export type FriendRequest = {
 export type Content = {
   id?: string; // DocId
   mediaType: 'Audio' | 'Video' | 'Podcast' | 'Article';
-  createdAt?: string;
+  createdAt?: string | Date;
   title: string;
   image: string;
   description: string;
@@ -90,4 +90,14 @@ export type NewsFeed = {
   content: Content;
   sender: User;
   receiver: User;
+};
+
+// Archive type
+export type Archive = {
+  id?: string;
+  userId: string;
+  contentId: string;
+  user?: User;
+  content?: Content;
+  createdAt?: string | Date;
 };
