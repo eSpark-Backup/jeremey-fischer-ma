@@ -47,12 +47,20 @@ const Button = ({
 
 const styles = StyleSheet.create({
   btnContainer: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.card,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    width: '90%',
+    width: '100%',
   },
 });
 
