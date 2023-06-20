@@ -10,6 +10,14 @@ import {
 import { colors } from '../../theme';
 import MyText from '../MyText';
 
+interface BtnProps {
+  btnStyle?: ViewStyle;
+  titleStyle?: TextStyle;
+  title?: string;
+  disabled?: boolean;
+  icon?: React.ReactNode;
+  onPress?: () => void;
+}
 const Button = ({
   btnStyle = {},
   titleStyle = {},
@@ -17,14 +25,7 @@ const Button = ({
   disabled = false,
   icon = null,
   onPress,
-}: {
-  btnStyle?: ViewStyle;
-  titleStyle?: TextStyle;
-  title?: string;
-  disabled?: boolean;
-  icon?: React.ReactNode;
-  onPress?: () => void;
-}) => {
+}: BtnProps) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}

@@ -3,11 +3,11 @@ import { StyleSheet, Text, View, Platform, Alert } from 'react-native';
 import { Avatar } from '@rneui/base';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import { Divider, Icon } from '@rneui/themed';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { GapView, MyCanvas, MyText, NormalBtn } from '../../components';
 import { SCREEN_WIDTH } from '../../constants';
 import { NavProps } from '../../types';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { storeUserData } from '../../utils';
 
 export default function App() {
