@@ -3,6 +3,11 @@ import { db } from '.';
 import { FriendRequest, User } from '../types';
 import { collections } from './constants';
 
+/**
+ * Fetch User FriendRequest
+ * @param {uid}  uid - `uid` is uid of a user which friend request needs to be fetched
+ * @returns {FriendRequest[]} `FriendRequest[]` Return FriendRequests
+ */
 export const getAllRequest = async (uid: string) => {
   try {
     const requests: FriendRequest[] = [];
@@ -27,6 +32,11 @@ export const getAllRequest = async (uid: string) => {
   }
 };
 
+/**
+ * Send FriendRequest
+ * @param {FriendRequest}  FriendRequest - `FriendRequest` send Required data to send request
+ * @returns {string} `message` Return message wheter it success or failed
+ */
 export const sendRequest = async (data: FriendRequest) => {
   try {
     const res: any = await db()
@@ -41,6 +51,11 @@ export const sendRequest = async (data: FriendRequest) => {
   }
 };
 
+/**
+ * Accept FriendRequest
+ * @param {id}  id - `id` id of friend request
+ * @returns {string} `message` Return message wheter it success or failed
+ */
 export const acceptRequest = async (id: string) => {
   try {
     const isRequestExist = await db()
@@ -97,6 +112,11 @@ export const acceptRequest = async (id: string) => {
   }
 };
 
+/**
+ * Reject FriendRequest
+ * @param {id}  id - `id` id of friend request
+ * @returns {string} `message` Return message wheter it success or failed
+ */
 export const rejectRequest = async (id: string) => {
   try {
     const isRequestExist = await db()
