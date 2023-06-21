@@ -29,7 +29,7 @@ export default function FriendsList() {
         image="https://randomuser.me/api/portraits/men/22.jpg"
         requestBtn={true}
       />
-      <LineSeperator />
+      <SubHeader title="Friends" />
       {loadFriends.get() ? (
         <ActivityIndicator
           size={'large'}
@@ -43,7 +43,7 @@ export default function FriendsList() {
             <CommunityCard
               name={item.userName}
               details={item.email}
-              image={"https://randomuser.me/api/portraits/men/22.jpg"}
+              image={'https://randomuser.me/api/portraits/men/22.jpg'}
             />
           )}
           ListEmptyComponent={

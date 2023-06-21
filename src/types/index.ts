@@ -4,7 +4,13 @@ import { FakeFeedType } from '../constants';
 
 export type RootStackParamList = {
   Login: undefined;
-  Tab: { screen: 'Archive' | 'Home' | 'Profile'; params?: undefined };
+  Tab: {
+    screen: 'Article' | 'Audio' | 'Podcast' | 'Video';
+    params?: undefined;
+  };
+  Details: { item: FakeFeedType };;
+  ProfileNav: undefined;
+  CommunityNav: undefined;
   Share: undefined;
 };
 
@@ -19,7 +25,22 @@ export type HomeStackParamList = {
 
 export type ProfileStackParamList = {
   Profile: undefined;
+  Archive: undefined;
   Settings: undefined;
+};
+
+export type CommunityStackParamList = {
+  FriendsList: undefined;
+  GroupsList: undefined;
+  GroupDetails: undefined;
+  AddNewGroup: undefined;
+};
+
+export type TabNavParamList = {
+  Article: undefined;
+  Audio: undefined;
+  Podcast: undefined;
+  Video: undefined;
 };
 
 export type NavProps = NativeStackScreenProps<RootStackParamList>;
@@ -90,4 +111,14 @@ export type NewsFeed = {
   content: Content;
   sender: User;
   receiver: User;
+};
+
+// GLobalState type
+export type GlobalState = {
+  userData: null;
+  screenLoading: boolean;
+  loadFriends: boolean;
+  friends: User[] | null;
+  loadGroups: boolean;
+  groups: Group[] | null;
 };

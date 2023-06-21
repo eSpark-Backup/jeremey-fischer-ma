@@ -76,7 +76,7 @@ export default function App() {
         <NormalBtn
           title="View Archive"
           btnStyle={{ justifyContent: 'space-between', marginVertical: 5 }}
-          onPress={() => navigation.navigate('Tab', { screen: 'Archive' })}
+          onPress={() => navigation.navigate('Archive')}
           icon={
             <ArchiveOutlineSvg color={colors.text} width={25} height={25} />
           }

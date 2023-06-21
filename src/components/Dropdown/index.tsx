@@ -5,12 +5,14 @@ import {
   TouchableOpacity,
   FlatList,
   ScrollView,
+  ViewStyle,
 } from 'react-native';
 import { Theme, useTheme } from '@react-navigation/native';
 import MI from 'react-native-vector-icons/MaterialIcons';
 
 import styles from './styles';
 import useUpdateEffect from '../../utils/hooks/useUpdateEffect';
+import GapView from '../GapView';
 
 const Dropdown = ({
   dataSource,
@@ -21,6 +23,8 @@ const Dropdown = ({
   title,
   defaultLabel,
   minWidth,
+  containerStyle,
+  overlap,
 }: {
   dataSource: { name: string; id: string }[];
   handleLabel?: (value: { name?: string; id?: string }, type: string) => void;
@@ -30,6 +34,8 @@ const Dropdown = ({
   title?: string;
   defaultLabel: string;
   minWidth?: number;
+  containerStyle?: ViewStyle;
+  overlap?: boolean;
 }) => {
   const [label, setLabel] = useState<{ name?: string; id?: string }>({
     name: '',
@@ -64,53 +70,63 @@ const Dropdown = ({
   };
 
   return (
-    <View style={{ minWidth: minWidth }}>
-      {title && (
-        <Text
-          style={{
-            color: colors.text,
-            ...styles.labelText,
-          }}>
-          {title}
-        </Text>
-      )}
-      <TouchableOpacity onPress={() => handleToggle?.(type)}>
-        <View
-          style={{
-            borderColor: borderColor,
-            ...styles.dropdownLabelContainer,
-          }}>
-          <View style={styles.dropdownLabelInner}>
-            <Text style={{ color: colors.text, ...styles.dropDownText }}>
-              {label.name == '' ? defaultLabel : label.name}
-            </Text>
-            {toggleValue ? (
-              <MI name="arrow-drop-up" color={colors.text} size={22} />
-            ) : (
-              <MI name="arrow-drop-down" color={colors.text} size={22} />
-            )}
+    <>
+      <View
+        style={{
+          minWidth: minWidth,
+          position: overlap ? 'absolute' : 'relative',
+          zIndex: 1,
+          ...containerStyle,
+        }}>
+        {title && (
+          <Text
+            style={{
+              color: colors.text,
+              ...styles.labelText,
+            }}>
+            {title}
+          </Text>
+        )}
+        <TouchableOpacity onPress={() => handleToggle?.(type)}>
+          <View
+            style={{
+              borderColor: borderColor,
+              ...styles.dropdownLabelContainer,
+            }}>
+            <View style={styles.dropdownLabelInner}>
+              <Text style={{ color: colors.text, ...styles.dropDownText }}>
+                {label.name == '' ? defaultLabel : label.name}
+              </Text>
+              {toggleValue ? (
+                <MI name="arrow-drop-up" color={colors.text} size={22} />
+              ) : (
+                <MI name="arrow-drop-down" color={colors.text} size={22} />
+              )}
+            </View>
           </View>
-        </View>
-      </TouchableOpacity>
-      {toggleValue && (
-        <View
-          style={{
-            ...styles.dropDownContainer,
-            borderColor: borderColor,
-            maxHeight: 100,
-            minWidth: minWidth,
-          }}>
-          <ScrollView>
-            <FlatList
-              data={dataSource}
-              nestedScrollEnabled
-              renderItem={renderList}
-            />
-          </ScrollView>
-        </View>
-      )}
-      <View style={{ height: 10 }} />
-    </View>
+        </TouchableOpacity>
+        {toggleValue && (
+          <View
+            style={{
+              ...styles.dropDownContainer,
+              borderColor: borderColor,
+              maxHeight: 100,
+              minWidth: minWidth,
+              zIndex: 10,
+            }}>
+            <ScrollView>
+              <FlatList
+                data={dataSource}
+                nestedScrollEnabled
+                renderItem={renderList}
+              />
+            </ScrollView>
+          </View>
+        )}
+        <View style={{ height: 10 }} />
+      </View>
+      {overlap && <GapView length={77} />}
+    </>
   );
 };
 

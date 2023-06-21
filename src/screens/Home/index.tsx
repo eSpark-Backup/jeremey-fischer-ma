@@ -31,6 +31,13 @@ import { disableBackButton } from '../../utils';
 
 import { getGroupById, getMyGroups } from '../../api/groups.controller';
 import { getAllFreinds } from '../../api/user.controller';
+import {
+  ArticleSvg,
+  GroupSvg,
+  MicNoneSvg,
+  MusicNoteSvg,
+  TvSvg,
+} from '../../assets';
 
 export default function App() {
   useEffect(() => {
@@ -67,35 +74,33 @@ const MyFeed = () => {
 
     return (
       <View>
-        <View
-          style={{
-            flexDirection: 'row',
+        {/* <Dropdown
+          defaultLabel="Select Item..."
+          minWidth={150}
+          overlap
+          containerStyle={{
             alignSelf: 'flex-end',
-          }}>
-          <Dropdown
-            defaultLabel="Select Item..."
-            minWidth={150}
-            dataSource={[
-              { name: 'Article', id: 'art' },
-              { name: 'Video', id: 'vid' },
-              { name: 'Podcast', id: 'pod' },
-              { name: 'Audio', id: 'aud' },
-              { name: 'Sender', id: 'sen' },
-            ]}
-            toggleValue={toggleVal}
-            type="sort"
-            handleToggle={() => setToggleVal(!toggleVal)}
-            title="Sort By..."
-          />
-        </View>
+          }}
+          dataSource={[
+            { name: 'Article', id: 'art' },
+            { name: 'Video', id: 'vid' },
+            { name: 'Podcast', id: 'pod' },
+            { name: 'Audio', id: 'aud' },
+            { name: 'Sender', id: 'sen' },
+          ]}
+          toggleValue={toggleVal}
+          type="sort"
+          handleToggle={() => setToggleVal(!toggleVal)}
+          title="Sort By..."
+        />
         <MyText
           textStyle={{
-            alignSelf: 'flex-end',
             marginVertical: 5,
+            alignSelf: 'flex-end',
             fontWeight: 'bold',
           }}>
           -- today --
-        </MyText>
+        </MyText> */}
         <MyCard>
           <TouchableOpacity
             style={{ flexDirection: 'row', padding: 10 }}
@@ -168,7 +173,7 @@ const MyFeed = () => {
 
   return (
     <View>
-      <MyText>What your friends are reading:</MyText>
+      {/* <MyText>What your friends are reading:</MyText> */}
       <GapView />
       <FlatList data={fakeFeedData} renderItem={renderFeedList} />
     </View>

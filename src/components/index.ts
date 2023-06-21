@@ -13,3 +13,5 @@ export { default as LineSeperator } from './LineSeperator';
 export { default as Tabs } from './Tabs';
 export { default as LabelBox } from './LabelBox';
 export { default as Dropdown } from './Dropdown';
+export { default as CustomTabBar } from './CustomTabBar';
+export { default as FeedCard } from './FeedCard';

@@ -20,22 +20,12 @@ export default function HomeNav() {
   const { friends, loadFriends } = useHookstate(store);
 
   return (
-    <Stack.Navigator
-      initialRouteName="Home"
-      screenOptions={{
-        header: ({ route, navigation }) => (
-          <MyHeader
-            route={route}
-            rightIcon={true}
-            rightIconType={'font-awesome-5'}
-            rightIconName="users"
-            onPressRightIcon={() =>
-              getFriends(navigation, loadFriends, friends)
-            }
-          />
-        ),
-      }}>
-      <Stack.Screen name="Home" component={Home} />
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Details"
         component={Details}

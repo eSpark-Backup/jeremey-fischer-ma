@@ -1,18 +1,22 @@
-import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import {
+  NavigationHelpers,
+  NavigationProp,
+  ParamListBase,
+} from '@react-navigation/native';
 import { State } from '@hookstate/core';
 
-import { HomeStackParamList, User } from '../../../types';
+import { Group, HomeStackParamList, User } from '../../../types';
 import { getAllFreinds, loginUser } from '../../../api/user.controller';
 import { storeUserData } from '../../../utils';
 import { getMyGroups } from '../../../api/groups.controller';
 
 export const getFriends = async (
-  navigation: NavigationProp<ParamListBase>,
+  navigation: NavigationHelpers<ParamListBase>,
   loadFriends: State<boolean, {}>,
-  friends: State<null, {}>,
+  friends: State<User[] | null, {}>,
 ) => {
   loadFriends.set(true);
-  navigation.navigate('FriendsList');
+  navigation.navigate('CommunityNav');
   getAllFreinds('1686658085577').then(res => {
     console.log('get all friends', JSON.stringify(res));
     friends.set(res.data);
@@ -23,7 +27,7 @@ export const getFriends = async (
 export const getGroups = async (
   navigation: NavigationProp<ParamListBase>,
   loadGroups: State<boolean, {}>,
-  groups: State<null, {}>,
+  groups: State<Group[] | null, {}>,
 ) => {
   loadGroups.set(true);
   navigation.navigate('GroupsList');
