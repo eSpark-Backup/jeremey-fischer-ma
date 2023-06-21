@@ -62,6 +62,7 @@ export type Content = {
   description: string;
   senderId: string;
   sender?: User;
+  url?: string;
 };
 
 // Group type
