@@ -1,19 +1,23 @@
 import React from 'react';
-import {StyleSheet, ScrollView} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import {
   CommunityCard,
   LineSeperator,
   MyCanvas,
+  MyText,
   SearchBar,
   SubHeader,
   Tabs,
 } from '../../../components';
-import {HomeNavProps} from '../../../types';
+import { useHookstate } from '@hookstate/core';
+import store from '../../../store/store';
+import { colors } from '../../../theme';
 
 export default function FriendsList() {
-  const navigation = useNavigation<HomeNavProps['navigation']>();
+  const { friends, loadFriends } = useHookstate(store);
+
   return (
     <MyCanvas>
       <SearchBar placeholder="Search by email" />
@@ -25,8 +29,32 @@ export default function FriendsList() {
         image="https://randomuser.me/api/portraits/men/22.jpg"
         requestBtn={true}
       />
-      <LineSeperator />
-      <ScrollView>
+      <SubHeader title="Friends" />
+      {loadFriends.get() ? (
+        <ActivityIndicator
+          size={'large'}
+          color={colors.primary}
+          style={{ marginTop: 10 }}
+        />
+      ) : (
+        <FlatList
+          data={friends.get()}
+          renderItem={({ item }) => (
+            <CommunityCard
+              name={item.userName}
+              details={item.email}
+              image={'https://randomuser.me/api/portraits/men/22.jpg'}
+            />
+          )}
+          ListEmptyComponent={
+            <MyText
+              textStyle={{ textAlign: 'center', marginTop: 10 }}
+              children="No Friends to Show"
+            />
+          }
+        />
+      )}
+      {/* <ScrollView>
         <CommunityCard
           name="John"
           details="john@email.com"
@@ -38,7 +66,7 @@ export default function FriendsList() {
           details="john@email.com"
           image="https://randomuser.me/api/portraits/men/22.jpg"
         />
-      </ScrollView>
+      </ScrollView> */}
     </MyCanvas>
   );
 }

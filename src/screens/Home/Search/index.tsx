@@ -17,6 +17,7 @@ export default function Search() {
       <SearchBar placeholder="Seach content" />
       <View style={styles.btnContainer}>
         <Dropdown
+          // overlap
           type="from"
           toggleValue={toggle}
           handleToggle={() => setToggle(!toggle)}
@@ -36,7 +37,7 @@ export default function Search() {
 const styles = StyleSheet.create({
   btnContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
   },
 });

@@ -8,7 +8,11 @@ import {
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
-import { useNavigation, useTheme } from '@react-navigation/native';
+import {
+  getActionFromState,
+  useNavigation,
+  useTheme,
+} from '@react-navigation/native';
 import { Avatar } from '@rneui/themed';
 
 import {
@@ -20,10 +24,13 @@ import {
   MyText,
   OutlineBtn,
 } from '../../components';
+
 import { FakeFeedType, fakeFeedData } from '../../constants';
 import { HomeNavProps, NavProps } from '../../types';
 import { disableBackButton } from '../../utils';
-import { getGroupById } from '../../api/groups.controller';
+
+import { getGroupById, getMyGroups } from '../../api/groups.controller';
+import { getAllFreinds } from '../../api/user.controller';
 
 export default function App() {
   useEffect(() => {
@@ -48,77 +55,45 @@ const MyFeed = () => {
     item: FakeFeedType;
     index: number;
   }) => {
-    // sendRequest({
-    //   senderId: '1686658135025',
-    //   receiverId: '1686658085577',
-    //   status: 'pending',
-    // }).then(res => {
-    //   console.log('all sendRequest', res);
+    // getGroupById('5gz5N3CCtfgTGlZgJ08q').then(res => {
+    //   console.log('all shareContentToGroup', JSON.stringify(res));
     // });
-
-    // getAllRequest('1686658085577').then(res => {
-    //   console.log('all requests', res);
-    // });
-
-    // searchUser('', '1686658135025', '1686658085577').then(res => {
-    //   console.log('all searchUser', res);
-    // });
-
-    // rejectRequest('HqAL0A4fDiG79oCwgtg9').then(res => {
-    //   console.log('all acceptRequest', res);
-    // });
-
-    // getAllFreinds('1686658085577').then(res => {
-    //   console.log('all getAllFreinds', res);
-    // });
-
-    // createGroup({
-    //   groupCreatorId: '89372jfgsda823',
-    //   groupName: 'First Group',
-    //   Members: ['1686658085577', '89372jfgsda823'],
-    // }).then(res => {
-    //   console.log('all createGroup', res);
-    // });
-
-    // getMyGroups('1686658085577').then(res => {
-    //   console.log('all getMyGroups', res);
-    // });
-
-    getGroupById('5gz5N3CCtfgTGlZgJ08q').then(res => {
-      console.log('all shareContentToGroup', JSON.stringify(res));
+    getMyGroups('1686658085577').then(res => {
+      console.log('get all groups', JSON.stringify(res));
     });
+    // getAllFreinds('1686658085577').then(res => {
+    //   console.log('get all friends', res.data);
+    // });
 
     return (
       <View>
-        <View
-          style={{
-            flexDirection: 'row',
+        {/* <Dropdown
+          defaultLabel="Select Item..."
+          minWidth={150}
+          overlap
+          containerStyle={{
             alignSelf: 'flex-end',
-          }}>
-          <Dropdown
-            defaultLabel="Select Item..."
-            minWidth={150}
-            dataSource={[
-              { name: 'Article', id: 'art' },
-              { name: 'Video', id: 'vid' },
-              { name: 'Podcast', id: 'pod' },
-              { name: 'Audio', id: 'aud' },
-              { name: 'Sender', id: 'sen' },
-            ]}
-            toggleValue={toggleVal}
-            type="sort"
-            handleToggle={() => setToggleVal(!toggleVal)}
-            title="Sort By..."
-          />
-        </View>
+          }}
+          dataSource={[
+            { name: 'Article', id: 'art' },
+            { name: 'Video', id: 'vid' },
+            { name: 'Podcast', id: 'pod' },
+            { name: 'Audio', id: 'aud' },
+            { name: 'Sender', id: 'sen' },
+          ]}
+          toggleValue={toggleVal}
+          type="sort"
+          handleToggle={() => setToggleVal(!toggleVal)}
+          title="Sort By..."
+        />
         <MyText
           textStyle={{
-            alignSelf: 'flex-end',
             marginVertical: 5,
+            alignSelf: 'flex-end',
             fontWeight: 'bold',
           }}>
           -- today --
-        </MyText>
+        </MyText> */}
         <MyCard>
           <TouchableOpacity
             style={{ flexDirection: 'row', padding: 10 }}
@@ -191,7 +166,7 @@ const MyFeed = () => {
 
   return (
     <View>
-      <MyText>What your friends are reading:</MyText>
+      {/* <MyText>What your friends are reading:</MyText> */}
       <GapView />
       <FlatList data={fakeFeedData} renderItem={renderFeedList} />
     </View>

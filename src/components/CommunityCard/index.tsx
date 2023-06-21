@@ -47,12 +47,12 @@ export default function CommunityCard({
         <View style={styles.row}>
           <TouchableOpacity
             activeOpacity={0.8}
-            style={{ ...styles.requestBtns, borderColor: colors.danger }}>
+            style={{ ...styles.requestBtns }}>
             <Icon name="close" color={colors.danger} />
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
-            style={{ ...styles.requestBtns, borderColor: colors.primary }}>
+            style={{ ...styles.requestBtns }}>
             <Icon name="check" color={colors.primary} />
           </TouchableOpacity>
         </View>
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   row: { flexDirection: 'row' },
   contentContainer: { marginLeft: 10, justifyContent: 'center' },
-  requestBtns: { marginRight: 10, padding: 5, borderRadius: 5, borderWidth: 1 },
+  requestBtns: { marginRight: 10, padding: 5 },
   addBtn: {
     marginRight: 10,
   },
