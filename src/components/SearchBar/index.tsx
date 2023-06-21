@@ -1,8 +1,8 @@
 import React from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
-import {Icon} from '@rneui/themed';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Icon } from '@rneui/themed';
 
-import {colors} from '../../theme';
+import { colors } from '../../theme';
 
 export default function SearchBar({
   value,
@@ -15,13 +15,14 @@ export default function SearchBar({
 }) {
   return (
     <View style={styles.container}>
-      <Icon type="feather" name="search" color={'grey'} size={20} />
+      <Icon type="feather" name="search" color={'#8c9298'} size={20} />
       <TextInput
         style={styles.input}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor="#676767"
+        placeholderTextColor={'#8c9298'}
+        returnKeyType="search"
         underlineColorAndroid="transparent"
       />
     </View>
@@ -35,11 +36,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'center',
-    borderWidth: 1,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
     borderRadius: 10,
     paddingHorizontal: 20,
     marginBottom: 10,
-    backgroundColor: 'white',
+    backgroundColor: colors.card,
   },
-  input: {marginLeft: 8, color: colors.background, width: '97%'},
+  input: { marginLeft: 8, color: colors.text, width: '97%' },
 });

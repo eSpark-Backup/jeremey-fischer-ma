@@ -22,13 +22,7 @@ export default function ProfileNav() {
         component={Profile}
         options={{
           header: ({ route, navigation }) => (
-            <MyHeader
-              route={route}
-              rightIcon
-              rightIconName="ios-settings-outline"
-              rightIconType="ionicon"
-              onPressRightIcon={() => navigation.navigate('Settings')}
-            />
+            <MyHeader route={route} rightIcon={false} />
           ),
         }}
       />

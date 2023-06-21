@@ -3,11 +3,11 @@ import { StyleSheet, Text, View, Platform, Alert } from 'react-native';
 import { Avatar } from '@rneui/base';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import { Divider, Icon } from '@rneui/themed';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 import { GapView, MyCanvas, MyText, NormalBtn } from '../../components';
 import { SCREEN_WIDTH } from '../../constants';
 import { NavProps, ProfileProps } from '../../types';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { storeUserData } from '../../utils';
 import { ArchiveOutlineSvg } from '../../assets';
 
@@ -41,7 +41,7 @@ export default function App() {
       <View style={{ alignItems: 'center' }}>
         <Avatar
           rounded
-          containerStyle={{ borderWidth: 2, borderColor: colors.primary }}
+          containerStyle={{ borderWidth: 0.6, borderColor: 'grey' }}
           source={{ uri: 'https://randomuser.me/api/portraits/men/36.jpg' }}
           size={120}
         />

@@ -9,6 +9,7 @@ import {
   Home,
 } from '../screens';
 import Details from '../screens/Home/Details';
+import Search from '../screens/Home/Search';
 import { HomeStackParamList } from '../types';
 import { MyHeader } from '../components';
 
@@ -32,6 +33,19 @@ export default function HomeNav() {
       <Stack.Screen
         name="Details"
         component={Details}
+        options={{
+          header: ({ route, navigation }) => (
+            <MyHeader
+              route={route}
+              leftIcon={true}
+              onPressLeftIcon={() => navigation.goBack()}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="Search"
+        component={Search}
         options={{
           header: ({ route, navigation }) => (
             <MyHeader
