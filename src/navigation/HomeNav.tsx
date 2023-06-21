@@ -17,7 +17,7 @@ export default function HomeNav() {
   const Stack = createNativeStackNavigator<HomeStackParamList>();
   return (
     <Stack.Navigator
-      initialRouteName="Search"
+      initialRouteName="Home"
       screenOptions={{
         header: ({ route, navigation }) => (
           <MyHeader
