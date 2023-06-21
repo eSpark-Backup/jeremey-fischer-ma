@@ -31,13 +31,6 @@ import { disableBackButton } from '../../utils';
 
 import { getGroupById, getMyGroups } from '../../api/groups.controller';
 import { getAllFreinds } from '../../api/user.controller';
-import {
-  ArticleSvg,
-  GroupSvg,
-  MicNoneSvg,
-  MusicNoteSvg,
-  TvSvg,
-} from '../../assets';
 
 export default function App() {
   useEffect(() => {

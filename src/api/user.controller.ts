@@ -1,7 +1,11 @@
-import {db} from '.';
-import {User} from '../types';
-import {collections} from './constants';
+import { db } from '.';
+import { User } from '../types';
+import { collections } from './constants';
 
+/**
+ * Fetch All Users
+ * @returns {User[]} `User[]` Return Users
+ */
 export const getAllUsers = async () => {
   try {
     const users: User[] = [];
@@ -11,16 +15,21 @@ export const getAllUsers = async () => {
         const userData: any = user.data();
         users.push(userData);
       });
-      return {data: users, message: 'All Users'};
+      return { data: users, message: 'All Users' };
     } else {
-      return {data: users, message: 'User not Found'};
+      return { data: users, message: 'User not Found' };
     }
   } catch (error) {
     console.log('error', error);
-    return {data: [], message: 'Something went wrong'};
+    return { data: [], message: 'Something went wrong' };
   }
 };
 
+/**
+ * Login User
+ * @param {data}  User - `User` send required data for login
+ * @returns {User} `User` Return User if not found so undefined
+ */
 export const loginUser = async (data: User) => {
   try {
     var userData: User | undefined;
@@ -38,20 +47,27 @@ export const loginUser = async (data: User) => {
           Groups: [],
           Notification: [],
         });
-      return {data: (await res.get()).data(), message: 'Login Successfully'};
+      return { data: (await res.get()).data(), message: 'Login Successfully' };
     } else {
       isUserExist.forEach(res => {
         const data: any = res.data();
         userData = data;
       });
-      return {data: userData, message: 'Login Successfully'};
+      return { data: userData, message: 'Login Successfully' };
     }
   } catch (error) {
     console.log('err', error);
-    return {data: null, message: 'Something went wrong'};
+    return { data: null, message: 'Something went wrong' };
   }
 };
 
+/**
+ * Search User
+ * @param {email}  email - `email` Email for search by email
+ * @param {uid}  uid - `uid` uid for search by uid
+ * @param {myUid}  myUid - `myUid` For check is he friend of you or not
+ * @returns {User[]} `User[]` Return User if user found
+ */
 export const searchUser = async (
   email?: string,
   uid?: string,
@@ -71,7 +87,7 @@ export const searchUser = async (
 
     const result = !emailResult.empty ? emailResult : uidResult;
     if (result.empty) {
-      return {data: null, message: 'User Not Found'};
+      return { data: null, message: 'User Not Found' };
     } else {
       result.forEach(res => {
         const dbData: any = res.data();
@@ -79,14 +95,19 @@ export const searchUser = async (
         dbData.isFriend = dbData?.Friends?.includes(myUid ?? '');
         users.push(dbData);
       });
-      return {data: users, message: 'User Data'};
+      return { data: users, message: 'User Data' };
     }
   } catch (error) {
     console.log('searchUser errors', error);
-    return {data: null, message: 'Something went wrong'};
+    return { data: null, message: 'Something went wrong' };
   }
 };
 
+/**
+ * Search User
+ * @param {myUid}  myUid - `myUid` For getting all friends of this `UID`
+ * @returns {User} `User` Return User[]
+ */
 export const getAllFreinds = async (myUid: string) => {
   try {
     const friends: User[] = [];
@@ -95,16 +116,16 @@ export const getAllFreinds = async (myUid: string) => {
       .where('Friends', 'array-contains', myUid)
       .get();
     if (response.empty) {
-      return {data: null, message: 'You have not any friend'};
+      return { data: null, message: 'You have not any friend' };
     } else {
       response.forEach(res => {
         const data: any = res.data();
         friends.push(data);
       });
-      return {data: friends, message: 'Your friends'};
+      return { data: friends, message: 'Your friends' };
     }
   } catch (error) {
     console.log('getAllFreinds error', error);
-    return {data: null, message: 'Something went wrong'};
+    return { data: null, message: 'Something went wrong' };
   }
 };

@@ -25,6 +25,7 @@ const Dropdown = ({
   minWidth,
   containerStyle,
   overlap,
+  gapVal = 50,
 }: {
   dataSource: { name: string; id: string }[];
   handleLabel?: (value: { name?: string; id?: string }, type: string) => void;
@@ -36,6 +37,7 @@ const Dropdown = ({
   minWidth?: number;
   containerStyle?: ViewStyle;
   overlap?: boolean;
+  gapVal?: number;
 }) => {
   const [label, setLabel] = useState<{ name?: string; id?: string }>({
     name: '',
@@ -75,7 +77,7 @@ const Dropdown = ({
         style={{
           minWidth: minWidth,
           position: overlap ? 'absolute' : 'relative',
-          zIndex: 1,
+          zIndex: 10,
           ...containerStyle,
         }}>
         {title && (
@@ -125,7 +127,7 @@ const Dropdown = ({
         )}
         <View style={{ height: 10 }} />
       </View>
-      {overlap && <GapView length={77} />}
+      {overlap && <GapView length={gapVal} />}
     </>
   );
 };

@@ -8,7 +8,8 @@ export type RootStackParamList = {
     screen: 'Article' | 'Audio' | 'Podcast' | 'Video';
     params?: undefined;
   };
-  Details: { item: FakeFeedType };;
+  Details: { item: FakeFeedType };
+  Search: undefined;
   ProfileNav: undefined;
   CommunityNav: undefined;
   Share: undefined;
@@ -21,6 +22,7 @@ export type HomeStackParamList = {
   GroupsList: undefined;
   GroupDetails: { title: string };
   AddNewGroup: undefined;
+  Search: undefined;
 };
 
 export type ProfileStackParamList = {

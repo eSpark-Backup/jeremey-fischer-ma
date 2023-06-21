@@ -25,11 +25,7 @@ export default function ProfileNav() {
             <MyHeader
               route={route}
               leftIcon
-              rightIcon
-              rightIconName="ios-settings-outline"
-              rightIconType="ionicon"
               onPressLeftIcon={() => navigation.goBack()}
-              onPressRightIcon={() => navigation.navigate('Settings')}
             />
           ),
         }}

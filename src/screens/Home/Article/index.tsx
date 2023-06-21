@@ -1,11 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
 import { FAB } from '@rneui/themed';
 
 import { colors } from '../../../theme';
 import { FeedCard, MyCanvas } from '../../../components';
+import { NavProps } from '../../../types';
 
 export default function ArticleScreen() {
+  const navigation = useNavigation<NavProps['navigation']>();
   return (
     <MyCanvas>
       <FeedCard
@@ -18,6 +22,7 @@ export default function ArticleScreen() {
         visible={true}
         icon={{ name: 'search', color: 'white' }}
         color={colors.card}
+        onPress={() => navigation.navigate('Search')}
       />
     </MyCanvas>
   );
