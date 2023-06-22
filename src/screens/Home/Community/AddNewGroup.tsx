@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
 
@@ -23,13 +30,14 @@ export default function AddNewGroup() {
         <GapView />
         <TextInput
           style={{
-            color: colors.background,
-            backgroundColor: 'white',
+            color: colors.text,
+            backgroundColor: colors.card,
             borderRadius: 10,
             paddingHorizontal: 10,
+            paddingVertical: Platform.OS == 'ios' ? 10 : 0,
           }}
           placeholder={'Type Group Name'}
-          placeholderTextColor="#676767"
+          placeholderTextColor={'#ffffff55'}
           underlineColorAndroid="transparent"
         />
       </View>

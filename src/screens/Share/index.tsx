@@ -100,6 +100,7 @@ export default function Share() {
             padding: 10,
             minHeight: 100,
           }}
+          multiline
         />
       </View>
       <View

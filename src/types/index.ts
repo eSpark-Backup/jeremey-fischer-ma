@@ -72,7 +72,7 @@ export type FriendRequest = {
   senderId: string;
   receiverId: string;
   sender?: User;
-  status: 'pending' | 'accept' | 'reject';
+  status?: 'pending' | 'accept' | 'reject';
   id?: string; // DocId
 };
 
@@ -125,7 +125,7 @@ export type Archive = {
   user?: User;
   content?: Content;
   createdAt?: string | Date;
-}
+};
 
 // GLobalState type
 export type GlobalState = {

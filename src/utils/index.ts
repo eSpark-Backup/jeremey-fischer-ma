@@ -49,7 +49,7 @@ export const getContentTypeFromUrl = async (url: string) => {
       return 'Music';
     } else if (/soundcloud/.test(url)) {
       return 'Music';
-    } else if (/youtube/.test(url)) {
+    } else if (/youtube|youtu.be/.test(url)) {
       return 'Video';
     } else if (/vimeo/.test(url)) {
       return 'Video';
