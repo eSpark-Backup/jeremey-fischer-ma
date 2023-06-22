@@ -6,7 +6,7 @@
  */
 
 import React, { useCallback, useEffect } from 'react';
-import { SafeAreaView, Linking, StatusBar } from 'react-native';
+import { SafeAreaView, Linking, StatusBar, Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useHookstate } from '@hookstate/core';
 
@@ -14,7 +14,7 @@ import { useHookstate } from '@hookstate/core';
 import ShareMenu from 'react-native-share-menu';
 import { RootNav } from './src/navigation';
 import store from './src/store/store';
-import { getUserData } from './src/utils';
+import { getContentTypeFromUrl, getUserData } from './src/utils';
 import { ScreenLoader } from './src/components';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { colors } from './src/theme';
@@ -45,13 +45,23 @@ function App(): JSX.Element {
     };
   }, []);
 
-  const handleShare = useCallback((item?: any) => {
+  const handleShare = useCallback(async (item?: any) => {
     if (!item || !Boolean(item?.data?.length)) {
       console.log('Data not found on share', item);
       return;
     }
     Linking.openURL('seaglass://share');
-    console.log('Data found on share', item);
+    const url =
+      Platform.OS == 'android'
+        ? item?.data
+        : item.data?.length > 1
+        ? item?.data[1].data
+        : item?.data[0].data;
+    console.log(
+      `Data found on share ${Platform.OS}`,
+      url,
+      await getContentTypeFromUrl(url),
+    );
     // Linking.openURL('seaglass://share');
     // You can receive extra data from your custom Share View
   }, []);
