@@ -2,7 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from '@react-navigation/native';
 
-import { Profile } from '../screens';
+import { Archive, Profile } from '../screens';
 import Settings from '../screens/Profile/Details';
 import { ProfileStackParamList } from '../types';
 import { MyHeader } from '../components';
@@ -24,10 +24,8 @@ export default function ProfileNav() {
           header: ({ route, navigation }) => (
             <MyHeader
               route={route}
-              rightIcon
-              rightIconName="ios-settings-outline"
-              rightIconType="ionicon"
-              onPressRightIcon={() => navigation.navigate('Settings')}
+              leftIcon
+              onPressLeftIcon={() => navigation.goBack()}
             />
           ),
         }}
@@ -35,6 +33,19 @@ export default function ProfileNav() {
       <Stack.Screen
         name="Settings"
         component={Settings}
+        options={{
+          header: ({ route, navigation }) => (
+            <MyHeader
+              route={route}
+              leftIcon={true}
+              onPressLeftIcon={() => navigation.goBack()}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="Archive"
+        component={Archive}
         options={{
           header: ({ route, navigation }) => (
             <MyHeader

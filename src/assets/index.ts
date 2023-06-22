@@ -1,2 +1,9 @@
 export {default as ArchiveSvg} from './svgs/archive.svg';
 export {default as ArchiveOutlineSvg} from './svgs/archive-outline.svg';
+export {default as ArticleSvg} from './svgs/article.svg';
+export {default as MusicNoteSvg} from './svgs/music_note.svg';
+export {default as MicNoneSvg} from './svgs/mic_none.svg';
+export {default as TvSvg} from './svgs/tv.svg';
+export {default as GroupSvg} from './svgs/group.svg';
+export {default as NYTimesSvg} from './svgs/nytimes.svg';
+export {default as ArrowForward} from './svgs/arrow-forward.svg';

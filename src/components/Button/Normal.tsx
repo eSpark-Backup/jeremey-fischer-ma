@@ -10,6 +10,14 @@ import {
 import { colors } from '../../theme';
 import MyText from '../MyText';
 
+interface BtnProps {
+  btnStyle?: ViewStyle;
+  titleStyle?: TextStyle;
+  title?: string;
+  disabled?: boolean;
+  icon?: React.ReactNode;
+  onPress?: () => void;
+}
 const Button = ({
   btnStyle = {},
   titleStyle = {},
@@ -17,14 +25,7 @@ const Button = ({
   disabled = false,
   icon = null,
   onPress,
-}: {
-  btnStyle?: ViewStyle;
-  titleStyle?: TextStyle;
-  title?: string;
-  disabled?: boolean;
-  icon?: React.ReactNode;
-  onPress?: () => void;
-}) => {
+}: BtnProps) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -46,7 +47,15 @@ const Button = ({
 
 const styles = StyleSheet.create({
   btnContainer: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.card,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',

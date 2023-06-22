@@ -1,6 +1,5 @@
 import { BackHandler } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { User } from '../types';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 
 export const disableBackButton = () => {
@@ -15,7 +14,6 @@ export const getUserData = async () => {
   const jsonValue = await AsyncStorage.getItem('@userData');
   console.log('jsonValue', jsonValue);
   return jsonValue != null ? JSON.parse(jsonValue) : null;
-  // error reading value
 };
 
 export const storeUserData = async (
@@ -25,7 +23,7 @@ export const storeUserData = async (
     const jsonValue = JSON.stringify(value);
     await AsyncStorage.setItem('@userData', jsonValue);
   } catch (e) {
-    // saving error
+    console.error(e);
   }
 };
 

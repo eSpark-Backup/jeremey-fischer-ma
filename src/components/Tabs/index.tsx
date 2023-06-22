@@ -1,10 +1,13 @@
 import React from 'react';
-import {StyleSheet, View, TouchableOpacity} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-import {colors} from '../../theme';
+import { colors } from '../../theme';
 import MyText from '../MyText';
-import {HomeNavProps} from '../../types';
+import { HomeNavProps } from '../../types';
+import { getGroups } from '../../screens/Home/utils/function';
+import { useHookstate } from '@hookstate/core';
+import store from '../../store/store';
 
 export default function Tabs({
   selectedTabId,
@@ -12,6 +15,8 @@ export default function Tabs({
   selectedTabId: string | number;
 }) {
   const navigation = useNavigation<HomeNavProps['navigation']>();
+  const { groups, loadGroups } = useHookstate(store);
+
   return (
     <View
       style={{
@@ -36,7 +41,7 @@ export default function Tabs({
         <MyText children="Friends" />
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => navigation.navigate('GroupsList')}
+        onPress={() => getGroups(navigation, loadGroups, groups)}
         style={{
           width: '50%',
           height: '100%',

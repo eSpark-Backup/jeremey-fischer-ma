@@ -6,7 +6,7 @@
  */
 
 import React, { useCallback, useEffect } from 'react';
-import { SafeAreaView, Linking } from 'react-native';
+import { SafeAreaView, Linking, StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useHookstate } from '@hookstate/core';
 
@@ -17,6 +17,7 @@ import store from './src/store/store';
 import { getUserData } from './src/utils';
 import { ScreenLoader } from './src/components';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { colors } from './src/theme';
 
 function App(): JSX.Element {
   const { userData, screenLoading } = useHookstate(store);
@@ -57,7 +58,7 @@ function App(): JSX.Element {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
         <ScreenLoader show={screenLoading.get()} />
         <RootNav />
       </SafeAreaView>

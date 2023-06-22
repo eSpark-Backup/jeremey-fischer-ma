@@ -1,42 +1,31 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { useTheme } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Icon, Avatar } from '@rneui/themed';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { Icon } from '@rneui/themed';
 
-import { Archive } from '../screens';
-import { ArchiveOutlineSvg, ArchiveSvg } from '../assets';
-import { MyHeader } from '../components';
+import { CustomTabBar } from '../components';
 
-import HomeNav from './HomeNav';
-import ProfileNav from './ProfileNav';
+import ArticleScreen from '../screens/Home/Article';
+import AudioScreen from '../screens/Home/Audio';
+import PodcastScreen from '../screens/Home/Podcast/indexs';
+import VideoScreen from '../screens/Home/Video';
+import { TabNavParamList } from '../types';
 
 export default function TabNav() {
-  const Tab = createBottomTabNavigator();
-  const { colors } = useTheme();
-  const renderArchive = (focused: boolean, color: string) => {
-    return focused ? (
-      <ArchiveSvg color={color} width={35} height={35} />
-    ) : (
-      <ArchiveOutlineSvg color={color} width={35} height={35} />
-    );
-  };
-
+  const Tab = createMaterialTopTabNavigator<TabNavParamList>();
   return (
     <Tab.Navigator
-      initialRouteName="HomeNav"
+      tabBar={props => {
+        return <CustomTabBar {...props} />;
+      }}
       screenOptions={{
         tabBarShowLabel: false,
-        header: ({ route }) => {
-          return <MyHeader route={route} />;
-        },
       }}>
       <Tab.Screen
-        name="HomeNav"
-        component={HomeNav}
+        name="Article"
+        component={ArticleScreen}
         options={{
-          headerShown: false,
-          tabBarIcon: ({ color, focused, size }) => (
+          tabBarIcon: ({ color, focused }) => (
             <Icon
               name={focused ? 'ios-home' : 'ios-home-outline'}
               type="ionicon"
@@ -47,30 +36,45 @@ export default function TabNav() {
         }}
       />
       <Tab.Screen
-        name="Archive"
-        component={Archive}
+        name="Audio"
+        component={AudioScreen}
         options={{
-          tabBarIcon: ({ color, focused, size }) => {
-            return renderArchive(focused, color);
-          },
+          tabBarIcon: ({ color, focused }) => (
+            <Icon
+              name={focused ? 'ios-home' : 'ios-home-outline'}
+              type="ionicon"
+              color={color}
+              size={30}
+            />
+          ),
         }}
       />
       <Tab.Screen
-        name="ProfileNav"
-        component={ProfileNav}
+        name="Podcast"
+        component={PodcastScreen}
         options={{
-          headerShown: false,
-          tabBarIcon: ({ color, focused, size }) => {
-            return (
-              <Avatar
-                rounded
-                containerStyle={{ borderWidth: 2, borderColor: color }}
-                source={{
-                  uri: 'https://randomuser.me/api/portraits/men/36.jpg',
-                }}
-              />
-            );
-          },
+          tabBarIcon: ({ color, focused }) => (
+            <Icon
+              name={focused ? 'ios-home' : 'ios-home-outline'}
+              type="ionicon"
+              color={color}
+              size={30}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Video"
+        component={VideoScreen}
+        options={{
+          tabBarIcon: ({ color, focused }) => (
+            <Icon
+              name={focused ? 'ios-home' : 'ios-home-outline'}
+              type="ionicon"
+              color={color}
+              size={30}
+            />
+          ),
         }}
       />
     </Tab.Navigator>

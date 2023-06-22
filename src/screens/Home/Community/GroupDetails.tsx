@@ -1,7 +1,7 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import { GapView, MyCanvas } from '../../../components';
-import FeedCard from '../../../components/FeedCard';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+
+import { FeedCard, GapView, MyCanvas } from '../../../components';
 
 export default function GroupDetails() {
   return (

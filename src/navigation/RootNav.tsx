@@ -10,6 +10,10 @@ import { RootStackParamList } from '../types';
 import { MyHeader } from '../components';
 import { getUserData } from '../utils';
 import store from '../store/store';
+import ProfileNav from './ProfileNav';
+import CommunityNav from './CommunityNav';
+import Details from '../screens/Home/Details';
+import Search from '../screens/Home/Search';
 
 const linking: LinkingOptions<RootStackParamList> = {
   prefixes: ['seaglass://'], // Specify the custom URL scheme for your app
@@ -38,6 +42,46 @@ export default function RootNav() {
           name="Tab"
           component={TabNav}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Details"
+          component={Details}
+          options={{
+            header: ({ route, navigation }) => (
+              <MyHeader
+                route={route}
+                leftIcon={true}
+                onPressLeftIcon={() => navigation.goBack()}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="Search"
+          component={Search}
+          options={{
+            header: ({ route, navigation }) => (
+              <MyHeader
+                route={route}
+                leftIcon={true}
+                onPressLeftIcon={() => navigation.goBack()}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="ProfileNav"
+          component={ProfileNav}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="CommunityNav"
+          component={CommunityNav}
+          options={{
+            headerShown: false,
+          }}
         />
         <Stack.Screen
           name="Share"
