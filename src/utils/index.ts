@@ -53,6 +53,7 @@ export const getFriendRequests = async (
     loadRequests.set(false);
   });
 };
+
 export const getFriends = async (
   loadFriends: State<boolean, {}>,
   friends: State<User[] | null, {}>,
@@ -64,10 +65,12 @@ export const getFriends = async (
     loadFriends.set(false);
   });
 };
+
 /**
  * @param {url} url of a content to check its type
  * @returns {type} return type wheter it `music`, `video`, `podcast` or `article`
  */
+
 export const getContentTypeFromUrl = async (url: string) => {
   try {
     if (/spotify.*\/track|spotify.*\/album/.test(url)) {

@@ -20,7 +20,7 @@ export const getSearchedFriend = async (
   friends: State<User[] | null, {}>,
 ) => {
   loadFriends.set(true);
-  searchUser(searchVal,'','1686658085577').then(res => {
+  searchUser(searchVal,'1686658085577').then(res => {
     console.log('get searched friend', JSON.stringify(res));
     friends.set(res.data);
     loadFriends.set(false);

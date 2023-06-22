@@ -16,6 +16,8 @@ export default function CommunityCard({
   group,
   onPress,
   onPressAddBtn,
+  onRequestCancel,
+  onRequestAccept,
 }: {
   name: string;
   details: string;
@@ -26,6 +28,8 @@ export default function CommunityCard({
   group?: boolean;
   onPress?: () => void;
   onPressAddBtn?: () => void;
+  onRequestCancel?: () => void;
+  onRequestAccept?: () => void;
 }) {
   const [check, setcheck] = useState(false);
   return (
@@ -40,11 +44,13 @@ export default function CommunityCard({
       {requestBtn && (
         <View style={styles.row}>
           <TouchableOpacity
+            onPress={onRequestCancel}
             activeOpacity={0.8}
             style={{ ...styles.requestBtns }}>
             <Icon name="close" color={colors.text} />
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={onRequestAccept}
             activeOpacity={0.8}
             style={{ ...styles.requestBtns }}>
             <Icon name="check" color={colors.primary} />
