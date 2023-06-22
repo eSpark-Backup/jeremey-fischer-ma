@@ -29,15 +29,7 @@ export default function CommunityCard({
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.row}>
-        <Avatar
-          rounded
-          containerStyle={{
-            borderWidth: 2,
-            borderColor: colors.primary,
-          }}
-          size={'medium'}
-          source={{ uri: image }}
-        />
+        <Avatar rounded size={'medium'} source={{ uri: image }} />
         <View style={styles.contentContainer}>
           <MyText children={name} textStyle={{ fontSize: 16 }} />
           <MyText children={details} />
@@ -48,7 +40,7 @@ export default function CommunityCard({
           <TouchableOpacity
             activeOpacity={0.8}
             style={{ ...styles.requestBtns }}>
-            <Icon name="close" color={colors.danger} />
+            <Icon name="close" color={colors.text} />
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
@@ -72,8 +64,8 @@ export default function CommunityCard({
             iconType="material-community"
             checkedIcon="checkbox-outline"
             uncheckedIcon={'checkbox-blank-outline'}
-            checkedColor={colors.primary}
-            uncheckedColor={colors.primary}
+            checkedColor={colors.text}
+            uncheckedColor={colors.text}
             containerStyle={{
               padding: 0,
               backgroundColor: 'transparent',
@@ -90,15 +82,12 @@ export default function CommunityCard({
           }}>
           <Avatar
             rounded
-            containerStyle={{
-              borderWidth: 2,
-            }}
+            containerStyle={{}}
             source={{ uri: 'https://randomuser.me/api/portraits/men/22.jpg' }}
           />
           <Avatar
             rounded
             containerStyle={{
-              borderWidth: 2,
               right: 5,
             }}
             source={{ uri: 'https://randomuser.me/api/portraits/men/21.jpg' }}
@@ -106,7 +95,6 @@ export default function CommunityCard({
           <Avatar
             rounded
             containerStyle={{
-              borderWidth: 2,
               right: 10,
             }}
             source={{ uri: 'https://randomuser.me/api/portraits/men/29.jpg' }}

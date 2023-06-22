@@ -36,14 +36,12 @@ const CustomTabBar = ({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginVertical: 10,
+        margin: 10,
       }}>
       <Avatar
         onPress={() => navigation.navigate('ProfileNav')}
         rounded
         containerStyle={{
-          borderWidth: 2,
-          borderColor: colors.primary,
           marginHorizontal: 5,
           width: 35,
           height: 35,

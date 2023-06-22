@@ -95,7 +95,7 @@ export default function Share() {
             fontFamily: Platform.OS == 'ios' ? 'Verdana' : 'sans-serif-medium',
             textAlignVertical: 'top',
             borderWidth: 2,
-            borderColor: colors.primary,
+            borderColor: 'grey',
             borderRadius: 5,
             padding: 10,
             minHeight: 100,
