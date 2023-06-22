@@ -72,8 +72,8 @@ export default function CommunityCard({
             iconType="material-community"
             checkedIcon="checkbox-outline"
             uncheckedIcon={'checkbox-blank-outline'}
-            checkedColor={colors.primary}
-            uncheckedColor={colors.primary}
+            checkedColor={colors.text}
+            uncheckedColor={colors.text}
             containerStyle={{
               padding: 0,
               backgroundColor: 'transparent',

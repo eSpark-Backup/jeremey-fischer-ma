@@ -24,7 +24,7 @@ export default function LabelBox({ label }: { label: string }) {
       <Icon
         name="close"
         type="ionicon"
-        color={colors.primary}
+        color={colors.text}
         size={14}
         style={{ textAlignVertical: 'center' }}
       />

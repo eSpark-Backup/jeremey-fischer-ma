@@ -61,8 +61,7 @@ const CustomTabBar = ({
           onPress={() => navigation.navigate(state.routes[0].name)}
           style={{
             borderBottomWidth: 3,
-            borderBottomColor:
-              state.index == 0 ? 'grey' : 'transparent',
+            borderBottomColor: state.index == 0 ? 'grey' : 'transparent',
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
@@ -72,8 +71,7 @@ const CustomTabBar = ({
           onPress={() => navigation.navigate(state.routes[1].name)}
           style={{
             borderBottomWidth: 3,
-            borderBottomColor:
-              state.index == 1 ? 'grey' : 'transparent',
+            borderBottomColor: state.index == 1 ? 'grey' : 'transparent',
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
@@ -83,8 +81,7 @@ const CustomTabBar = ({
           onPress={() => navigation.navigate(state.routes[2].name)}
           style={{
             borderBottomWidth: 3,
-            borderBottomColor:
-              state.index == 2 ? 'grey' : 'transparent',
+            borderBottomColor: state.index == 2 ? 'grey' : 'transparent',
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
@@ -94,8 +91,7 @@ const CustomTabBar = ({
           onPress={() => navigation.navigate(state.routes[3].name)}
           style={{
             borderBottomWidth: 3,
-            borderBottomColor:
-              state.index == 3 ? 'grey' : 'transparent',
+            borderBottomColor: state.index == 3 ? 'grey' : 'transparent',
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
