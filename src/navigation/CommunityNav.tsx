@@ -11,7 +11,6 @@ import {
 import Details from '../screens/Home/Details';
 import { HomeStackParamList } from '../types';
 import { MyHeader } from '../components';
-import { getFriends } from '../screens/Home/utils/function';
 import { useHookstate } from '@hookstate/core';
 import store from '../store/store';
 

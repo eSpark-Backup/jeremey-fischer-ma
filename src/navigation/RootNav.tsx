@@ -32,7 +32,8 @@ export default function RootNav() {
     <NavigationContainer linking={linking} theme={MyTheme}>
       <Stack.Navigator
         // initialRouteName="Share"
-        initialRouteName={userData.get() ? 'Tab' : 'Login'}>
+        initialRouteName={userData.get() ? 'Tab' : 'Login'}
+        >
         <Stack.Screen
           name="Login"
           component={Login}

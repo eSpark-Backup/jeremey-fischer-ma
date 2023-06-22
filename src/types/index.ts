@@ -123,4 +123,6 @@ export type GlobalState = {
   friends: User[] | null;
   loadGroups: boolean;
   groups: Group[] | null;
+  loadRequests: boolean;
+  friendRequests: FriendRequest[] | null;
 };

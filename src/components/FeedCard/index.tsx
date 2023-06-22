@@ -52,13 +52,7 @@ export default function FeedCard({
           <GapView mode="horizontal" length={10} />
           <View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Avatar
-                rounded
-                containerStyle={{
-                  borderWidth: 2,
-                }}
-                source={{ uri: image }}
-              />
+              <Avatar rounded source={{ uri: image }} />
               <GapView mode="horizontal" length={5} />
               <MyText
                 children="Jeremy Fischer"

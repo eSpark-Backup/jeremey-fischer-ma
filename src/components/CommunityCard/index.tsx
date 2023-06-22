@@ -15,6 +15,7 @@ export default function CommunityCard({
   checkbox,
   group,
   onPress,
+  onPressAddBtn,
 }: {
   name: string;
   details: string;
@@ -24,20 +25,13 @@ export default function CommunityCard({
   checkbox?: boolean;
   group?: boolean;
   onPress?: () => void;
+  onPressAddBtn?: () => void;
 }) {
   const [check, setcheck] = useState(false);
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.row}>
-        <Avatar
-          rounded
-          containerStyle={{
-            borderWidth: 2,
-            borderColor: colors.primary,
-          }}
-          size={'medium'}
-          source={{ uri: image }}
-        />
+        <Avatar rounded size={'medium'} source={{ uri: image }} />
         <View style={styles.contentContainer}>
           <MyText children={name} textStyle={{ fontSize: 16 }} />
           <MyText children={details} />
@@ -48,7 +42,7 @@ export default function CommunityCard({
           <TouchableOpacity
             activeOpacity={0.8}
             style={{ ...styles.requestBtns }}>
-            <Icon name="close" color={colors.danger} />
+            <Icon name="close" color={colors.text} />
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.8}
@@ -57,7 +51,13 @@ export default function CommunityCard({
           </TouchableOpacity>
         </View>
       )}
-      {addBtn && <OutlineBtn title="Add" btnStyle={styles.addBtn} />}
+      {addBtn && (
+        <OutlineBtn
+          onPress={onPressAddBtn}
+          title="Add"
+          btnStyle={styles.addBtn}
+        />
+      )}
       {checkbox && (
         <View
           style={{
@@ -90,15 +90,11 @@ export default function CommunityCard({
           }}>
           <Avatar
             rounded
-            containerStyle={{
-              borderWidth: 2,
-            }}
             source={{ uri: 'https://randomuser.me/api/portraits/men/22.jpg' }}
           />
           <Avatar
             rounded
             containerStyle={{
-              borderWidth: 2,
               right: 5,
             }}
             source={{ uri: 'https://randomuser.me/api/portraits/men/21.jpg' }}
@@ -106,7 +102,6 @@ export default function CommunityCard({
           <Avatar
             rounded
             containerStyle={{
-              borderWidth: 2,
               right: 10,
             }}
             source={{ uri: 'https://randomuser.me/api/portraits/men/29.jpg' }}
