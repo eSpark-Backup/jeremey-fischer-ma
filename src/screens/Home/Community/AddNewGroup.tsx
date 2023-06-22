@@ -34,7 +34,7 @@ export default function AddNewGroup() {
             backgroundColor: colors.card,
             borderRadius: 10,
             paddingHorizontal: 10,
-            paddingVertical: Platform.OS == 'ios' ? 10 : 0,
+            paddingVertical: 10,
           }}
           placeholder={'Type Group Name'}
           placeholderTextColor={'#ffffff55'}
