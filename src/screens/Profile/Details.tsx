@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View, SectionList, FlatList} from 'react-native';
-import {useTheme} from '@react-navigation/native';
-import {CheckBox} from '@rneui/themed';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, SectionList, FlatList } from 'react-native';
+import { useTheme } from '@react-navigation/native';
+import { CheckBox } from '@rneui/themed';
 
-import {MyCanvas, MyText} from '../../components';
+import { Dropdown, GapView, MyCanvas, MyText } from '../../components';
 
 interface ListProps {
   title: string;
-  data: {title: string; data: CheckBoxData[]}[];
+  data: { title: string; data: CheckBoxData[] }[];
 }
 
 interface CheckBoxData {
@@ -16,10 +16,10 @@ interface CheckBoxData {
 }
 
 const data: CheckBoxData[] = [
-  {label: 'New Articles', value: true},
-  {label: 'New Videos', value: false},
-  {label: 'New Music', value: false},
-  {label: 'New Podcasts', value: true},
+  { label: 'New Articles', value: true },
+  { label: 'New Videos', value: false },
+  { label: 'New Music', value: false },
+  { label: 'New Podcasts', value: true },
 ];
 
 const List: ListProps[] = [
@@ -33,8 +33,8 @@ const List: ListProps[] = [
       {
         title: 'Notify me:',
         data: [
-          {label: 'Every Time I recieve new content', value: false},
-          {label: 'Once a day at 12:00 pm time', value: false},
+          { label: 'Every Time I recieve new content', value: false },
+          { label: 'Once a day at', value: false },
         ],
       },
     ],
@@ -49,14 +49,15 @@ export default function Settings() {
   );
 }
 
-const SettingList = ({data}: {data: ListProps[]}) => {
+const SettingList = ({ data }: { data: ListProps[] }) => {
   const [_, setListData] = useState<ListProps[]>();
-  const {colors} = useTheme();
+  const { colors } = useTheme();
+  const [toggle, setToggle] = useState<boolean>(false);
 
   const reMap = (item: CheckBoxData, index: number, index2: number) => {
     console.log('item', item, index, index2);
     let tempData = [...data];
-    let tempItem = {...item, value: !item?.value};
+    let tempItem = { ...item, value: !item?.value };
     tempData[0].data[index].data[index2] = tempItem;
     setListData([...tempData]);
   };
@@ -65,27 +66,47 @@ const SettingList = ({data}: {data: ListProps[]}) => {
     <SectionList
       sections={data}
       keyExtractor={(item, index) => index + item.title}
-      renderItem={({item, index}) => (
+      renderItem={({ item, index }) => (
         <View style={styles.item}>
           <MyText textStyle={styles.nestedTitle}>{item.title}</MyText>
           <FlatList
             data={item.data}
-            renderItem={({item, index: index2}) => (
-              <View style={styles.nestedItem}>
-                <CheckBox
-                  center
-                  checked={item?.value}
-                  checkedColor={colors.primary}
-                  containerStyle={{backgroundColor: 'transparent'}}
-                  onPress={() => reMap(item, index, index2)}
-                />
-                <MyText textStyle={{bottom: 1}}>{item.label}</MyText>
-              </View>
+            nestedScrollEnabled={true}
+            renderItem={({ item, index: index2 }) => (
+              <>
+                <View style={{...styles.nestedItem, alignItems: toggle ? 'flex-start' : 'center'}}>
+                  <CheckBox
+                    center
+                    checked={item?.value}
+                    checkedColor={colors.primary}
+                    containerStyle={{ backgroundColor: 'transparent' }}
+                    onPress={() => reMap(item, index, index2)}
+                  />
+
+                  <MyText textStyle={{ bottom: 1, marginTop: toggle ? 17.8 : 0 }}>{item.label}</MyText>
+                  {index2 == 1 && index == 1 && (
+                    <>
+                      <Dropdown
+                        type="from"
+                        containerStyle={{ marginHorizontal: 10 }}
+                        toggleValue={toggle}
+                        handleToggle={() => setToggle(!toggle)}
+                        defaultLabel="From"
+                        dataSource={[
+                          { id: '1', name: '12:00' },
+                          { id: '2', name: '1:00' },
+                        ]}
+                      />
+                      <MyText children="PM time" textStyle={{ bottom: 1,marginTop: toggle ? 17.8 : 0 }} />
+                    </>
+                  )}
+                </View>
+              </>
             )}
           />
         </View>
       )}
-      renderSectionHeader={({section: {title}}) => (
+      renderSectionHeader={({ section: { title } }) => (
         <MyText textStyle={styles.header}>{title}</MyText>
       )}
     />
@@ -105,7 +126,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 5,
     paddingHorizontal: 15,
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   header: {
     fontSize: 22,

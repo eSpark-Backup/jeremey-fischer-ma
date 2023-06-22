@@ -8,6 +8,8 @@ const store = hookstate<GlobalState>({
   friends: null,
   loadGroups: false,
   groups: null,
+  loadRequests: false,
+  friendRequests: null,
 });
 
 export default store;

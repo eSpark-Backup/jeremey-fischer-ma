@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import {
   CommunityCard,
-  LineSeperator,
   MyCanvas,
   MyText,
   SearchBar,
@@ -14,13 +13,30 @@ import {
 import { useHookstate } from '@hookstate/core';
 import store from '../../../store/store';
 import { colors } from '../../../theme';
+import { getSearchedFriend } from '../utils/function';
+import { AddFriend, getFriends } from '../../../utils';
 
 export default function FriendsList() {
-  const { friends, loadFriends } = useHookstate(store);
+  const { friends, loadFriends, friendRequests, loadRequests } =
+    useHookstate(store);
+  const [searchVal, setSearchVal] = useState('');
+
+  const clearSearch = () => {
+    setSearchVal('');
+    getFriends(loadFriends, friends);
+  };
 
   return (
     <MyCanvas>
-      <SearchBar placeholder="Search by email" />
+      <SearchBar
+        value={searchVal}
+        placeholder="Search by email"
+        onChangeText={setSearchVal}
+        clearInput={clearSearch}
+        onSubmitEditing={() =>
+          getSearchedFriend(searchVal, loadFriends, friends)
+        }
+      />
       <Tabs selectedTabId={1} />
       <SubHeader title="Friend Requests" />
       <CommunityCard
@@ -29,6 +45,32 @@ export default function FriendsList() {
         image="https://randomuser.me/api/portraits/men/22.jpg"
         requestBtn={true}
       />
+      {/* {loadRequests.get() ? (
+        <ActivityIndicator
+          size={'large'}
+          color={colors.primary}
+          style={{ marginTop: 10 }}
+        />
+      ) : (
+        <FlatList
+          data={friendRequests.get()}
+          renderItem={({ item }) => (
+            <CommunityCard
+              name={item.userName}
+              details={item.email}
+              image={'https://randomuser.me/api/portraits/men/22.jpg'}
+              addBtn={!item.isFriend}
+              onPressAddBtn={AddFriend}
+            />
+          )}
+          ListEmptyComponent={
+            <MyText
+              textStyle={{ textAlign: 'center', marginTop: 10 }}
+              children="No Friends to Show"
+            />
+          }
+        />
+      )} */}
       <SubHeader title="Friends" />
       {loadFriends.get() ? (
         <ActivityIndicator
@@ -44,6 +86,8 @@ export default function FriendsList() {
               name={item.userName}
               details={item.email}
               image={'https://randomuser.me/api/portraits/men/22.jpg'}
+              addBtn={item.isFriend == false || !item.isFriend == undefined}
+              onPressAddBtn={AddFriend}
             />
           )}
           ListEmptyComponent={

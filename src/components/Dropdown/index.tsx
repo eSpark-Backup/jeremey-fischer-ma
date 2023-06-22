@@ -116,7 +116,7 @@ const Dropdown = ({
               minWidth: minWidth,
               zIndex: 10,
             }}>
-            <ScrollView>
+            <ScrollView nestedScrollEnabled >
               <FlatList
                 data={dataSource}
                 nestedScrollEnabled
