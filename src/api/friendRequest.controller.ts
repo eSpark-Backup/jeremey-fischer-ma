@@ -11,19 +11,37 @@ import { collections } from './constants';
 export const getAllRequest = async (uid: string) => {
   try {
     const requests: FriendRequest[] = [];
+    const promises: Promise<any>[] = [];
     const result = await db()
       .collection(collections.friendRequests)
       .where('receiverId', '==', uid)
+      .where('status', '==', 'pending')
       .get();
 
     if (result.empty) {
       return { data: null, message: 'You have not any pending request!' };
     } else {
-      result.forEach(res => {
+      result.forEach(async res => {
         const responseData: any = res.data();
+        let sender: User | undefined = undefined;
+        const fetchSender = db()
+          .collection(collections.users)
+          .where('uid', '==', responseData.senderId)
+          .get()
+          .then(senderSnap => {
+            if (!senderSnap.empty) {
+              senderSnap.forEach(
+                (senderData: any) => (sender = senderData.data()),
+              );
+            }
+          });
+        promises.push(fetchSender);
+        await Promise.all([fetchSender]);
         responseData.id = res.id;
+        responseData.sender = sender;
         requests.push(responseData);
       });
+      await Promise.all(promises);
       return { data: requests, message: 'All Requests' };
     }
   } catch (error) {

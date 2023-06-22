@@ -5,4 +5,5 @@ export const collections = {
   contents: 'contents',
   postViews: 'postViews',
   newsFeed: 'newsFeed',
+  archives: 'archives',
 };

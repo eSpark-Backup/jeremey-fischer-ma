@@ -23,6 +23,7 @@ export const shareContentToGroup = async (
         image: 'image',
         description: 'description',
         senderId: senderId ?? '',
+        url: '',
       });
     await db()
       .collection(collections.contents)
@@ -61,6 +62,7 @@ export const shareContentWithFriend = async (
         image: 'image',
         description: 'description',
         senderId: senderId ?? '',
+        url: '',
       });
     await db()
       .collection(collections.contents)
