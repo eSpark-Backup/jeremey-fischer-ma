@@ -16,9 +16,9 @@ import {
 } from '../../assets';
 
 import { colors } from '../../theme';
-import { getFriends } from '../../screens/Home/utils/function';
 import { useHookstate } from '@hookstate/core';
 import store from '../../store/store';
+import { getFriendRequests, getFriends } from '../../utils';
 
 const CustomTabBar = ({
   state,
@@ -27,8 +27,14 @@ const CustomTabBar = ({
   state: TabNavigationState<ParamListBase>;
   navigation: NavigationHelpers<ParamListBase>;
 }) => {
-  const { friends, loadFriends } = useHookstate(store);
-  console.log('state', state);
+  const { friends, loadFriends, friendRequests, loadRequests } =
+    useHookstate(store);
+
+  const getNavigate = () => {
+    getFriends(loadFriends, friends);
+    getFriendRequests(loadRequests, friendRequests);
+    navigation.navigate('CommunityNav');
+  };
 
   return (
     <View
@@ -36,7 +42,7 @@ const CustomTabBar = ({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        margin: 10,
+        padding: 10,
       }}>
       <Avatar
         onPress={() => navigation.navigate('ProfileNav')}
@@ -55,8 +61,7 @@ const CustomTabBar = ({
           onPress={() => navigation.navigate(state.routes[0].name)}
           style={{
             borderBottomWidth: 3,
-            borderBottomColor:
-              state.index == 0 ? colors.primary : 'transparent',
+            borderBottomColor: state.index == 0 ? 'grey' : 'transparent',
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
@@ -66,8 +71,7 @@ const CustomTabBar = ({
           onPress={() => navigation.navigate(state.routes[1].name)}
           style={{
             borderBottomWidth: 3,
-            borderBottomColor:
-              state.index == 1 ? colors.primary : 'transparent',
+            borderBottomColor: state.index == 1 ? 'grey' : 'transparent',
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
@@ -77,8 +81,7 @@ const CustomTabBar = ({
           onPress={() => navigation.navigate(state.routes[2].name)}
           style={{
             borderBottomWidth: 3,
-            borderBottomColor:
-              state.index == 2 ? colors.primary : 'transparent',
+            borderBottomColor: state.index == 2 ? 'grey' : 'transparent',
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
@@ -88,8 +91,7 @@ const CustomTabBar = ({
           onPress={() => navigation.navigate(state.routes[3].name)}
           style={{
             borderBottomWidth: 3,
-            borderBottomColor:
-              state.index == 3 ? colors.primary : 'transparent',
+            borderBottomColor: state.index == 3 ? 'grey' : 'transparent',
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
@@ -97,7 +99,7 @@ const CustomTabBar = ({
         </TouchableOpacity>
       </View>
       <TouchableOpacity
-        onPress={() => getFriends(navigation, loadFriends, friends)}
+        onPress={getNavigate}
         style={{
           paddingVertical: 8,
           marginHorizontal: 5,

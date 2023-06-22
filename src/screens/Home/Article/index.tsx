@@ -7,9 +7,13 @@ import { FAB } from '@rneui/themed';
 import { colors } from '../../../theme';
 import { FeedCard, MyCanvas } from '../../../components';
 import { NavProps } from '../../../types';
+import { getAllRequest } from '../../../api/friendRequest.controller';
 
 export default function ArticleScreen() {
   const navigation = useNavigation<NavProps['navigation']>();
+  getAllRequest('1686658085577').then(res => {
+    console.log('get all groups', JSON.stringify(res));
+  });
   return (
     <MyCanvas>
       <FeedCard

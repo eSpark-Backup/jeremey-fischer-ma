@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, TextInput, View } from 'react-native';
 import { Icon } from '@rneui/themed';
 
 import { colors } from '../../theme';
@@ -8,10 +8,14 @@ export default function SearchBar({
   value,
   placeholder,
   onChangeText,
+  onSubmitEditing,
+  clearInput,
 }: {
   value?: string;
   placeholder?: string;
-  onChangeText?: () => void;
+  onChangeText?: (text: string) => void;
+  onSubmitEditing?: () => void;
+  clearInput?: () => void;
 }) {
   return (
     <View style={styles.container}>
@@ -24,7 +28,13 @@ export default function SearchBar({
         placeholderTextColor={'#8c9298'}
         returnKeyType="search"
         underlineColorAndroid="transparent"
+        onSubmitEditing={onSubmitEditing}
       />
+      {value && (
+        <TouchableOpacity onPress={clearInput}>
+          <Icon type="feather" name="x" color={'#8c9298'} size={20} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -49,5 +59,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: colors.card,
   },
-  input: { marginLeft: 8, color: colors.text, width: '97%' },
+  input: { marginLeft: 8, color: colors.text, width: '88%' },
 });

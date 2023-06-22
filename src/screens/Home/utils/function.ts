@@ -6,19 +6,22 @@ import {
 import { State } from '@hookstate/core';
 
 import { Group, HomeStackParamList, User } from '../../../types';
-import { getAllFreinds, loginUser } from '../../../api/user.controller';
+import {
+  getAllFreinds,
+  loginUser,
+  searchUser,
+} from '../../../api/user.controller';
 import { storeUserData } from '../../../utils';
 import { getMyGroups } from '../../../api/groups.controller';
 
-export const getFriends = async (
-  navigation: NavigationHelpers<ParamListBase>,
+export const getSearchedFriend = async (
+  searchVal: string,
   loadFriends: State<boolean, {}>,
   friends: State<User[] | null, {}>,
 ) => {
   loadFriends.set(true);
-  navigation.navigate('CommunityNav');
-  getAllFreinds('1686658085577').then(res => {
-    console.log('get all friends', JSON.stringify(res));
+  searchUser(searchVal,'','1686658085577').then(res => {
+    console.log('get searched friend', JSON.stringify(res));
     friends.set(res.data);
     loadFriends.set(false);
   });
