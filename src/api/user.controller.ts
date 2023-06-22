@@ -64,14 +64,14 @@ export const loginUser = async (data: User) => {
 /**
  * Search User
  * @param {email}  email - `email` Email for search by email
- * @param {uid}  uid - `uid` uid for search by uid
  * @param {myUid}  myUid - `myUid` For check is he friend of you or not
+ * @param {uid}  uid - `uid` uid for search by uid
  * @returns {User[]} `User[]` Return User if user found
  */
 export const searchUser = async (
   email?: string,
-  uid?: string,
   myUid?: string,
+  uid?: string,
 ) => {
   try {
     const users: User[] = [];

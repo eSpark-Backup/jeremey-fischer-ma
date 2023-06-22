@@ -6,3 +6,4 @@ export {default as MicNoneSvg} from './svgs/mic_none.svg';
 export {default as TvSvg} from './svgs/tv.svg';
 export {default as GroupSvg} from './svgs/group.svg';
 export {default as NYTimesSvg} from './svgs/nytimes.svg';
+export {default as ArrowForward} from './svgs/arrow-forward.svg';

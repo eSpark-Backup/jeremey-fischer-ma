@@ -28,9 +28,14 @@ import {
 import { FakeFeedType, fakeFeedData } from '../../constants';
 import { HomeNavProps, NavProps } from '../../types';
 import { disableBackButton } from '../../utils';
-
-import { getGroupById, getMyGroups } from '../../api/groups.controller';
-import { getAllFreinds } from '../../api/user.controller';
+import { getGroupById } from '../../api/groups.controller';
+import {
+  addToArchive,
+  getAllArchive,
+  removeToArchive,
+} from '../../api/archive.controller';
+import { LinkPreview } from '@flyerhq/react-native-link-preview';
+import { getAllRequest } from '../../api/friendRequest.controller';
 
 export default function App() {
   useEffect(() => {
@@ -58,11 +63,52 @@ const MyFeed = () => {
     // getGroupById('5gz5N3CCtfgTGlZgJ08q').then(res => {
     //   console.log('all shareContentToGroup', JSON.stringify(res));
     // });
-    getMyGroups('1686658085577').then(res => {
-      console.log('get all groups', JSON.stringify(res));
+
+    getAllRequest('1686658085577').then(res => {
+      console.log('all requests', JSON.stringify(res));
     });
+
+    // searchUser('', '1686658135025', '1686658085577').then(res => {
+    //   console.log('all searchUser', res);
+    // });
+
+    // rejectRequest('HqAL0A4fDiG79oCwgtg9').then(res => {
+    //   console.log('all acceptRequest', res);
+    // });
+
     // getAllFreinds('1686658085577').then(res => {
-    //   console.log('get all friends', res.data);
+    //   console.log('all getAllFreinds', res);
+    // });
+
+    // createGroup({
+    //   groupCreatorId: '89372jfgsda823',
+    //   groupName: 'First Group',
+    //   Members: ['1686658085577', '89372jfgsda823'],
+    // }).then(res => {
+    //   console.log('all createGroup', res);
+    // });
+
+    // getMyGroups('1686658085577').then(res => {
+    //   console.log('all getMyGroups', res);
+    // });
+
+    // getGroupById('5gz5N3CCtfgTGlZgJ08q').then(res => {
+    //   console.log('all shareContentToGroup', JSON.stringify(res));
+    // });
+
+    // addToArchive({
+    //   userId: '89372jfgsda823',
+    //   contentId: 'VWU5Ldh2GboXlYKg84CF',
+    // }).then(res => {
+    //   console.log('all addToArchive', JSON.stringify(res));
+    // });
+
+    // getAllArchive('').then(res => {
+    //   console.log('getAllArchive', JSON.stringify(res));
+    // });
+
+    // removeToArchive().then(res => {
+    //   console.log('removeToArchive', JSON.stringify(res));
     // });
 
     return (

@@ -60,7 +60,7 @@ export type User = {
   uid: string;
   image: string;
   fcmToken: string;
-  createdAt?: string;
+  createdAt?: string | Date;
   isFriend?: boolean;
   Friends?: string[]; // Array of friend UIDs
   Group?: string[]; // Array of GroupIds
@@ -71,7 +71,8 @@ export type User = {
 export type FriendRequest = {
   senderId: string;
   receiverId: string;
-  status: 'pending' | 'accept' | 'reject';
+  sender?: User;
+  status?: 'pending' | 'accept' | 'reject';
   id?: string; // DocId
 };
 
@@ -79,12 +80,13 @@ export type FriendRequest = {
 export type Content = {
   id?: string; // DocId
   mediaType: 'Audio' | 'Video' | 'Podcast' | 'Article';
-  createdAt?: string;
+  createdAt?: string | Date;
   title: string;
   image: string;
   description: string;
   senderId: string;
   sender?: User;
+  url?: string;
 };
 
 // Group type
@@ -113,6 +115,16 @@ export type NewsFeed = {
   content: Content;
   sender: User;
   receiver: User;
+};
+
+// Archive type
+export type Archive = {
+  id?: string;
+  userId: string;
+  contentId: string;
+  user?: User;
+  content?: Content;
+  createdAt?: string | Date;
 };
 
 // GLobalState type
