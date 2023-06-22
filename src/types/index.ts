@@ -48,6 +48,7 @@ export type User = {
 export type FriendRequest = {
   senderId: string;
   receiverId: string;
+  sender?: User;
   status: 'pending' | 'accept' | 'reject';
   id?: string; // DocId
 };

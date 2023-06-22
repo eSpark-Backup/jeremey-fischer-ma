@@ -30,6 +30,7 @@ import {
   removeToArchive,
 } from '../../api/archive.controller';
 import { LinkPreview } from '@flyerhq/react-native-link-preview';
+import { getAllRequest } from '../../api/friendRequest.controller';
 
 export default function App() {
   useEffect(() => {
@@ -62,9 +63,9 @@ const MyFeed = () => {
     //   console.log('all sendRequest', res);
     // });
 
-    // getAllRequest('1686658085577').then(res => {
-    //   console.log('all requests', res);
-    // });
+    getAllRequest('1686658085577').then(res => {
+      console.log('all requests', JSON.stringify(res));
+    });
 
     // searchUser('', '1686658135025', '1686658085577').then(res => {
     //   console.log('all searchUser', res);
