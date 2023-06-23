@@ -27,12 +27,9 @@ const CustomTabBar = ({
   state: TabNavigationState<ParamListBase>;
   navigation: NavigationHelpers<ParamListBase>;
 }) => {
-  const { friends, loadFriends, friendRequests, loadRequests } =
-    useHookstate(store);
-
   const getNavigate = () => {
-    getFriends(loadFriends, friends);
-    getFriendRequests(loadRequests, friendRequests);
+    getFriends();
+    getFriendRequests();
     navigation.navigate('CommunityNav');
   };
 
@@ -53,7 +50,10 @@ const CustomTabBar = ({
           height: 35,
         }}
         source={{
-          uri: 'https://randomuser.me/api/portraits/men/36.jpg',
+          uri:
+            store.userData.get()?.userName == ''
+              ? 'https://randomuser.me/api/portraits/men/36.jpg'
+              : store.userData.get()?.image,
         }}
       />
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -61,8 +61,7 @@ const CustomTabBar = ({
           onPress={() => navigation.navigate(state.routes[0].name)}
           style={{
             borderBottomWidth: 3,
-            borderBottomColor:
-              state.index == 0 ? 'grey' : 'transparent',
+            borderBottomColor: state.index == 0 ? 'grey' : 'transparent',
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
@@ -72,8 +71,7 @@ const CustomTabBar = ({
           onPress={() => navigation.navigate(state.routes[1].name)}
           style={{
             borderBottomWidth: 3,
-            borderBottomColor:
-              state.index == 1 ? 'grey' : 'transparent',
+            borderBottomColor: state.index == 1 ? 'grey' : 'transparent',
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
@@ -83,8 +81,7 @@ const CustomTabBar = ({
           onPress={() => navigation.navigate(state.routes[2].name)}
           style={{
             borderBottomWidth: 3,
-            borderBottomColor:
-              state.index == 2 ? 'grey' : 'transparent',
+            borderBottomColor: state.index == 2 ? 'grey' : 'transparent',
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
@@ -94,8 +91,7 @@ const CustomTabBar = ({
           onPress={() => navigation.navigate(state.routes[3].name)}
           style={{
             borderBottomWidth: 3,
-            borderBottomColor:
-              state.index == 3 ? 'grey' : 'transparent',
+            borderBottomColor: state.index == 3 ? 'grey' : 'transparent',
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>

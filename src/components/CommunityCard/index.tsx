@@ -35,7 +35,7 @@ export default function CommunityCard({
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.row}>
-        <Avatar rounded size={'medium'} source={{ uri: image }} />
+        <Avatar rounded size={'medium'} source={{ uri: image == '' ? 'https://randomuser.me/api/portraits/men/22.jpg' : image }} />
         <View style={styles.contentContainer}>
           <MyText children={name} textStyle={{ fontSize: 16 }} />
           <MyText children={details} />

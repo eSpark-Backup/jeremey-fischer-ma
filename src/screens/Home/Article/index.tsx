@@ -15,7 +15,6 @@ export default function ArticleScreen() {
     <MyCanvas>
       <FeedCard
         date="today"
-        image={'https://randomuser.me/api/portraits/men/22.jpg'}
         time={'3h'}
       />
       <FAB

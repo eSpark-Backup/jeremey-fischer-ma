@@ -1,10 +1,13 @@
 import { BackHandler } from 'react-native';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { State } from '@hookstate/core';
 import { FriendRequest, User } from '../types';
 import { getAllFreinds } from '../api/user.controller';
 import { getAllRequest, sendRequest } from '../api/friendRequest.controller';
+import store from '../store/store';
+import { getMyGroups } from '../api/groups.controller';
 
 export const disableBackButton = () => {
   const backHandler = BackHandler.addEventListener(
@@ -31,10 +34,10 @@ export const storeUserData = async (
   }
 };
 
-export const AddFriend = async () => {
+export const AddFriend = async (id: string) => {
   const data = <FriendRequest>{
-    senderId: '1686658085577',
-    receiverId: 'ZGjV9vm1NlSWoZouyk28w8XELDs1',
+    senderId: store.userData.get()?.uid,
+    receiverId: id,
     status: 'pending',
   };
   sendRequest(data).then(res => {
@@ -42,27 +45,31 @@ export const AddFriend = async () => {
   });
 };
 
-export const getFriendRequests = async (
-  loadRequests: State<boolean, {}>,
-  friendRequests: State<FriendRequest[] | null, {}>,
-) => {
-  loadRequests.set(true);
-  getAllRequest('ZGjV9vm1NlSWoZouyk28w8XELDs1').then(res => {
+export const getFriendRequests = async () => {
+  store.loadRequests.set(true);
+  getAllRequest(store.userData.get()?.uid).then(res => {
     console.log('get all friends request', JSON.stringify(res));
-    friendRequests.set(res.data);
-    loadRequests.set(false);
+    store.friendRequests.set(res.data);
+    store.loadRequests.set(false);
   });
 };
 
-export const getFriends = async (
-  loadFriends: State<boolean, {}>,
-  friends: State<User[] | null, {}>,
-) => {
-  loadFriends.set(true);
-  getAllFreinds('1686658085577').then(res => {
+export const getFriends = async () => {
+  store.loadFriends.set(true);
+  getAllFreinds(store.userData.get()?.uid).then(res => {
     console.log('get all friends', JSON.stringify(res));
-    friends.set(res.data);
-    loadFriends.set(false);
+    store.friends.set(res.data);
+    store.loadFriends.set(false);
+  });
+};
+
+export const getGroups = async (navigation: NavigationProp<ParamListBase>) => {
+  store.loadGroups.set(true);
+  navigation.navigate('GroupsList');
+  getMyGroups('1686658085577').then(res => {
+    console.log('get all groups', JSON.stringify(res));
+    store.groups.set(res.data);
+    store.loadGroups.set(false);
   });
 };
 

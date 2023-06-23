@@ -10,6 +10,7 @@ import { SCREEN_WIDTH } from '../../constants';
 import { NavProps, ProfileProps } from '../../types';
 import { storeUserData } from '../../utils';
 import { ArchiveOutlineSvg } from '../../assets';
+import store from '../../store/store';
 
 export default function App() {
   const navigation = useNavigation<ProfileProps['navigation']>();
@@ -42,11 +43,15 @@ export default function App() {
         <Avatar
           rounded
           containerStyle={{ borderWidth: 0.6, borderColor: 'grey' }}
-          source={{ uri: 'https://randomuser.me/api/portraits/men/36.jpg' }}
+          source={{
+            uri: store.userData.get()?.image
+              ? store.userData.get()?.image
+              : 'https://randomuser.me/api/portraits/men/36.jpg',
+          }}
           size={120}
         />
         <MyText textStyle={{ fontWeight: 'bold', fontSize: 24, marginTop: 10 }}>
-          John Doe
+          {store.userData.get()?.userName}
         </MyText>
         <MyText textStyle={{ fontWeight: 'bold', marginTop: 10, opacity: 0.5 }}>
           Member for 2 Years

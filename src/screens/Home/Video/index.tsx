@@ -12,10 +12,7 @@ export default function VideoScreen() {
   const navigation = useNavigation<NavProps['navigation']>();
   return (
     <MyCanvas>
-      <FeedCard
-        image={'https://randomuser.me/api/portraits/men/22.jpg'}
-        time={'3h'}
-      />
+      <FeedCard time={'3h'} />
       <FAB
         style={{ position: 'absolute', bottom: 20, right: 20, zIndex: 1 }}
         visible={true}

@@ -5,9 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import { colors } from '../../theme';
 import MyText from '../MyText';
 import { HomeNavProps } from '../../types';
-import { getGroups } from '../../screens/Home/utils/function';
 import { useHookstate } from '@hookstate/core';
 import store from '../../store/store';
+import { getGroups } from '../../utils';
 
 export default function Tabs({
   selectedTabId,
@@ -41,7 +41,7 @@ export default function Tabs({
         <MyText children="Friends" />
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => getGroups(navigation, loadGroups, groups)}
+        onPress={() => getGroups(navigation)}
         style={{
           width: '50%',
           height: '100%',

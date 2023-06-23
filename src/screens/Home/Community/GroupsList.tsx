@@ -12,13 +12,13 @@ import {
   SearchBar,
   Tabs,
 } from '../../../components';
-import { HomeNavProps } from '../../../types';
+import { CommunityNavProps, HomeNavProps } from '../../../types';
 import { useHookstate } from '@hookstate/core';
 import store from '../../../store/store';
 import { colors } from '../../../theme';
 
 export default function GroupsList() {
-  const navigation = useNavigation<HomeNavProps['navigation']>();
+  const navigation = useNavigation<CommunityNavProps['navigation']>();
   const { groups, loadGroups } = useHookstate(store);
 
   return (
@@ -43,7 +43,7 @@ export default function GroupsList() {
               details={`${item.Members.length} Members`}
               image="https://randomuser.me/api/portraits/men/22.jpg"
               onPress={() =>
-                navigation.navigate('GroupDetails', { title: item.groupName })
+                navigation.navigate('GroupDetails', { title: item.groupName, content: item.contents })
               }
             />
           )}
