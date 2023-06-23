@@ -6,7 +6,7 @@ import { useHookstate, State } from '@hookstate/core';
 
 import store from '../../store/store';
 import { colors } from '../../theme';
-import { NormalBtn, GapView, MyCanvas } from '../../components';
+import { NormalBtn, GapView, MyCanvas, MyText } from '../../components';
 import { NavProps } from '../../types';
 import { _signIn } from './utils/funtions';
 
@@ -21,13 +21,13 @@ const Login = () => {
         justifyContent: 'space-around',
       }}>
       <View>
-        <Text style={{ color: '#fff', fontSize: 20 }}>LOGO GOES HERE</Text>
+        <MyText textStyle={{ color: '#fff', fontSize: 20 }}>Seaglass</MyText>
       </View>
       <GapView length={50} />
       <View>
-        <Text style={{ color: '#fff', fontSize: 20 }}>
+        <MyText textStyle={{ color: '#fff', fontSize: 20 }}>
           Login to your account
-        </Text>
+        </MyText>
       </View>
       <GapView length={50} />
       <NormalBtn
