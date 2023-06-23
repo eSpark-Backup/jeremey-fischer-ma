@@ -90,6 +90,7 @@ export type Content = {
   message: string;
   sender?: User;
   url?: string;
+  isViewed?: boolean;
 };
 
 // Group type

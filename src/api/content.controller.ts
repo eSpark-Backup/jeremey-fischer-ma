@@ -104,15 +104,29 @@ export const getNewsFeedContent = async (myUid: string) => {
         let content = null;
         let sender = null;
         let receiver = null;
-
+        const innerPromises: Promise<void>[] = [];
         const fetchContent = db()
           .collection(collections.contents)
           .doc(newsFeedData?.contentId ?? '')
           .get()
-          .then(contentData => {
+          .then(async contentData => {
             content = contentData.data();
+            let isViewed = false;
+            const postViewFetch = db()
+              .collection(collections.postViews)
+              .where('contentId', '==', content?.id)
+              .where('userId', '==', myUid)
+              .get()
+              .then(PvSnap => {
+                if (!PvSnap.empty) {
+                  isViewed = true;
+                }
+              });
+            innerPromises.push(postViewFetch);
+            await Promise.all([postViewFetch]);
+            // @ts-ignore
+            content.isViewed = isViewed;
           });
-
         const fetchSender = db()
           .collection(collections.users)
           .where('uid', '==', newsFeedData?.senderId ?? '')
@@ -138,7 +152,12 @@ export const getNewsFeedContent = async (myUid: string) => {
           });
 
         promises.push(fetchContent, fetchSender, fetchReceiver);
-        await Promise.all([fetchContent, fetchSender, fetchReceiver]);
+        await Promise.all([
+          fetchContent,
+          fetchSender,
+          fetchReceiver,
+          ...innerPromises,
+        ]);
 
         newsFeedData.sender = sender;
         newsFeedData.receiver = receiver;
