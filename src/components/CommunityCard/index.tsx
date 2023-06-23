@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import { Avatar, CheckBox, Icon } from '@rneui/themed';
 
@@ -16,6 +16,8 @@ export default function CommunityCard({
   group,
   onPress,
   onPressAddBtn,
+  onChecked,
+  checked = false,
 }: {
   name: string;
   details: string;
@@ -24,10 +26,11 @@ export default function CommunityCard({
   addBtn?: boolean;
   checkbox?: boolean;
   group?: boolean;
+  checked?: boolean;
   onPress?: () => void;
   onPressAddBtn?: () => void;
+  onChecked?: (isChecked: boolean) => void;
 }) {
-  const [check, setcheck] = useState(false);
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.row}>
@@ -66,9 +69,12 @@ export default function CommunityCard({
             marginRight: 10,
           }}>
           <CheckBox
-            checked={check}
+            checked={checked}
             size={30}
-            onPress={() => setcheck(!check)}
+            onPress={() => {
+              const newVal = !checked;
+              onChecked?.(newVal);
+            }}
             iconType="material-community"
             checkedIcon="checkbox-outline"
             uncheckedIcon={'checkbox-blank-outline'}

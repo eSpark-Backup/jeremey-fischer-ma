@@ -5,7 +5,13 @@ import MyText from '../MyText';
 import { Icon } from '@rneui/themed';
 import GapView from '../GapView';
 
-export default function LabelBox({ label }: { label: string }) {
+export default function LabelBox({
+  label,
+  onCross = () => {},
+}: {
+  label: string;
+  onCross: () => void;
+}) {
   const { colors } = useTheme();
   return (
     <View
@@ -22,6 +28,7 @@ export default function LabelBox({ label }: { label: string }) {
       <MyText textStyle={{ fontSize: 14 }}>{label}</MyText>
       <GapView mode="horizontal" length={5} />
       <Icon
+        onPress={onCross}
         name="close"
         type="ionicon"
         color={colors.text}
