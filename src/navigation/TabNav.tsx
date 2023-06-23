@@ -1,18 +1,44 @@
-import React from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Icon } from '@rneui/themed';
+import { useHookstate } from '@hookstate/core';
 
 import { CustomTabBar } from '../components';
-
 import ArticleScreen from '../screens/Home/Article';
 import AudioScreen from '../screens/Home/Audio';
 import PodcastScreen from '../screens/Home/Podcast/indexs';
 import VideoScreen from '../screens/Home/Video';
 import { TabNavParamList } from '../types';
+import { getNewsFeedContent } from '../api/content.controller';
+import store from '../store/store';
+import loaders from '../store/loaders';
 
 export default function TabNav() {
+  const userData = useHookstate(store?.userData);
+  const newsFeed = useHookstate(store?.newsFeed);
+  const loadNewsFeed = useHookstate(loaders?.newsFeed);
   const Tab = createMaterialTopTabNavigator<TabNavParamList>();
+  console.log('userData', userData.get()?.['uid']);
+
+  useCallback(async () => {
+    try {
+      loadNewsFeed.set(true);
+      const data = await getNewsFeedContent(userData?.get()?.['uid'] ?? '');
+      console.log('aya contents', JSON.stringify(data));
+      if (data?.data != null) {
+        newsFeed.set(data?.data);
+        loadNewsFeed.set(false);
+      } else {
+        console.log('message', data.message);
+        loadNewsFeed.set(false);
+      }
+    } catch (e) {
+      console.log('err at newsfeed fetch', e);
+      loadNewsFeed.set(false);
+    }
+  }, [])();
+
   return (
     <Tab.Navigator
       tabBar={props => {

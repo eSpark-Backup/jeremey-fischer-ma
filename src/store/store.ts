@@ -1,5 +1,5 @@
 import { hookstate } from '@hookstate/core';
-import { GlobalState, User } from '../types';
+import { GlobalState } from '../types';
 
 const store = hookstate<GlobalState>({
   userData: null,
@@ -10,6 +10,7 @@ const store = hookstate<GlobalState>({
   groups: null,
   loadRequests: false,
   friendRequests: null,
+  newsFeed: [],
 });
 
 export default store;

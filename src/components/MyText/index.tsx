@@ -7,7 +7,7 @@ export default function MyText({
   textStyle,
   lines = 3,
 }: {
-  children?: string;
+  children?: string | string[];
   textStyle?: TextStyle;
   lines?: number;
 }) {
