@@ -83,8 +83,10 @@ export type Content = {
   createdAt?: string | Date;
   title: string;
   image: string;
+  favIcon: string;
   description: string;
-  senderId: string;
+  senderId?: string;
+  message: string;
   sender?: User;
   url?: string;
 };
