@@ -65,6 +65,7 @@ export type User = {
   Friends?: string[]; // Array of friend UIDs
   Group?: string[]; // Array of GroupIds
   Notifications?: string[]; // Array of notification IDs
+  isRequested?: boolean; // only for search friend with current userId
 };
 
 // FriendRequest type
