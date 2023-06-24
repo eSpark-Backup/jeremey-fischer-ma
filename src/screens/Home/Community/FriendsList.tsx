@@ -69,7 +69,7 @@ export default function FriendsList() {
               <CommunityCard
                 name={item.sender?.userName}
                 details={item.sender?.email}
-                image={'https://randomuser.me/api/portraits/men/22.jpg'}
+                image={item.sender?.image}
                 requestBtn={true}
                 onRequestAccept={() => acceptFriendRequest(item.id)}
                 onRequestCancel={() => cancelFriendRequest(item.id)}
@@ -99,7 +99,8 @@ export default function FriendsList() {
                 details={item.email}
                 image={item.image}
                 addBtn={item.isFriend == false || !item.isFriend == undefined}
-                onPressAddBtn={() => AddFriend(item.uid)}
+                requested={item.isRequested}
+                onPressAddBtn={() => AddFriend(item.uid, item.email)}
               />
             )}
             ListEmptyComponent={

@@ -58,6 +58,7 @@ export default function Details() {
         style={{
           alignSelf: 'center',
         }}>
+        <GapView />
         <OutlineBtn title="Move to Archive" />
       </View>
     </MyCanvas>

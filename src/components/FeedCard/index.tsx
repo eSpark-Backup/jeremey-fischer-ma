@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from '@rneui/themed';
+
 import MyText from '../MyText';
 import Dot from '../Dot';
 import MyCard from '../MyCard';
@@ -33,9 +34,7 @@ export default function FeedCard({
     <MyCard>
       <TouchableOpacity
         style={{ padding: 10 }}
-        onPress={() =>
-          navigation.navigate('Details', { item: fakeFeedData[0] })
-        }>
+        onPress={() => console.log('redirect to link')}>
         <View
           style={{
             flexDirection: 'row',
@@ -104,7 +103,12 @@ export default function FeedCard({
         </View>
         <View style={{ alignSelf: 'flex-end' }}>
           <GapView length={5} />
-          <ArrowForward />
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Details', { item: fakeFeedData[0] })
+            }>
+            <ArrowForward />
+          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     </MyCard>

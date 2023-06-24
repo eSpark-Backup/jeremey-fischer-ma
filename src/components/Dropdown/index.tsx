@@ -92,7 +92,7 @@ const Dropdown = ({
         <TouchableOpacity onPress={() => handleToggle?.(type)}>
           <View
             style={{
-              borderColor: borderColor,
+              borderColor: 'grey',
               ...styles.dropdownLabelContainer,
             }}>
             <View style={styles.dropdownLabelInner}>
@@ -111,7 +111,7 @@ const Dropdown = ({
           <View
             style={{
               ...styles.dropDownContainer,
-              borderColor: borderColor,
+              borderColor: 'grey',
               maxHeight: 100,
               minWidth: minWidth,
               zIndex: 10,

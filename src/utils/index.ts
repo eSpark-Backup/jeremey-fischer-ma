@@ -8,6 +8,7 @@ import { getAllFreinds } from '../api/user.controller';
 import { getAllRequest, sendRequest } from '../api/friendRequest.controller';
 import store from '../store/store';
 import { getMyGroups } from '../api/groups.controller';
+import { getSearchedFriend } from '../screens/Home/utils/function';
 
 export const disableBackButton = () => {
   const backHandler = BackHandler.addEventListener(
@@ -34,14 +35,16 @@ export const storeUserData = async (
   }
 };
 
-export const AddFriend = async (id: string) => {
+export const AddFriend = async (id: string, email: string) => {
   const data = <FriendRequest>{
     senderId: store.userData.get()?.uid,
     receiverId: id,
     status: 'pending',
   };
+  store.loadFriends.set(true);
   sendRequest(data).then(res => {
     console.log('request sent', JSON.stringify(res));
+    getSearchedFriend(email);
   });
 };
 
@@ -66,7 +69,7 @@ export const getFriends = async () => {
 export const getGroups = async (navigation: NavigationProp<ParamListBase>) => {
   store.loadGroups.set(true);
   navigation.navigate('GroupsList');
-  getMyGroups('1686658085577').then(res => {
+  getMyGroups(store.userData.get()?.uid).then(res => {
     console.log('get all groups', JSON.stringify(res));
     store.groups.set(res.data);
     store.loadGroups.set(false);
@@ -80,22 +83,22 @@ export const getGroups = async (navigation: NavigationProp<ParamListBase>) => {
 
 export const getContentTypeFromUrl = async (url: string) => {
   try {
-    if (/spotify.*\/track|spotify.*\/album/.test(url)) {
-      return 'Music';
+    if (/spotify.*\/track|spotify.*\/album|spotify.*\/playlist/.test(url)) {
+      return 'Audio';
     } else if (/tidal/.test(url)) {
-      return 'Music';
+      return 'Audio';
     } else if (/music\.apple/.test(url)) {
-      return 'Music';
+      return 'Audio';
     } else if (/deezer/.test(url)) {
-      return 'Music';
+      return 'Audio';
     } else if (/pandora/.test(url)) {
-      return 'Music';
+      return 'Audio';
     } else if (/amazon\.com\/music/.test(url)) {
-      return 'Music';
+      return 'Audio';
     } else if (/music\.youtube/.test(url)) {
-      return 'Music';
+      return 'Audio';
     } else if (/soundcloud/.test(url)) {
-      return 'Music';
+      return 'Audio';
     } else if (/youtube|youtu.be/.test(url)) {
       return 'Video';
     } else if (/vimeo/.test(url)) {
@@ -115,11 +118,11 @@ export const getContentTypeFromUrl = async (url: string) => {
     } else if (/peacock/.test(url)) {
       return 'Video';
     } else if (/(spotify.*\/episode)/.test(url)) {
-      return 'Podcasts';
+      return 'Podcast';
     } else if (/podcasts\.apple/.test(url)) {
-      return 'Podcasts';
+      return 'Podcast';
     } else if (/stitcher/.test(url)) {
-      return 'Podcasts';
+      return 'Podcast';
     } else {
       return 'Article';
     }
@@ -127,4 +130,18 @@ export const getContentTypeFromUrl = async (url: string) => {
     console.log('getContentTypeFromUrl error', error);
     return 'Article';
   }
+};
+
+/**
+ * Fixes a broken URL by replacing 'https:/' or 'http:/' with 'https://' or 'http://'.
+ * @param {string} url - The URL to fix.
+ * @returns {string} - The fixed URL.
+ */
+export const fixBrokenURL = (url: string) => {
+  // Check if the URL starts with 'https:/' or 'http:/' instead of 'https://' or 'http://'
+  if (url.startsWith('https:/') || url.startsWith('http:/')) {
+    // Replace 'https:/' or 'http:/' with 'https://' or 'http://'
+    url = url.replace(/:\//, '://');
+  }
+  return url;
 };

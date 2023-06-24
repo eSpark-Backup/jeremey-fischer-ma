@@ -26,7 +26,7 @@ export default function Tabs({
         marginVertical: 10,
         alignSelf: 'center',
         borderWidth: 2,
-        borderColor: colors.primary,
+        borderColor: 'grey',
         borderRadius: 5,
       }}>
       <TouchableOpacity

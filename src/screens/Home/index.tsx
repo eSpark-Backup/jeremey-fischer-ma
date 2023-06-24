@@ -143,7 +143,7 @@ const MyFeed = () => {
         <MyCard>
           <TouchableOpacity
             style={{ flexDirection: 'row', padding: 10 }}
-            onPress={() => navigation.navigate('Details', { item })}>
+            onPress={() => console.log('redirect to link')}>
             <View style={{ alignSelf: 'flex-start', marginTop: 5 }}>
               <Image
                 source={{ uri: 'https://picsum.photos/300/200' }}
@@ -152,7 +152,6 @@ const MyFeed = () => {
               <Avatar
                 rounded
                 containerStyle={{
-                  borderWidth: 2,
                   bottom: -10,
                   left: 5,
                   position: 'absolute',
@@ -164,7 +163,6 @@ const MyFeed = () => {
               <Avatar
                 rounded
                 containerStyle={{
-                  borderWidth: 2,
                   bottom: -10,
                   left: 30,
                   position: 'absolute',
@@ -176,7 +174,6 @@ const MyFeed = () => {
               <Avatar
                 rounded
                 containerStyle={{
-                  borderWidth: 2,
                   bottom: -10,
                   left: 30 + 25,
                   position: 'absolute',

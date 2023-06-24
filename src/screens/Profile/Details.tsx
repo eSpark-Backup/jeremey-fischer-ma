@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, SectionList, FlatList } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { CheckBox } from '@rneui/themed';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import { Dropdown, GapView, MyCanvas, MyText } from '../../components';
+import { TouchableOpacity } from 'react-native';
 
 interface ListProps {
   title: string;
@@ -13,6 +15,7 @@ interface ListProps {
 interface CheckBoxData {
   label: string;
   value: boolean;
+  time?: string;
 }
 
 const data: CheckBoxData[] = [
@@ -34,7 +37,7 @@ const List: ListProps[] = [
         title: 'Notify me:',
         data: [
           { label: 'Every Time I recieve new content', value: false },
-          { label: 'Once a day at', value: false },
+          { label: 'Once a day at', value: false, time: '00:00 AM' },
         ],
       },
     ],
@@ -53,7 +56,30 @@ const SettingList = ({ data }: { data: ListProps[] }) => {
   const [_, setListData] = useState<ListProps[]>();
   const { colors } = useTheme();
   const [toggle, setToggle] = useState<boolean>(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
 
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date: Date) => {
+    const time = new Date(date).toLocaleTimeString([], {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    });
+    let tempData = [...data];
+    let tempItem = {
+      ...data[0].data[1].data[1],
+      value: data[0].data[1].data[1].value,
+    };
+    tempData[0].data[1].data[1] = { ...tempItem, time: time };
+    setListData([...tempData]);
+    hideDatePicker();
+  };
   const reMap = (item: CheckBoxData, index: number, index2: number) => {
     console.log('item', item, index, index2);
     let tempData = [...data];
@@ -68,13 +94,23 @@ const SettingList = ({ data }: { data: ListProps[] }) => {
       keyExtractor={(item, index) => index + item.title}
       renderItem={({ item, index }) => (
         <View style={styles.item}>
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="time"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
           <MyText textStyle={styles.nestedTitle}>{item.title}</MyText>
           <FlatList
             data={item.data}
             nestedScrollEnabled={true}
             renderItem={({ item, index: index2 }) => (
               <>
-                <View style={{...styles.nestedItem, alignItems: toggle ? 'flex-start' : 'center'}}>
+                <View
+                  style={{
+                    ...styles.nestedItem,
+                    alignItems: toggle ? 'flex-start' : 'center',
+                  }}>
                   <CheckBox
                     center
                     checked={item?.value}
@@ -83,8 +119,11 @@ const SettingList = ({ data }: { data: ListProps[] }) => {
                     onPress={() => reMap(item, index, index2)}
                   />
 
-                  <MyText textStyle={{ bottom: 1, marginTop: toggle ? 17.8 : 0 }}>{item.label}</MyText>
-                  {index2 == 1 && index == 1 && (
+                  <MyText
+                    textStyle={{ bottom: 1, marginTop: toggle ? 17.8 : 0 }}>
+                    {item.label}
+                  </MyText>
+                  {/* {index2 == 1 && index == 1 && (
                     <>
                       <Dropdown
                         type="from"
@@ -97,8 +136,22 @@ const SettingList = ({ data }: { data: ListProps[] }) => {
                           { id: '2', name: '1:00' },
                         ]}
                       />
-                      <MyText children="PM time" textStyle={{ bottom: 1,marginTop: toggle ? 17.8 : 0 }} />
+                      <MyText
+                        children="PM time"
+                        textStyle={{ bottom: 1, marginTop: toggle ? 17.8 : 0 }}
+                      />
                     </>
+                  )} */}
+                  {index2 == 1 && index == 1 && (
+                    <TouchableOpacity
+                      onPress={showDatePicker}
+                      activeOpacity={0.8}
+                      style={{
+                        ...styles.timePicker,
+                        borderColor: colors.text,
+                      }}>
+                      <MyText children={item.time ?? ''} />
+                    </TouchableOpacity>
                   )}
                 </View>
               </>
@@ -135,5 +188,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
 
     fontSize: 16,
+  },
+  timePicker: {
+    borderWidth: 1,
+    minHeight: 30,
+    minWidth: 50,
+    alignSelf: 'center',
+    marginHorizontal: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+    paddingHorizontal: 10,
   },
 });

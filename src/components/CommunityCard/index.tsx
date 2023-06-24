@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import { Avatar, CheckBox, Icon } from '@rneui/themed';
 
@@ -18,6 +18,9 @@ export default function CommunityCard({
   onPressAddBtn,
   onRequestCancel,
   onRequestAccept,
+  onChecked,
+  checked = false,
+  requested,
 }: {
   name: string;
   details: string;
@@ -26,21 +29,35 @@ export default function CommunityCard({
   addBtn?: boolean;
   checkbox?: boolean;
   group?: boolean;
+  checked?: boolean;
   onPress?: () => void;
   onPressAddBtn?: () => void;
   onRequestCancel?: () => void;
   onRequestAccept?: () => void;
+  onChecked?: (isChecked: boolean) => void;
+  requested?: boolean;
 }) {
-  const [check, setcheck] = useState(false);
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.row}>
-        <Avatar rounded size={'medium'} source={{ uri: image == '' ? 'https://randomuser.me/api/portraits/men/22.jpg' : image }} />
+        <Avatar
+          rounded
+          size={'medium'}
+          source={{
+            uri:
+              image == ''
+                ? 'https://randomuser.me/api/portraits/men/22.jpg'
+                : image,
+          }}
+        />
         <View style={styles.contentContainer}>
           <MyText children={name} textStyle={{ fontSize: 16 }} />
           <MyText children={details} />
         </View>
       </View>
+      {requested && (
+        <MyText children="Request Sent" textStyle={{ marginRight: 10, fontSize: 12 }} />
+      )}
       {requestBtn && (
         <View style={styles.row}>
           <TouchableOpacity
@@ -57,7 +74,7 @@ export default function CommunityCard({
           </TouchableOpacity>
         </View>
       )}
-      {addBtn && (
+      {addBtn && !requested && (
         <OutlineBtn
           onPress={onPressAddBtn}
           title="Add"
@@ -72,14 +89,17 @@ export default function CommunityCard({
             marginRight: 10,
           }}>
           <CheckBox
-            checked={check}
+            checked={checked}
             size={30}
-            onPress={() => setcheck(!check)}
+            onPress={() => {
+              const newVal = !checked;
+              onChecked?.(newVal);
+            }}
             iconType="material-community"
             checkedIcon="checkbox-outline"
             uncheckedIcon={'checkbox-blank-outline'}
-            checkedColor={colors.primary}
-            uncheckedColor={colors.primary}
+            checkedColor={colors.text}
+            uncheckedColor={colors.text}
             containerStyle={{
               padding: 0,
               backgroundColor: 'transparent',
@@ -133,7 +153,7 @@ const styles = StyleSheet.create({
   },
   row: { flexDirection: 'row' },
   contentContainer: { marginLeft: 10, justifyContent: 'center' },
-  requestBtns: { marginRight: 10, padding: 5 },
+  requestBtns: { marginRight: 5, padding: 5 },
   addBtn: {
     marginRight: 10,
   },

@@ -50,7 +50,7 @@ export default function GroupsList() {
           ListEmptyComponent={
             <MyText
               textStyle={{ textAlign: 'center', marginTop: 10 }}
-              children="No Friends to Show"
+              children="No Groups to Show"
             />
           }
         />
