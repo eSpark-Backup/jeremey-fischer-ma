@@ -14,16 +14,34 @@ import { useHookstate } from '@hookstate/core';
 import store from '../../../store/store';
 import { colors } from '../../../theme';
 import { getSearchedFriend } from '../utils/function';
-import { AddFriend, getFriends } from '../../../utils';
+import { AddFriend, getFriendRequests, getFriends } from '../../../utils';
+import {
+  acceptRequest,
+  rejectRequest,
+} from '../../../api/friendRequest.controller';
 
 export default function FriendsList() {
-  const { friends, loadFriends, friendRequests, loadRequests } =
+  const { userData, friends, loadFriends, friendRequests, loadRequests } =
     useHookstate(store);
   const [searchVal, setSearchVal] = useState('');
 
   const clearSearch = () => {
     setSearchVal('');
-    getFriends(loadFriends, friends);
+    getFriends();
+  };
+
+  const acceptFriendRequest = (id: string) => {
+    acceptRequest(id).then(res => {
+      console.log('accept friend request', JSON.stringify(res));
+      getFriendRequests();
+    });
+  };
+
+  const cancelFriendRequest = (id: string) => {
+    rejectRequest(id).then(res => {
+      console.log('reject friend request', JSON.stringify(res));
+      getFriendRequests();
+    });
   };
 
   return (
@@ -33,71 +51,67 @@ export default function FriendsList() {
         placeholder="Search by email"
         onChangeText={setSearchVal}
         clearInput={clearSearch}
-        onSubmitEditing={() =>
-          getSearchedFriend(searchVal, loadFriends, friends)
-        }
+        onSubmitEditing={() => getSearchedFriend(searchVal)}
       />
       <Tabs selectedTabId={1} />
-      <SubHeader title="Friend Requests" />
-      <CommunityCard
-        name="John"
-        details="john@email.com"
-        image="https://randomuser.me/api/portraits/men/22.jpg"
-        requestBtn={true}
-      />
-      {/* {loadRequests.get() ? (
-        <ActivityIndicator
-          size={'large'}
-          color={colors.primary}
-          style={{ marginTop: 10 }}
-        />
-      ) : (
-        <FlatList
-          data={friendRequests.get()}
-          renderItem={({ item }) => (
-            <CommunityCard
-              name={item.userName}
-              details={item.email}
-              image={'https://randomuser.me/api/portraits/men/22.jpg'}
-              addBtn={!item.isFriend}
-              onPressAddBtn={AddFriend}
-            />
-          )}
-          ListEmptyComponent={
-            <MyText
-              textStyle={{ textAlign: 'center', marginTop: 10 }}
-              children="No Friends to Show"
-            />
-          }
-        />
-      )} */}
-      <SubHeader title="Friends" />
-      {loadFriends.get() ? (
-        <ActivityIndicator
-          size={'large'}
-          color={colors.primary}
-          style={{ marginTop: 10 }}
-        />
-      ) : (
-        <FlatList
-          data={friends.get()}
-          renderItem={({ item }) => (
-            <CommunityCard
-              name={item.userName}
-              details={item.email}
-              image={'https://randomuser.me/api/portraits/men/22.jpg'}
-              addBtn={item.isFriend == false || !item.isFriend == undefined}
-              onPressAddBtn={AddFriend}
-            />
-          )}
-          ListEmptyComponent={
-            <MyText
-              textStyle={{ textAlign: 'center', marginTop: 10 }}
-              children="No Friends to Show"
-            />
-          }
-        />
-      )}
+      <View>
+        <SubHeader title="Friend Requests" />
+        {loadRequests.get() ? (
+          <ActivityIndicator
+            size={'large'}
+            color={colors.primary}
+            style={{ marginTop: 10 }}
+          />
+        ) : (
+          <FlatList
+            data={friendRequests.get()}
+            renderItem={({ item }) => (
+              <CommunityCard
+                name={item.sender?.userName}
+                details={item.sender?.email}
+                image={item.sender?.image}
+                requestBtn={true}
+                onRequestAccept={() => acceptFriendRequest(item.id)}
+                onRequestCancel={() => cancelFriendRequest(item.id)}
+              />
+            )}
+            ListEmptyComponent={
+              <MyText
+                textStyle={{ textAlign: 'center', marginTop: 10 }}
+                children="No Friend Requests to Show"
+              />
+            }
+          />
+        )}
+        <SubHeader title="Friends" />
+        {loadFriends.get() ? (
+          <ActivityIndicator
+            size={'large'}
+            color={colors.primary}
+            style={{ marginTop: 10 }}
+          />
+        ) : (
+          <FlatList
+            data={friends.get()}
+            renderItem={({ item }) => (
+              <CommunityCard
+                name={item.userName}
+                details={item.email}
+                image={item.image}
+                addBtn={item.isFriend == false || !item.isFriend == undefined}
+                requested={item.isRequested}
+                onPressAddBtn={() => AddFriend(item.uid, item.email)}
+              />
+            )}
+            ListEmptyComponent={
+              <MyText
+                textStyle={{ textAlign: 'center', marginTop: 10 }}
+                children="No Friends to Show"
+              />
+            }
+          />
+        )}
+      </View>
       {/* <ScrollView>
         <CommunityCard
           name="John"

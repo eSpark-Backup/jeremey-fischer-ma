@@ -14,10 +14,20 @@ export default function FeedCard({
   date,
   image,
   time,
+  favIcon,
+  senderName,
+  senderImage,
+  title,
+  description,
 }: {
   date?: string;
-  image: string;
+  image?: string;
   time: string;
+  favIcon?: string;
+  senderName?: string;
+  senderImage?: string;
+  title?: string;
+  description?: string;
 }) {
   const navigation = useNavigation<NavProps['navigation']>();
   return (
@@ -38,24 +48,39 @@ export default function FeedCard({
             }}>
             <Dot show={true} />
             <GapView length={25} />
-            <NYTimesSvg width={35} height={35} />
+            {favIcon ? (
+              <Image
+                source={{ uri: favIcon }}
+                style={{ width: 35, height: 35 }}
+              />
+            ) : (
+              <NYTimesSvg width={35} height={35} />
+            )}
           </View>
           <View
             style={{
               width: '30%',
-              // alignSelf: 'flex-start',
             }}>
             <Image
-              source={{ uri: 'https://picsum.photos/110/90' }}
+              source={{
+                uri: image ?? 'https://picsum.photos/110/90',
+              }}
               style={{ width: 100, height: 80 }}
             />
           </View>
           <View style={{ width: '55%' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Avatar rounded source={{ uri: image }} />
+              <Avatar
+                rounded
+                source={{
+                  uri:
+                    senderImage ??
+                    'https://randomuser.me/api/portraits/men/22.jpg',
+                }}
+              />
               <GapView mode="horizontal" length={5} />
               <MyText
-                children="Jeremy Fischer"
+                children={senderName ?? 'Jeremy Fischer'}
                 textStyle={{ fontWeight: 'bold' }}
               />
               <GapView length={15} mode="horizontal" />
@@ -63,13 +88,16 @@ export default function FeedCard({
             </View>
             <GapView />
             <MyText
-              children="Breaking News"
+              children={title ?? 'Breaking News'}
               textStyle={{ fontWeight: 'bold' }}
             />
             <GapView />
             <MyText
               lines={3}
-              children="Voluptate consequat sunt ipsum pariatur ut consectetur. Voluptate consequat sunt ipsum pariatur ut consectetur. Voluptate consequat sunt ipsum pariatur ut consectetur."
+              children={
+                description ??
+                'Voluptate consequat sunt ipsum pariatur ut consectetur. Voluptate consequat sunt ipsum pariatur ut consectetur. Voluptate consequat sunt ipsum pariatur ut consectetur.'
+              }
             />
           </View>
         </View>

@@ -8,6 +8,7 @@ import { Avatar } from '@rneui/themed';
 
 export default function Details() {
   const route = useRoute<HomeNavProps['route']>();
+  
   const { colors } = useTheme();
   return (
     <MyCanvas>
