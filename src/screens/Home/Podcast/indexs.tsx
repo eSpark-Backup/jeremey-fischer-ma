@@ -4,7 +4,12 @@ import { useNavigation } from '@react-navigation/native';
 import { ImmutableObject, useHookstate } from '@hookstate/core';
 import { FAB } from '@rneui/themed';
 
-import { EmptyFeedLabel, FeedCard, MyCanvas } from '../../../components';
+import {
+  EmptyFeedLabel,
+  FeedCard,
+  GapView,
+  MyCanvas,
+} from '../../../components';
 import { colors } from '../../../theme';
 import { NavProps, NewsFeed } from '../../../types';
 import store from '../../../store/store';
@@ -45,6 +50,7 @@ export default function PodcastScreen() {
         <FlatList
           data={podcasts}
           renderItem={renderFeed}
+          ItemSeparatorComponent={() => <GapView />}
           ListEmptyComponent={<EmptyFeedLabel label="No Podcasts Found" />}
         />
       )}

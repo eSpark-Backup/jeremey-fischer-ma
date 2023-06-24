@@ -1,5 +1,11 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Image,
+  Linking,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from '@rneui/themed';
 
@@ -24,7 +30,7 @@ export default function FeedCard({
     <MyCard>
       <TouchableOpacity
         style={{ padding: 10 }}
-        onPress={() => console.log('redirect to link')}>
+        onPress={() => Linking.openURL(contentData?.url!)}>
         <View
           style={{
             flexDirection: 'row',

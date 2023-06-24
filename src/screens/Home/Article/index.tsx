@@ -8,6 +8,7 @@ import { colors } from '../../../theme';
 import {
   EmptyFeedLabel,
   FeedCard,
+  GapView,
   MyCanvas,
   MyText,
 } from '../../../components';
@@ -53,6 +54,7 @@ export default function ArticleScreen() {
         <FlatList
           data={articles}
           renderItem={renderFeed}
+          ItemSeparatorComponent={() => <GapView />}
           ListEmptyComponent={<EmptyFeedLabel label="No Articles Found" />}
         />
       )}

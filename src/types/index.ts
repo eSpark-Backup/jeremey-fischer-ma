@@ -1,6 +1,4 @@
-import { ImmutableArray } from '@hookstate/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RouteProp } from '@react-navigation/native';
 
 import { FakeFeedType } from '../constants';
 
@@ -36,7 +34,7 @@ export type ProfileStackParamList = {
 export type CommunityStackParamList = {
   FriendsList: undefined;
   GroupsList: undefined;
-  GroupDetails: { title: string; content?: ImmutableArray<Content> };
+  GroupDetails: undefined;
   AddNewGroup: undefined;
 };
 
@@ -50,13 +48,6 @@ export type TabNavParamList = {
 export type NavProps = NativeStackScreenProps<RootStackParamList>;
 
 export type HomeNavProps = NativeStackScreenProps<HomeStackParamList>;
-
-// export type CommunityNavProps = NativeStackScreenProps<CommunityStackParamList>;
-
-export type CommunityNavProps = NativeStackScreenProps<
-  CommunityStackParamList & RootStackParamList,
-  'GroupDetails'
->;
 
 export type ProfileProps = NativeStackScreenProps<
   ProfileStackParamList & RootStackParamList
@@ -109,7 +100,7 @@ export type Group = {
   Members: string[]; // Array of member UIDs
   groupCreatorId: string;
   groupCreator?: User;
-  contents?: Content[]; // Array of content IDs
+  contents?: string[]; // Array of content IDs
 };
 
 // PostView type
@@ -142,7 +133,7 @@ export type Archive = {
 
 // GLobalState type
 export type GlobalState = {
-  userData: User | null;
+  userData: null;
   screenLoading: boolean;
   loadFriends: boolean;
   friends: User[] | null;
@@ -151,4 +142,5 @@ export type GlobalState = {
   loadRequests: boolean;
   friendRequests: FriendRequest[] | null;
   newsFeed: NewsFeed[];
+  archives: Archive[];
 };

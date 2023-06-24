@@ -1,79 +1,75 @@
-import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { useHookstate } from '@hookstate/core';
+import { useTheme } from '@react-navigation/native';
 
-import { Dot, MyCanvas, MyCard, MyText, OutlineBtn } from '../../components';
-import { Avatar } from '@rneui/themed';
+import {
+  ArchiveCard,
+  EmptyFeedLabel,
+  GapView,
+  MyCanvas,
+} from '../../components';
+import loaders from '../../store/loaders';
+import { Archive } from '../../types';
+import { getAllArchive } from '../../api/archive.controller';
+import store from '../../store/store';
 
 export default function App() {
+  const [archives, setArchives] = useState<Archive[]>([]);
+  const loader = useHookstate(loaders?.archive);
+  const userData = useHookstate(store?.userData);
+  const archiveData = useHookstate(store?.archives);
+
+  const { colors } = useTheme();
+
+  useEffect(() => {
+    getAllArchives();
+  }, []);
+
+  async function getAllArchives() {
+    try {
+      loader.set(true);
+      const res = await getAllArchive(userData?.get()?.['uid'] ?? '');
+      if (res?.data != null) {
+        archiveData.set(res?.data);
+        setArchives(res?.data);
+        loader.set(false);
+      } else {
+        console.log('message', res.message);
+        loader.set(false);
+      }
+    } catch (e) {
+      console.log('err at newsfeed fetch', e);
+      loader.set(false);
+    }
+  }
+
+  function renderArchive({ item, index }: { item: Archive; index: number }) {
+    return (
+      <ArchiveCard
+        key={index}
+        contentData={item?.content!}
+        senderData={item?.user!}
+      />
+    );
+  }
+
   return (
     <MyCanvas>
-      <View>
-        <MyCard>
-          <View style={{ flexDirection: 'row', padding: 10 }}>
-            <View style={{ alignSelf: 'flex-start', marginTop: 5 }}>
-              <Image
-                source={{ uri: 'https://picsum.photos/300/200' }}
-                style={{ width: 150, height: 100 }}
-              />
-              <Avatar
-                rounded
-                containerStyle={{
-                  bottom: -10,
-                  left: 5,
-                  position: 'absolute',
-                }}
-                source={{
-                  uri: 'https://randomuser.me/api/portraits/men/22.jpg',
-                }}
-              />
-              <Avatar
-                rounded
-                containerStyle={{
-                  bottom: -10,
-                  left: 30,
-                  position: 'absolute',
-                }}
-                source={{
-                  uri: 'https://randomuser.me/api/portraits/men/21.jpg',
-                }}
-              />
-              <Avatar
-                rounded
-                containerStyle={{
-                  bottom: -10,
-                  left: 30 + 25,
-                  position: 'absolute',
-                }}
-                source={{
-                  uri: 'https://randomuser.me/api/portraits/men/29.jpg',
-                }}
-              />
-            </View>
-            <View style={{ marginLeft: 10, flex: 1, justifyContent: 'center' }}>
-              <MyText children="Title" />
-              <MyText children="SubTitle" />
-              <MyText
-                children="Qui deserunt ut ex non irure veniam tempor sunt ipsum cillum?"
-                textStyle={{ marginTop: 10 }}
-              />
-              <MyText
-                children="Archived since 3 days"
-                textStyle={{ marginVertical: 10, alignSelf: 'flex-end' }}
-              />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                }}>
-                <OutlineBtn title="RESTORE" />
-              </View>
-            </View>
-          </View>
-        </MyCard>
-      </View>
+      {loader.get() ? (
+        <ActivityIndicator
+          size={'large'}
+          color={colors.primary}
+          style={{ marginTop: 10 }}
+        />
+      ) : (
+        <FlatList
+          data={archives}
+          renderItem={renderArchive}
+          ItemSeparatorComponent={() => <GapView />}
+          ListEmptyComponent={<EmptyFeedLabel label="No Archives Found" />}
+        />
+      )}
     </MyCanvas>
   );
 }
-
-const styles = StyleSheet.create({});
