@@ -1,20 +1,40 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { StyleSheet, Image, View } from 'react-native';
-import { useRoute, useTheme, RouteProp } from '@react-navigation/native';
+import {
+  useRoute,
+  useTheme,
+  RouteProp,
+  useFocusEffect,
+} from '@react-navigation/native';
 import moment from 'moment';
-
-import { Dot, GapView, MyCanvas, MyText, OutlineBtn } from '../../components';
-import { HomeNavProps, HomeStackParamList } from '../../types';
 import { Avatar } from '@rneui/themed';
+
+import { GapView, MyCanvas, MyText, OutlineBtn } from '../../components';
+import { HomeStackParamList } from '../../types';
+import { PostView } from '../../api/postView.controller';
+import { useHookstate } from '@hookstate/core';
+import store from '../../store/store';
 
 type DetailsScreenRouteProps = RouteProp<HomeStackParamList, 'Details'>;
 
 export default function Details() {
+  const userData = useHookstate(store?.userData);
   const { params } = useRoute<DetailsScreenRouteProps>();
   const { colors } = useTheme();
   const {
     item: { contentData, senderData },
   } = params;
+
+  useEffect(() => {
+    markAsSeen();
+  }, []);
+
+  async function markAsSeen() {
+    console.log(contentData?.id, userData?.get()?.['uid']);
+    const res = await PostView(contentData?.id!, userData?.get()?.['uid']!);
+    console.log('res mark as seen', res);
+  }
+
   return (
     <MyCanvas>
       <View style={{ alignItems: 'center' }}>

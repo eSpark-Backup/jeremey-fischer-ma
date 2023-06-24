@@ -12,9 +12,11 @@ function extractFeeds(
 }
 
 const transformTime = (time: number) => {
-  const spilted = moment.unix(time).utc(false).fromNow(true).split(' ');
-  const suffix = spilted[1].charAt(0);
-  return spilted[0] + suffix;
+  const splited = moment.unix(time).utc(false).fromNow(true).split(' ');
+  const suffix =
+    splited.length < 2 ? splited[2].charAt(0) : splited[1].charAt(0);
+  const prefix = splited[0] == 'a' || 'an' ? '1' : splited[0];
+  return prefix + suffix;
 };
 
 export { extractFeeds, transformTime };

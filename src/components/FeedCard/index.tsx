@@ -19,6 +19,7 @@ export default function FeedCard({
   senderData: User;
 }) {
   const navigation = useNavigation<NavProps['navigation']>();
+
   return (
     <MyCard>
       <TouchableOpacity
@@ -35,7 +36,11 @@ export default function FeedCard({
               alignSelf: 'flex-start',
               width: '10%',
             }}>
-            <Dot show={true} />
+            {contentData?.isViewed ? (
+              <GapView length={12} />
+            ) : (
+              <Dot show={true} />
+            )}
             <GapView length={25} />
             <Image
               source={{ uri: contentData?.favIcon }}
