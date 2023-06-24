@@ -1,4 +1,3 @@
-import { ImmutableArray } from '@hookstate/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
 
@@ -36,7 +35,7 @@ export type ProfileStackParamList = {
 export type CommunityStackParamList = {
   FriendsList: undefined;
   GroupsList: undefined;
-  GroupDetails: { title: string; content?: ImmutableArray<Content> };
+  GroupDetails: { item: { title: string; content?: Content[] } };
   AddNewGroup: undefined;
 };
 

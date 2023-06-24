@@ -12,7 +12,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
 
-import { HomeNavProps, User } from '../../../types';
+import { CommunityNavProps, HomeNavProps, User } from '../../../types';
 import { colors } from '../../../theme';
 import {
   CommunityCard,
@@ -20,18 +20,25 @@ import {
   MyCanvas,
   MyText,
   NormalBtn,
+  ScreenLoader,
   SearchBar,
 } from '../../../components';
 import { useHookstate } from '@hookstate/core';
 import store from '../../../store/store';
 import { getFriends } from '../../../utils';
-import { getSearchedFriend } from '../utils/function';
+import { getSearchedFriend, groupCreation } from '../utils/function';
+import loaders from '../../../store/loaders';
 
 export default function AddNewGroup() {
-  const navigation = useNavigation<HomeNavProps['navigation']>();
-  const { friends, loadFriends } = useHookstate(store);
+  const navigation = useNavigation<CommunityNavProps['navigation']>();
+  const friendStore: any = useHookstate(store.friends);
+  const friends: User[] = friendStore.get();
+  const { loadFriends } = useHookstate(store).get();
+  const { createGroup } = useHookstate(loaders).get();
+  const [groupName, setGroupName] = useState('');
   const [searchVal, setSearchVal] = useState('');
   const [selectedFriends, setSelectedFriends] = useState<User[]>([]);
+  const [selectedFriendIds, setSelectedFriendIds] = useState<string[]>([]);
 
   const clearSearch = () => {
     setSearchVal('');
@@ -46,16 +53,28 @@ export default function AddNewGroup() {
     } else {
       // The item with the targetId doesn't exist in the array, so add it
       selectedFriends.push(friend);
+      selectedFriendIds.push(friend.uid);
     }
     setSelectedFriends([...selectedFriends]);
+    setSelectedFriendIds([...selectedFriendIds]);
+  };
+
+  const createtheGroup = () => {
+    if (groupName && selectedFriendIds.length > 0) {
+      groupCreation(groupName, selectedFriendIds, navigation);
+    } else {
+      console.log('Please type group name or select friend');
+    }
   };
 
   return (
     <MyCanvas>
+      <ScreenLoader show={createGroup} />
       <View style={{ alignSelf: 'center', width: '95%' }}>
         <MyText children="Enter Group Name" />
         <GapView />
         <TextInput
+          value={groupName}
           style={{
             color: colors.text,
             backgroundColor: colors.card,
@@ -64,6 +83,7 @@ export default function AddNewGroup() {
             paddingHorizontal: 10,
             paddingVertical: 10,
           }}
+          onChangeText={e => setGroupName(e)}
           placeholder={'Type Group Name'}
           placeholderTextColor={'#ffffff55'}
           underlineColorAndroid="transparent"
@@ -84,7 +104,7 @@ export default function AddNewGroup() {
           onSubmitEditing={() => getSearchedFriend(searchVal)}
         />
       </View>
-      {loadFriends.get() ? (
+      {loadFriends ? (
         <View style={{ flex: 1 }}>
           <ActivityIndicator
             size={'large'}
@@ -94,7 +114,7 @@ export default function AddNewGroup() {
         </View>
       ) : (
         <FlatList
-          data={friends.get()}
+          data={friends}
           renderItem={({ item }) =>
             item.isFriend || item.isFriend == undefined ? (
               <CommunityCard
@@ -130,7 +150,7 @@ export default function AddNewGroup() {
           alignSelf: 'center',
           width: '95%',
         }}
-        onPress={() => navigation.navigate('GroupsList')}
+        onPress={createtheGroup}
         icon={<Icon name="user-plus" type="font-awesome-5" color={'#ffffff'} />}
       />
       <GapView length={5} />

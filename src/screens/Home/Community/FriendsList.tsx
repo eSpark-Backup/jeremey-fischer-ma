@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
 import {
   CommunityCard,
@@ -19,10 +18,14 @@ import {
   acceptRequest,
   rejectRequest,
 } from '../../../api/friendRequest.controller';
+import { User } from '../../../types';
 
 export default function FriendsList() {
-  const { userData, friends, loadFriends, friendRequests, loadRequests } =
-    useHookstate(store);
+  const friendStore: any = useHookstate(store.friends);
+  const friends: User[] = friendStore.get();
+  const friendRequestsStore: any = useHookstate(store.friendRequests);
+  const friendRequests: User[] = friendRequestsStore.get();
+  const { loadFriends, loadRequests } = useHookstate(store);
   const [searchVal, setSearchVal] = useState('');
 
   const clearSearch = () => {
@@ -64,15 +67,15 @@ export default function FriendsList() {
           />
         ) : (
           <FlatList
-            data={friendRequests.get()}
+            data={friendRequests}
             renderItem={({ item }) => (
               <CommunityCard
-                name={item.sender?.userName}
-                details={item.sender?.email}
-                image={item.sender?.image}
+                name={item.userName}
+                details={item.email}
+                image={item.image}
                 requestBtn={true}
-                onRequestAccept={() => acceptFriendRequest(item.id)}
-                onRequestCancel={() => cancelFriendRequest(item.id)}
+                onRequestAccept={() => acceptFriendRequest(item.uid)}
+                onRequestCancel={() => cancelFriendRequest(item.uid)}
               />
             )}
             ListEmptyComponent={
@@ -92,7 +95,7 @@ export default function FriendsList() {
           />
         ) : (
           <FlatList
-            data={friends.get()}
+            data={friends}
             renderItem={({ item }) => (
               <CommunityCard
                 name={item.userName}

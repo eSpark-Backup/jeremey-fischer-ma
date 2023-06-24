@@ -1,36 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, FlatList } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, RouteProp } from '@react-navigation/native';
 
 import { FeedCard, GapView, MyCanvas } from '../../../components';
-import { CommunityNavProps } from '../../../types';
+import {
+  CommunityNavProps,
+  CommunityStackParamList,
+  NewsFeed,
+} from '../../../types';
 import CommunityNav from '../../../navigation/CommunityNav';
+import loaders from '../../../store/loaders';
+import store from '../../../store/store';
+import { useHookstate } from '@hookstate/core';
+import { extractFeeds } from '../../../utils/globalFunctions';
+
+type GroupDetailsScreenRouteProps = RouteProp<
+  CommunityStackParamList,
+  'GroupDetails'
+>;
 
 export default function GroupDetails() {
-  const route = useRoute<CommunityNavProps['route']>();
+  const newsFeedData = useHookstate(store?.newsFeed).get();
+  const loader = useHookstate(loaders.newsFeed).get();
+  const [groupContent, setGroupContent] = useState<NewsFeed[]>([]);
+  const { params } = useRoute<GroupDetailsScreenRouteProps>();
+  const {
+    item: { title, content },
+  } = params;
 
-  console.log('route', route.params.content);
+  useEffect(() => {
+    if (!loader) {
+      setGroupContent(extractFeeds(newsFeedData, 'Article'));
+    }
+  }, [loader]);
+
+  function renderGroupFeed({ item, index }: { item: NewsFeed; index: number }) {
+    return (
+      <FeedCard
+        key={index}
+        contentData={item.content}
+        senderData={item.sender}
+      />
+    );
+  }
 
   return (
     <MyCanvas>
-      <FlatList
-        data={route.params.content}
-        renderItem={({ item }) => (
-          <>
-            <FeedCard
-              date="today"
-              title={item.title}
-              description={item.description}
-              favIcon={item.favIcon}
-              senderName={item.sender?.userName}
-              senderImage={item.sender?.image}
-              image={item.image}
-              time={'3h'}
-            />
-            <GapView />
-          </>
-        )}
-      />
+      <FlatList data={groupContent} renderItem={renderGroupFeed} />
       {/* <ScrollView>
         <FeedCard
           date="today"

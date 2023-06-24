@@ -12,14 +12,16 @@ import {
   SearchBar,
   Tabs,
 } from '../../../components';
-import { CommunityNavProps, HomeNavProps } from '../../../types';
+import { CommunityNavProps, Group, HomeNavProps } from '../../../types';
 import { useHookstate } from '@hookstate/core';
 import store from '../../../store/store';
 import { colors } from '../../../theme';
 
 export default function GroupsList() {
   const navigation = useNavigation<CommunityNavProps['navigation']>();
-  const { groups, loadGroups } = useHookstate(store);
+  const groupsStore: any = useHookstate(store.groups);
+  const groups: Group[] = groupsStore.get();
+  const { loadGroups } = useHookstate(store);
 
   return (
     <MyCanvas>
@@ -35,7 +37,7 @@ export default function GroupsList() {
         </View>
       ) : (
         <FlatList
-          data={groups.get()}
+          data={groups}
           renderItem={({ item }) => (
             <CommunityCard
               group
@@ -44,8 +46,7 @@ export default function GroupsList() {
               image="https://randomuser.me/api/portraits/men/22.jpg"
               onPress={() =>
                 navigation.navigate('GroupDetails', {
-                  title: item.groupName,
-                  content: item.contents,
+                  item: { title: item.groupName, content: item.contents },
                 })
               }
             />

@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { colors } from '../../theme';
 import MyText from '../MyText';
-import { HomeNavProps } from '../../types';
+import { CommunityNavProps, HomeNavProps } from '../../types';
 import { useHookstate } from '@hookstate/core';
 import store from '../../store/store';
 import { getGroups } from '../../utils';
@@ -14,8 +14,13 @@ export default function Tabs({
 }: {
   selectedTabId: string | number;
 }) {
-  const navigation = useNavigation<HomeNavProps['navigation']>();
+  const navigation = useNavigation<CommunityNavProps['navigation']>();
   const { groups, loadGroups } = useHookstate(store);
+
+  const navigateToGroups = () => {
+    getGroups();
+    navigation.navigate('GroupsList');
+  };
 
   return (
     <View
@@ -41,7 +46,7 @@ export default function Tabs({
         <MyText children="Friends" />
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => getGroups(navigation)}
+        onPress={navigateToGroups}
         style={{
           width: '50%',
           height: '100%',

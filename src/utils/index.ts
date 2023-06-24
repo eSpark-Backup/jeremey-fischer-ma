@@ -50,7 +50,7 @@ export const AddFriend = async (id: string, email: string) => {
 
 export const getFriendRequests = async () => {
   store.loadRequests.set(true);
-  getAllRequest(store.userData.get()?.uid).then(res => {
+  getAllRequest(store.userData.get().uid).then(res => {
     console.log('get all friends request', JSON.stringify(res));
     store.friendRequests.set(res.data);
     store.loadRequests.set(false);
@@ -66,9 +66,8 @@ export const getFriends = async () => {
   });
 };
 
-export const getGroups = async (navigation: NavigationProp<ParamListBase>) => {
+export const getGroups = async () => {
   store.loadGroups.set(true);
-  navigation.navigate('GroupsList');
   getMyGroups(store.userData.get()?.uid).then(res => {
     console.log('get all groups', JSON.stringify(res));
     store.groups.set(res.data);
