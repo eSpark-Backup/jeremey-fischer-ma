@@ -1,5 +1,5 @@
 import { db } from '.';
-import { NewsFeed } from '../types';
+import { Content, NewsFeed } from '../types';
 import { collections } from './constants';
 import firestore from '@react-native-firebase/firestore';
 
@@ -12,18 +12,15 @@ import firestore from '@react-native-firebase/firestore';
 export const shareContentToGroup = async (
   groupId: string,
   senderId: string,
+  Content: Content,
 ) => {
   try {
     const response = await db()
       .collection(collections.contents)
       .add({
-        mediaType: 'Audio',
+        ...Content,
         createdAt: new Date(),
-        title: 'title',
-        image: 'image',
-        description: 'description',
         senderId: senderId ?? '',
-        url: '',
       });
     await db()
       .collection(collections.contents)
@@ -45,41 +42,40 @@ export const shareContentToGroup = async (
 /**
  * Share Content with friend
  * @param {senderId}  senderId - `senderId` the User which send the contend
- * @param {receiverId}  receiverId - `receiverId` User which recieve this content
+ * @param {receiverId}  receiverIds - `receiverIds` Array of User Ids which recieve this content
  * @returns {message} `message` return message wheter it succesfull or not.
  */
 export const shareContentWithFriend = async (
   senderId: string,
-  receiverId: string,
+  receiverIds: string[],
+  Content: Content,
 ) => {
   try {
     const response = await db()
       .collection(collections.contents)
       .add({
-        mediaType: 'Audio',
+        ...Content,
         createdAt: new Date(),
-        title: 'title',
-        image: 'image',
-        description: 'description',
         senderId: senderId ?? '',
-        url: '',
       });
     await db()
       .collection(collections.contents)
       .doc(response.id)
       .update({ id: response.id });
 
-    const newsFeedRespone = await db()
-      .collection(collections.newsFeed)
-      .add({
-        contentId: response.id ?? '',
-        senderId: senderId ?? '',
-        receiverId: receiverId ?? '',
-      });
-    await db()
-      .collection(collections.newsFeed)
-      .doc(newsFeedRespone.id)
-      .update({ id: newsFeedRespone.id });
+    for (let index = 0; index < receiverIds.length; index++) {
+      const newsFeedRespone = await db()
+        .collection(collections.newsFeed)
+        .add({
+          contentId: response.id ?? '',
+          senderId: senderId ?? '',
+          receiverId: receiverIds[index] ?? '',
+        });
+      await db()
+        .collection(collections.newsFeed)
+        .doc(newsFeedRespone.id)
+        .update({ id: newsFeedRespone.id });
+    }
     return { data: null, message: 'Post Shared Successfully' };
   } catch (error) {
     console.log('error shareContentWithFriend', error);
@@ -108,15 +104,29 @@ export const getNewsFeedContent = async (myUid: string) => {
         let content = null;
         let sender = null;
         let receiver = null;
-
+        const innerPromises: Promise<void>[] = [];
         const fetchContent = db()
           .collection(collections.contents)
           .doc(newsFeedData?.contentId ?? '')
           .get()
-          .then(contentData => {
+          .then(async contentData => {
             content = contentData.data();
+            let isViewed = false;
+            const postViewFetch = db()
+              .collection(collections.postViews)
+              .where('contentId', '==', content?.id)
+              .where('userId', '==', myUid)
+              .get()
+              .then(PvSnap => {
+                if (!PvSnap.empty) {
+                  isViewed = true;
+                }
+              });
+            innerPromises.push(postViewFetch);
+            await Promise.all([postViewFetch]);
+            // @ts-ignore
+            content.isViewed = isViewed;
           });
-
         const fetchSender = db()
           .collection(collections.users)
           .where('uid', '==', newsFeedData?.senderId ?? '')
@@ -142,7 +152,12 @@ export const getNewsFeedContent = async (myUid: string) => {
           });
 
         promises.push(fetchContent, fetchSender, fetchReceiver);
-        await Promise.all([fetchContent, fetchSender, fetchReceiver]);
+        await Promise.all([
+          fetchContent,
+          fetchSender,
+          fetchReceiver,
+          ...innerPromises,
+        ]);
 
         newsFeedData.sender = sender;
         newsFeedData.receiver = receiver;

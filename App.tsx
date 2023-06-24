@@ -50,18 +50,13 @@ function App(): JSX.Element {
       console.log('Data not found on share', item);
       return;
     }
-    Linking.openURL('seaglass://share');
     const url =
       Platform.OS == 'android'
         ? item?.data
         : item.data?.length > 1
         ? item?.data[1].data
         : item?.data[0].data;
-    console.log(
-      `Data found on share ${Platform.OS}`,
-      url,
-      await getContentTypeFromUrl(url),
-    );
+    Linking.openURL(`seaglass://share?url=${url}`);
     // Linking.openURL('seaglass://share');
     // You can receive extra data from your custom Share View
   }, []);

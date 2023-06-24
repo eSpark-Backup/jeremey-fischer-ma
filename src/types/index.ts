@@ -65,6 +65,7 @@ export type User = {
   Friends?: string[]; // Array of friend UIDs
   Group?: string[]; // Array of GroupIds
   Notification?: string[]; // Array of notification IDs
+  isRequested?: boolean; // only for search friend with current userId
 };
 
 // FriendRequest type
@@ -83,11 +84,13 @@ export type Content = {
   createdAt?: { seconds: number; nanoseconds: number };
   title: string;
   image: string;
+  favIcon: string;
   description: string;
-  senderId: string;
+  senderId?: string;
+  message: string;
+  sender?: User;
   url?: string;
-  message?: string;
-  favIcon?: string;
+  isViewed?: boolean;
 };
 
 // Group type

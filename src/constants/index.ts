@@ -34,3 +34,6 @@ export type FakeFeedType = {
   timeStamp: Date;
   mediaType: 'Audio' | 'Video' | 'Podcast' | 'Article';
 };
+
+export const defaultImage: string =
+  'https://randomuser.me/api/portraits/men/22.jpg';

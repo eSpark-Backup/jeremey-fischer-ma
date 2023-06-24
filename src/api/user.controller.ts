@@ -89,12 +89,29 @@ export const searchUser = async (
     if (result.empty) {
       return { data: null, message: 'User Not Found' };
     } else {
-      result.forEach(res => {
+      const promises: Promise<void>[] = [];
+      result.forEach(async res => {
         const dbData: any = res.data();
+        let isRequested = false;
+        const fetchRequest = db()
+          .collection(collections.friendRequests)
+          .where('senderId', '==', myUid ?? '')
+          .where('receiverId', '==', dbData.uid ?? '')
+          .where('status', '==', 'pending')
+          .get()
+          .then(FrSnap => {
+            if (!FrSnap.empty) {
+              isRequested = true;
+            }
+          });
+        promises.push(fetchRequest);
+        await Promise.all([fetchRequest]);
         dbData.id = res.id;
+        dbData.isRequested = isRequested;
         dbData.isFriend = dbData?.Friends?.includes(myUid ?? '');
         users.push(dbData);
       });
+      await Promise.all(promises);
       return { data: users, message: 'User Data' };
     }
   } catch (error) {
