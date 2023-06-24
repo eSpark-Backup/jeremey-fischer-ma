@@ -10,7 +10,7 @@ export type RootStackParamList = {
     screen: 'Article' | 'Audio' | 'Podcast' | 'Video';
     params?: undefined;
   };
-  Details: { item: FakeFeedType };
+  Details: { item: { senderData: User; contentData: Content } };
   Search: undefined;
   ProfileNav: undefined;
   CommunityNav: undefined;
@@ -19,7 +19,7 @@ export type RootStackParamList = {
 
 export type HomeStackParamList = {
   Home: undefined;
-  Details: { item: FakeFeedType };
+  Details: { item: { senderData: User; contentData: Content } };
   FriendsList: undefined;
   GroupsList: undefined;
   GroupDetails: { title: string };
@@ -73,7 +73,7 @@ export type User = {
   isFriend?: boolean;
   Friends?: string[]; // Array of friend UIDs
   Group?: string[]; // Array of GroupIds
-  Notifications?: string[]; // Array of notification IDs
+  Notification?: string[]; // Array of notification IDs
   isRequested?: boolean; // only for search friend with current userId
 };
 
@@ -90,7 +90,7 @@ export type FriendRequest = {
 export type Content = {
   id?: string; // DocId
   mediaType: 'Audio' | 'Video' | 'Podcast' | 'Article';
-  createdAt?: string | Date;
+  createdAt?: { seconds: number; nanoseconds: number };
   title: string;
   image: string;
   favIcon: string;
@@ -150,4 +150,5 @@ export type GlobalState = {
   groups: Group[] | null;
   loadRequests: boolean;
   friendRequests: FriendRequest[] | null;
+  newsFeed: NewsFeed[];
 };

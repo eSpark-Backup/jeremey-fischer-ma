@@ -13,6 +13,7 @@ import MI from 'react-native-vector-icons/MaterialIcons';
 import styles from './styles';
 import useUpdateEffect from '../../utils/hooks/useUpdateEffect';
 import GapView from '../GapView';
+import MyText from '../MyText';
 
 const Dropdown = ({
   dataSource,
@@ -63,9 +64,9 @@ const Dropdown = ({
             backgroundColor: colors.background,
             ...styles.itemContainer,
           }}>
-          <Text style={{ color: colors.text, ...styles.itemText }}>
+          <MyText textStyle={{ color: colors.text, ...styles.itemText }}>
             {item.name}
-          </Text>
+          </MyText>
         </View>
       </TouchableOpacity>
     );
@@ -81,13 +82,13 @@ const Dropdown = ({
           ...containerStyle,
         }}>
         {title && (
-          <Text
-            style={{
+          <MyText
+            textStyle={{
               color: colors.text,
               ...styles.labelText,
             }}>
             {title}
-          </Text>
+          </MyText>
         )}
         <TouchableOpacity onPress={() => handleToggle?.(type)}>
           <View
@@ -96,9 +97,10 @@ const Dropdown = ({
               ...styles.dropdownLabelContainer,
             }}>
             <View style={styles.dropdownLabelInner}>
-              <Text style={{ color: colors.text, ...styles.dropDownText }}>
-                {label.name == '' ? defaultLabel : label.name}
-              </Text>
+              <MyText
+                textStyle={{ color: colors.text, ...styles.dropDownText }}>
+                {label.name == '' ? defaultLabel : label?.name}
+              </MyText>
               {toggleValue ? (
                 <MI name="arrow-drop-up" color={colors.text} size={22} />
               ) : (
@@ -116,7 +118,7 @@ const Dropdown = ({
               minWidth: minWidth,
               zIndex: 10,
             }}>
-            <ScrollView nestedScrollEnabled >
+            <ScrollView nestedScrollEnabled>
               <FlatList
                 data={dataSource}
                 nestedScrollEnabled

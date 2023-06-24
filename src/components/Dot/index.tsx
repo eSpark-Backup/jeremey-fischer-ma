@@ -8,10 +8,9 @@ export default function Dot({ show = false }: { show?: boolean }) {
     <View
       style={{
         backgroundColor: '#1284fa',
-        borderWidth: 1.2,
         borderRadius: 50,
-        width: 20,
-        height: 20,
+        width: 12,
+        height: 12,
       }}
     />
   ) : (

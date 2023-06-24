@@ -59,6 +59,7 @@ export default function AddNewGroup() {
           style={{
             color: colors.text,
             backgroundColor: colors.card,
+            fontFamily: 'DMSans-Regular',
             borderRadius: 10,
             paddingHorizontal: 10,
             paddingVertical: 10,

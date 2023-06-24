@@ -59,5 +59,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: colors.card,
   },
-  input: { marginLeft: 8, color: colors.text, width: '88%' },
+  input: {
+    marginLeft: 8,
+    color: colors.text,
+    width: '88%',
+    fontFamily: 'DMSans-Regular',
+  },
 });

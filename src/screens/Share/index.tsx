@@ -230,7 +230,7 @@ export default function Share() {
           placeholderTextColor={'#ffffff55'}
           style={{
             color: colors.text,
-            fontFamily: Platform.OS == 'ios' ? 'Verdana' : 'sans-serif-medium',
+            fontFamily: 'DMSans-Regular',
             textAlignVertical: 'top',
             borderWidth: 2,
             borderColor: 'grey',

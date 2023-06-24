@@ -1,14 +1,14 @@
 import React from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   ViewStyle,
   TextStyle,
   TouchableOpacity,
 } from 'react-native';
 
-import {colors} from '../../theme';
+import { colors } from '../../theme';
+import MyText from '../MyText';
 
 export default function Outline({
   btnStyle = {},
@@ -30,16 +30,18 @@ export default function Outline({
       activeOpacity={0.8}
       onPress={onPress}
       disabled={disabled}
-      style={[styles.btnContainer, btnStyle, disabled && {opacity: 0.6}]}>
+      style={[styles.btnContainer, btnStyle, disabled && { opacity: 0.6 }]}>
       <View>
-        <Text style={[styles.titleStyle, titleStyle]}>{title}</Text>
+        <MyText textStyle={{ ...styles.titleStyle, ...titleStyle }}>
+          {title}
+        </MyText>
       </View>
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  titleStyle: {color: '#fff'},
+  titleStyle: { color: '#fff' },
   btnContainer: {
     padding: 5,
     paddingHorizontal: 10,
