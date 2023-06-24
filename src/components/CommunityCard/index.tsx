@@ -16,8 +16,11 @@ export default function CommunityCard({
   group,
   onPress,
   onPressAddBtn,
+  onRequestCancel,
+  onRequestAccept,
   onChecked,
   checked = false,
+  requested,
 }: {
   name: string;
   details: string;
@@ -29,32 +32,49 @@ export default function CommunityCard({
   checked?: boolean;
   onPress?: () => void;
   onPressAddBtn?: () => void;
+  onRequestCancel?: () => void;
+  onRequestAccept?: () => void;
   onChecked?: (isChecked: boolean) => void;
+  requested?: boolean;
 }) {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.row}>
-        <Avatar rounded size={'medium'} source={{ uri: image }} />
+        <Avatar
+          rounded
+          size={'medium'}
+          source={{
+            uri:
+              image == ''
+                ? 'https://randomuser.me/api/portraits/men/22.jpg'
+                : image,
+          }}
+        />
         <View style={styles.contentContainer}>
           <MyText children={name} textStyle={{ fontSize: 16 }} />
           <MyText children={details} />
         </View>
       </View>
+      {requested && (
+        <MyText children="Request Sent" textStyle={{ marginRight: 10, fontSize: 12 }} />
+      )}
       {requestBtn && (
         <View style={styles.row}>
           <TouchableOpacity
+            onPress={onRequestCancel}
             activeOpacity={0.8}
             style={{ ...styles.requestBtns }}>
             <Icon name="close" color={colors.text} />
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={onRequestAccept}
             activeOpacity={0.8}
             style={{ ...styles.requestBtns }}>
             <Icon name="check" color={colors.primary} />
           </TouchableOpacity>
         </View>
       )}
-      {addBtn && (
+      {addBtn && !requested && (
         <OutlineBtn
           onPress={onPressAddBtn}
           title="Add"
@@ -133,7 +153,7 @@ const styles = StyleSheet.create({
   },
   row: { flexDirection: 'row' },
   contentContainer: { marginLeft: 10, justifyContent: 'center' },
-  requestBtns: { marginRight: 10, padding: 5 },
+  requestBtns: { marginRight: 5, padding: 5 },
   addBtn: {
     marginRight: 10,
   },
