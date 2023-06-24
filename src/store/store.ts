@@ -11,6 +11,7 @@ const store = hookstate<GlobalState>({
   loadRequests: false,
   friendRequests: null,
   newsFeed: [],
+  archives: [],
 });
 
 export default store;
