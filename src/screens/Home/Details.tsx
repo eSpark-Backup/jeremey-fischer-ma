@@ -88,7 +88,10 @@ export default function Details() {
           alignSelf: 'center',
         }}>
         <GapView />
-        <OutlineBtn title="Move to Archive" />
+        <OutlineBtn
+          title="Move to Archive"
+          // onPress={() => handleMoveToArchive()}
+        />
       </View>
     </MyCanvas>
   );
