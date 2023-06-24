@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,11 +6,13 @@ import {
   TextInput,
   ScrollView,
   Platform,
+  ActivityIndicator,
+  FlatList,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
 
-import { HomeNavProps } from '../../../types';
+import { HomeNavProps, User } from '../../../types';
 import { colors } from '../../../theme';
 import {
   CommunityCard,
@@ -20,9 +22,34 @@ import {
   NormalBtn,
   SearchBar,
 } from '../../../components';
+import { useHookstate } from '@hookstate/core';
+import store from '../../../store/store';
+import { getFriends } from '../../../utils';
+import { getSearchedFriend } from '../utils/function';
 
 export default function AddNewGroup() {
   const navigation = useNavigation<HomeNavProps['navigation']>();
+  const { friends, loadFriends } = useHookstate(store);
+  const [searchVal, setSearchVal] = useState('');
+  const [selectedFriends, setSelectedFriends] = useState<User[]>([]);
+
+  const clearSearch = () => {
+    setSearchVal('');
+    getFriends();
+  };
+
+  const onSelectFriend = (friend: User, isChecked: Boolean) => {
+    const index = selectedFriends.findIndex(item => item.uid === friend.uid);
+    if (index !== -1 || !isChecked) {
+      // The item with the targetId exists in the array, so remove it
+      selectedFriends.splice(index, 1);
+    } else {
+      // The item with the targetId doesn't exist in the array, so add it
+      selectedFriends.push(friend);
+    }
+    setSelectedFriends([...selectedFriends]);
+  };
+
   return (
     <MyCanvas>
       <View style={{ alignSelf: 'center', width: '95%' }}>
@@ -48,28 +75,52 @@ export default function AddNewGroup() {
           textStyle={{ marginLeft: 20 }}
         />
         <GapView />
-        <SearchBar placeholder="Seach by email" />
+        <SearchBar
+          value={searchVal}
+          placeholder="Search by email"
+          onChangeText={setSearchVal}
+          clearInput={clearSearch}
+          onSubmitEditing={() => getSearchedFriend(searchVal)}
+        />
       </View>
-      <ScrollView style={{ flex: 1 }}>
-        <CommunityCard
-          name="John"
-          details="john@email.com"
-          image="https://randomuser.me/api/portraits/men/22.jpg"
-          checkbox
+      {loadFriends.get() ? (
+        <View style={{ flex: 1 }}>
+          <ActivityIndicator
+            size={'large'}
+            color={colors.primary}
+            style={{ marginTop: 10 }}
+          />
+        </View>
+      ) : (
+        <FlatList
+          data={friends.get()}
+          renderItem={({ item }) =>
+            item.isFriend || item.isFriend == undefined ? (
+              <CommunityCard
+                name={item.userName}
+                details={item.email}
+                image={item.image}
+                checkbox
+                checked={Boolean(
+                  selectedFriends.filter(val => item.uid == val.uid).length,
+                )}
+                onChecked={isChecked => onSelectFriend(item, isChecked)}
+              />
+            ) : (
+              <MyText
+                textStyle={{ textAlign: 'center', marginTop: 10 }}
+                children="No Friends to Show"
+              />
+            )
+          }
+          ListEmptyComponent={
+            <MyText
+              textStyle={{ textAlign: 'center', marginTop: 10 }}
+              children="No Friends to Show"
+            />
+          }
         />
-        <CommunityCard
-          name="John"
-          details="john@email.com"
-          image="https://randomuser.me/api/portraits/men/22.jpg"
-          checkbox
-        />
-        <CommunityCard
-          name="John"
-          details="john@email.com"
-          image="https://randomuser.me/api/portraits/men/22.jpg"
-          checkbox
-        />
-      </ScrollView>
+      )}
       <GapView length={20} />
       <NormalBtn
         title="Create Group"

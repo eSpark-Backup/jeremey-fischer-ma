@@ -43,7 +43,10 @@ export default function GroupsList() {
               details={`${item.Members.length} Members`}
               image="https://randomuser.me/api/portraits/men/22.jpg"
               onPress={() =>
-                navigation.navigate('GroupDetails', { title: item.groupName, content: item.contents })
+                navigation.navigate('GroupDetails', {
+                  title: item.groupName,
+                  content: item.contents,
+                })
               }
             />
           )}
@@ -55,35 +58,6 @@ export default function GroupsList() {
           }
         />
       )}
-      {/* <ScrollView style={{ flex: 1 }}>
-        <CommunityCard
-          name="Group 1"
-          details="5 Members"
-          image="https://randomuser.me/api/portraits/men/22.jpg"
-          group
-          onPress={() =>
-            navigation.navigate('GroupDetails', { title: 'Group 1' })
-          }
-        />
-        <CommunityCard
-          name="Group 2"
-          details="5 Members"
-          image="https://randomuser.me/api/portraits/men/22.jpg"
-          group
-          onPress={() =>
-            navigation.navigate('GroupDetails', { title: 'Group 2' })
-          }
-        />
-        <CommunityCard
-          name="Group 3"
-          details="5 Members"
-          image="https://randomuser.me/api/portraits/men/22.jpg"
-          group
-          onPress={() =>
-            navigation.navigate('GroupDetails', { title: 'Group 3' })
-          }
-        />
-      </ScrollView> */}
       <GapView />
       <NormalBtn
         title="Add Group"

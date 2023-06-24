@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   TextInput,
   Platform,
@@ -22,10 +21,14 @@ import {
 import { Icon } from '@rneui/themed';
 import store from '../../store/store';
 import { useHookstate } from '@hookstate/core';
-import { fixBrokenURL, getContentTypeFromUrl, getFriends } from '../../utils';
+import {
+  fixBrokenURL,
+  getContentTypeFromUrl,
+  getFriends,
+  getGroups,
+} from '../../utils';
 import { Content, Group, User } from '../../types';
 import { defaultImage } from '../../constants';
-import { getGroups } from '../Home/utils/function';
 import { LinkPreview } from '@flyerhq/react-native-link-preview';
 import { getLinkPreview } from 'link-preview-js';
 import {
