@@ -49,6 +49,8 @@ export type NavProps = NativeStackScreenProps<RootStackParamList>;
 
 export type HomeNavProps = NativeStackScreenProps<HomeStackParamList>;
 
+export type CommunityNavProps = NativeStackScreenProps<CommunityStackParamList>;
+
 export type ProfileProps = NativeStackScreenProps<
   ProfileStackParamList & RootStackParamList
 >;
@@ -97,10 +99,10 @@ export type Content = {
 export type Group = {
   id?: string; // DocId
   groupName: string;
-  Members: string[]; // Array of member UIDs
+  Members: User[]; // Array of member UIDs
   groupCreatorId: string;
   groupCreator?: User;
-  contents?: string[]; // Array of content IDs
+  contents?: Content[]; // Array of content IDs
 };
 
 // PostView type

@@ -39,7 +39,6 @@ export const getMyGroups = async (myUid: string) => {
       .collection(collections.groups)
       .where('Members', 'array-contains', myUid)
       .get();
-
     if (response.empty) {
       return { data: null, message: 'You have not add in any group' };
     } else {

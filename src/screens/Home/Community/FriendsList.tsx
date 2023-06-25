@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
+import { useHookstate } from '@hookstate/core';
 
 import {
   CommunityCard,
@@ -9,7 +10,6 @@ import {
   SubHeader,
   Tabs,
 } from '../../../components';
-import { useHookstate } from '@hookstate/core';
 import store from '../../../store/store';
 import { colors } from '../../../theme';
 import { getSearchedFriend } from '../utils/function';

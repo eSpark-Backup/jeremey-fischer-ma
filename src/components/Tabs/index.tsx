@@ -7,7 +7,7 @@ import MyText from '../MyText';
 import { CommunityNavProps, HomeNavProps } from '../../types';
 import { useHookstate } from '@hookstate/core';
 import store from '../../store/store';
-import { getGroups } from '../../utils';
+import { getFriends, getGroups } from '../../utils';
 
 export default function Tabs({
   selectedTabId,
@@ -20,6 +20,11 @@ export default function Tabs({
   const navigateToGroups = () => {
     getGroups();
     navigation.navigate('GroupsList');
+  };
+
+  const navigateToFriends = () => {
+    getFriends();
+    navigation.navigate('FriendsList');
   };
 
   return (
@@ -35,7 +40,7 @@ export default function Tabs({
         borderRadius: 5,
       }}>
       <TouchableOpacity
-        onPress={() => navigation.navigate('FriendsList')}
+        onPress={navigateToFriends}
         style={{
           width: '50%',
           height: '100%',

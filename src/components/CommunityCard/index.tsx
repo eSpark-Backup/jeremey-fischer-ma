@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Avatar, CheckBox, Icon } from '@rneui/themed';
 
 import { colors } from '../../theme';
 import MyText from '../MyText';
 import { OutlineBtn } from '../Button';
+import { User } from '../../types';
+import GapView from '../GapView';
 
 export default function CommunityCard({
   name,
@@ -14,6 +16,7 @@ export default function CommunityCard({
   addBtn,
   checkbox,
   group,
+  members,
   onPress,
   onPressAddBtn,
   onRequestCancel,
@@ -29,6 +32,7 @@ export default function CommunityCard({
   addBtn?: boolean;
   checkbox?: boolean;
   group?: boolean;
+  members?: User[];
   checked?: boolean;
   onPress?: () => void;
   onPressAddBtn?: () => void;
@@ -56,7 +60,10 @@ export default function CommunityCard({
         </View>
       </View>
       {requested && (
-        <MyText children="Request Sent" textStyle={{ marginRight: 10, fontSize: 12 }} />
+        <MyText
+          children="Request Sent"
+          textStyle={{ marginRight: 10, fontSize: 12 }}
+        />
       )}
       {requestBtn && (
         <View style={styles.row}>
@@ -114,25 +121,23 @@ export default function CommunityCard({
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <Avatar
-            rounded
-            source={{ uri: 'https://randomuser.me/api/portraits/men/22.jpg' }}
-          />
-          <Avatar
-            rounded
-            containerStyle={{
-              right: 5,
-            }}
-            source={{ uri: 'https://randomuser.me/api/portraits/men/21.jpg' }}
-          />
-          <Avatar
-            rounded
-            containerStyle={{
-              right: 10,
-            }}
-            source={{ uri: 'https://randomuser.me/api/portraits/men/29.jpg' }}
-          />
-          <MyText textStyle={{ right: 10 }} children="+ 2" />
+          {members?.map(
+            (item, index) =>
+              index < 3 && (
+                <Avatar
+                  rounded
+                  containerStyle={{
+                    left: 10 - 5 * index,
+                  }}
+                  source={{ uri: item?.image! }}
+                />
+              ),
+          )}
+          {members?.length! > 3 ? (
+            <MyText children={`+${(members?.length! - 3).toString()}`} />
+          ) : (
+            <GapView mode="horizontal" />
+          )}
         </View>
       )}
     </TouchableOpacity>
