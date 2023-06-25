@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback } from 'react';
-import { StyleSheet, Image, View } from 'react-native';
+import React, { useEffect, useCallback, useState } from 'react';
+import { StyleSheet, Image, View, ActivityIndicator } from 'react-native';
 import {
   useRoute,
   useTheme,
@@ -8,17 +8,21 @@ import {
 } from '@react-navigation/native';
 import moment from 'moment';
 import { Avatar } from '@rneui/themed';
+import { useHookstate } from '@hookstate/core';
 
 import { GapView, MyCanvas, MyText, OutlineBtn } from '../../components';
 import { HomeStackParamList } from '../../types';
 import { PostView } from '../../api/postView.controller';
-import { useHookstate } from '@hookstate/core';
 import store from '../../store/store';
+import { addToArchive, getAllArchive } from '../../api/archive.controller';
+import loaders from '../../store/loaders';
 
 type DetailsScreenRouteProps = RouteProp<HomeStackParamList, 'Details'>;
 
 export default function Details() {
+  const [isArchived, setIsArchived] = useState<boolean>(false);
   const userData = useHookstate(store?.userData);
+  const loader = useHookstate(loaders?.contentDetails);
   const { params } = useRoute<DetailsScreenRouteProps>();
   const { colors } = useTheme();
   const {
@@ -27,12 +31,49 @@ export default function Details() {
 
   useEffect(() => {
     markAsSeen();
+    getAllArchives();
   }, []);
 
   async function markAsSeen() {
     console.log(contentData?.id, userData?.get()?.['uid']);
     const res = await PostView(contentData?.id!, userData?.get()?.['uid']!);
     console.log('res mark as seen', res);
+  }
+
+  async function getAllArchives() {
+    try {
+      loader.set(true);
+      const res = await getAllArchive(userData?.get()?.['uid'] ?? '');
+      if (res?.data != null) {
+        console.log('kia archive hain', res?.data);
+        setIsArchived(
+          res?.data.some(item => item?.content?.id === contentData?.id),
+        );
+        loader.set(false);
+      } else {
+        console.log('message', res.message);
+        loader.set(false);
+      }
+    } catch (e) {
+      console.log('err at newsfeed fetch', e);
+      loader.set(false);
+    }
+  }
+
+  async function handleMoveToArchive() {
+    loader.set(true);
+    try {
+      const res = await addToArchive({
+        userId: userData?.get()?.['uid']!,
+        contentId: contentData?.id!,
+      });
+      console.log('done', res);
+      loader.set(false);
+      getAllArchives();
+    } catch (e) {
+      console.log('error at add to Archive', e);
+      loader.set(false);
+    }
   }
 
   return (
@@ -88,10 +129,20 @@ export default function Details() {
           alignSelf: 'center',
         }}>
         <GapView />
-        <OutlineBtn
-          title="Move to Archive"
-          // onPress={() => handleMoveToArchive()}
-        />
+        {loader.get() ? (
+          <ActivityIndicator
+            size={'large'}
+            color={colors.primary}
+            style={{ marginTop: 10 }}
+          />
+        ) : isArchived ? (
+          <MyText textStyle={{ opacity: 0.5 }} children={'Archived'} />
+        ) : (
+          <OutlineBtn
+            title="Move to Archive"
+            onPress={async () => await handleMoveToArchive()}
+          />
+        )}
       </View>
     </MyCanvas>
   );

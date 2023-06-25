@@ -15,4 +15,5 @@ export { default as LabelBox } from './LabelBox';
 export { default as Dropdown } from './Dropdown';
 export { default as CustomTabBar } from './CustomTabBar';
 export { default as FeedCard } from './FeedCard';
+export { default as ArchiveCard } from './ArchiveCard';
 export { default as EmptyFeedLabel } from './EmptyFeedLabel';
