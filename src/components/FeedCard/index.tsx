@@ -74,6 +74,11 @@ export default function FeedCard({
               <MyText>{transformTime(contentData?.createdAt?.seconds!)}</MyText>
             </View>
             <GapView />
+            <MyText
+              children={contentData.title}
+              textStyle={{ fontWeight: 'bold' }}
+            />
+            <GapView />
             <MyText lines={3} children={contentData?.description} />
           </View>
         </View>
