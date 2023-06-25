@@ -60,7 +60,7 @@ export type User = {
   uid: string;
   image: string;
   fcmToken: string;
-  createdAt?: string | Date;
+  createdAt?: { seconds: number; nanoseconds: number };
   isFriend?: boolean;
   Friends?: string[]; // Array of friend UIDs
   Group?: string[]; // Array of GroupIds
@@ -133,7 +133,7 @@ export type Archive = {
 
 // GLobalState type
 export type GlobalState = {
-  userData: null;
+  userData: null | User;
   screenLoading: boolean;
   loadFriends: boolean;
   friends: User[] | null;
