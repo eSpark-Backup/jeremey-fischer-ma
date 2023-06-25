@@ -27,7 +27,7 @@ import {
   getFriends,
   getGroups,
 } from '../../utils';
-import { Content, Group, User } from '../../types';
+import { Content, Group, NavProps, User } from '../../types';
 import { defaultImage } from '../../constants';
 import { LinkPreview } from '@flyerhq/react-native-link-preview';
 import { getLinkPreview } from 'link-preview-js';
@@ -75,7 +75,7 @@ const friendData = [
 export default function Share() {
   const { colors } = useTheme();
   const route: any = useRoute();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavProps['navigation']>();
 
   const [dropDownToggle, setDropDownToggle] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -149,7 +149,7 @@ export default function Share() {
 
             Alert.alert('Alert', 'Post Share Successfully');
             setLoader(false);
-            navigation.goBack();
+            navigation.navigate('Tab', { screen: 'Article' });
           } catch (error) {
             setLoader(false);
 
@@ -168,7 +168,7 @@ export default function Share() {
             Alert.alert('Alert', 'Post Share Successfully');
             setLoader(false);
 
-            navigation.goBack();
+            navigation.navigate('Tab', { screen: 'Article' });
           } catch (error) {
             setLoader(false);
 

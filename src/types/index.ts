@@ -35,7 +35,7 @@ export type ProfileStackParamList = {
 export type CommunityStackParamList = {
   FriendsList: undefined;
   GroupsList: undefined;
-  GroupDetails: { item: { title: string; content?: Content[] } };
+  GroupDetails: { item: { title: string; contents?: Content[] } };
   AddNewGroup: undefined;
 };
 
@@ -96,7 +96,7 @@ export type Content = {
   description: string;
   senderId?: string;
   message: string;
-  sender?: User;
+  sender: User;
   url?: string;
   isViewed?: boolean;
 };

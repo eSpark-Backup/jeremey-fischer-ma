@@ -46,7 +46,7 @@ export default function GroupsList() {
               image="https://randomuser.me/api/portraits/men/22.jpg"
               onPress={() =>
                 navigation.navigate('GroupDetails', {
-                  item: { title: item.groupName, content: item.contents },
+                  item: { title: item.groupName, contents: item.contents },
                 })
               }
             />
