@@ -32,7 +32,7 @@ export default function CommunityCard({
   addBtn?: boolean;
   checkbox?: boolean;
   group?: boolean;
-  members?: User[];
+  members?: User[] | string[];
   checked?: boolean;
   onPress?: () => void;
   onPressAddBtn?: () => void;
@@ -123,7 +123,8 @@ export default function CommunityCard({
           }}>
           {members?.map(
             (item, index) =>
-              index < 3 && (
+              index < 3 &&
+              typeof item !== 'string' && (
                 <Avatar
                   rounded
                   containerStyle={{

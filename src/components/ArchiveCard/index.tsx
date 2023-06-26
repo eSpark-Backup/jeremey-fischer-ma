@@ -33,7 +33,7 @@ export default function ArchiveCard({
               position: 'absolute',
             }}
             source={{
-              uri: 'https://randomuser.me/api/portraits/men/11.jpg',
+              uri: contentData.sender.image,
             }}
           />
           {/* <Avatar
