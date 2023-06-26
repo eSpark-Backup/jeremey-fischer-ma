@@ -16,8 +16,6 @@ export default function GroupDetails() {
     item: { contents },
   } = params;
 
-  console.log('contents', contents);
-
   function renderGroupFeed({ item, index }: { item: Content; index: number }) {
     return <FeedCard key={index} contentData={item} senderData={item.sender} />;
   }

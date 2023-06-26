@@ -43,7 +43,7 @@ export default function CommunityCard({
 }) {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <View style={styles.row}>
+      <View style={{ ...styles.row, flex: 1 }}>
         <Avatar
           rounded
           size={'medium'}
@@ -55,7 +55,7 @@ export default function CommunityCard({
           }}
         />
         <View style={styles.contentContainer}>
-          <MyText children={name} textStyle={{ fontSize: 16 }} />
+          <MyText lines={1} children={name} textStyle={{ fontSize: 16 }} />
           <MyText children={details} />
         </View>
       </View>
@@ -147,6 +147,7 @@ export default function CommunityCard({
 const styles = StyleSheet.create({
   container: {
     width: '95%',
+    // flex: 1,
     flexDirection: 'row',
     alignSelf: 'center',
     alignItems: 'center',
@@ -157,7 +158,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.card,
   },
   row: { flexDirection: 'row' },
-  contentContainer: { marginLeft: 10, justifyContent: 'center' },
+  contentContainer: {
+    flex: 1,
+    marginLeft: 10,
+    justifyContent: 'center',
+  },
   requestBtns: { marginRight: 5, padding: 5 },
   addBtn: {
     marginRight: 10,
