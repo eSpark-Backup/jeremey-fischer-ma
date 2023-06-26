@@ -70,6 +70,7 @@ export default function Details() {
       console.log('done', res);
       loader.set(false);
       getAllArchives();
+      store.archiveId.set(contentData.id!);
     } catch (e) {
       console.log('error at add to Archive', e);
       loader.set(false);

@@ -113,6 +113,7 @@ export default function FriendsList() {
                 name={item.userName}
                 details={item.email}
                 image={item.image}
+                requested={item.isRequested}
                 addBtn={item.isFriend == false || !item.isFriend == undefined}
                 onPressAddBtn={() => AddFriend(item.uid, item.email)}
               />

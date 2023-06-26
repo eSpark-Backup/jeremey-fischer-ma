@@ -12,6 +12,7 @@ const store = hookstate<GlobalState>({
   friendRequests: [],
   newsFeed: [],
   archives: [],
+  archiveId: null,
 });
 
 export default store;

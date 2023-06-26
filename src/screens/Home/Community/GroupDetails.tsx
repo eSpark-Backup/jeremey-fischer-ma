@@ -1,15 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, FlatList } from 'react-native';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import {
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+} from 'react-native';
+import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import {
   EmptyFeedLabel,
   FeedCard,
   GapView,
   MyCanvas,
+  MyText,
 } from '../../../components';
-import { CommunityStackParamList, Content } from '../../../types';
-import { extractFeeds } from '../../../utils/globalFunctions';
+import {
+  CommunityNavProps,
+  CommunityStackParamList,
+  Content,
+} from '../../../types';
+import store from '../../../store/store';
+import { colors } from '../../../theme';
+import { getGroupById } from '../../../api/groups.controller';
+import useUpdateEffect from '../../../utils/hooks/useUpdateEffect';
 
 type GroupDetailsScreenRouteProps = RouteProp<
   CommunityStackParamList,
@@ -17,21 +32,27 @@ type GroupDetailsScreenRouteProps = RouteProp<
 >;
 
 export default function GroupDetails() {
+  const navigation = useNavigation<CommunityNavProps['navigation']>();
   const { params } = useRoute<GroupDetailsScreenRouteProps>();
   const {
-    item: { contents },
+    item: { title, contents },
   } = params;
 
-  const [groupContent, setGroupContent] = useState<Content[]>([]);
+  const [groupContent, setGroupContent] = useState<Content[]>(contents!);
 
-  useEffect(() => {
-    console.log('useEfff');
-
-    const reduceArchived: any = contents?.filter(
-      item => item.isArchived == false,
-    );
-    setGroupContent(reduceArchived);
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const reduceArchived: any = groupContent?.filter(
+        item => item.isArchived == false && item.id != store.archiveId.get(),
+      );
+      setGroupContent(reduceArchived);
+      navigation.setParams({
+        item: { title: title, contents: reduceArchived },
+      });
+      store.archiveId.set(null);
+      console.log('contents', contents);
+    }, []),
+  );
 
   function renderGroupFeed({ item, index }: { item: Content; index: number }) {
     return <FeedCard key={index} contentData={item} senderData={item.sender} />;
@@ -45,6 +66,9 @@ export default function GroupDetails() {
         ListEmptyComponent={<EmptyFeedLabel label="No Group Content Found" />}
         ItemSeparatorComponent={() => <GapView />}
       />
+      <TouchableOpacity>
+        <MyText children={'Update Params'} />
+      </TouchableOpacity>
     </MyCanvas>
   );
 }
