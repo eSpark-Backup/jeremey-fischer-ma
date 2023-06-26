@@ -109,7 +109,9 @@ export const searchUser = async (
         dbData.id = res.id;
         dbData.isRequested = isRequested;
         dbData.isFriend = dbData?.Friends?.includes(myUid ?? '');
-        users.push(dbData);
+        if (!Boolean(users.filter(val => val.uid == dbData.uid).length)) {
+          users.push(dbData);
+        }
       });
       await Promise.all(promises);
       return { data: users, message: 'User Data' };
