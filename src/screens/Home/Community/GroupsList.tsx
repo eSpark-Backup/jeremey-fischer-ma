@@ -43,7 +43,8 @@ export default function GroupsList() {
               group
               name={item.groupName}
               details={`${item.Members.length} Members`}
-              image="https://randomuser.me/api/portraits/men/22.jpg"
+              members={item?.Members!}
+              image={item.groupCreator?.image!}
               onPress={() =>
                 navigation.navigate('GroupDetails', {
                   item: { title: item.groupName, contents: item.contents },

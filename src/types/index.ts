@@ -49,6 +49,8 @@ export type NavProps = NativeStackScreenProps<RootStackParamList>;
 
 export type HomeNavProps = NativeStackScreenProps<HomeStackParamList>;
 
+export type CommunityNavProps = NativeStackScreenProps<CommunityStackParamList>;
+
 export type ProfileProps = NativeStackScreenProps<
   ProfileStackParamList & RootStackParamList
 >;
@@ -60,7 +62,7 @@ export type User = {
   uid: string;
   image: string;
   fcmToken: string;
-  createdAt?: string | Date;
+  createdAt?: { seconds: number; nanoseconds: number };
   isFriend?: boolean;
   Friends?: string[]; // Array of friend UIDs
   Group?: string[]; // Array of GroupIds
@@ -97,10 +99,10 @@ export type Content = {
 export type Group = {
   id?: string; // DocId
   groupName: string;
-  Members: string[]; // Array of member UIDs
+  Members: User[]; // Array of member UIDs
   groupCreatorId: string;
   groupCreator?: User;
-  contents?: string[]; // Array of content IDs
+  contents?: Content[]; // Array of content IDs
 };
 
 // PostView type
@@ -133,7 +135,7 @@ export type Archive = {
 
 // GLobalState type
 export type GlobalState = {
-  userData: null;
+  userData: null | User;
   screenLoading: boolean;
   loadFriends: boolean;
   friends: User[] | null;

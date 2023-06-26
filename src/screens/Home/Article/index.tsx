@@ -13,7 +13,6 @@ import {
   MyText,
 } from '../../../components';
 import { NavProps, NewsFeed } from '../../../types';
-import { getAllRequest } from '../../../api/friendRequest.controller';
 import store from '../../../store/store';
 import loaders from '../../../store/loaders';
 import { extractFeeds } from '../../../utils/globalFunctions';
@@ -23,9 +22,6 @@ export default function ArticleScreen() {
   const newsFeedData = useHookstate(store?.newsFeed).get();
   const loader = useHookstate(loaders.newsFeed).get();
   const navigation = useNavigation<NavProps['navigation']>();
-  getAllRequest('1686658085577').then(res => {
-    console.log('get all groups', JSON.stringify(res));
-  });
   useEffect(() => {
     if (!loader) {
       setArticles(extractFeeds(newsFeedData, 'Article'));

@@ -4,6 +4,7 @@ import { Avatar } from '@rneui/base';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import { Divider, Icon } from '@rneui/themed';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { useHookstate } from '@hookstate/core';
 
 import { GapView, MyCanvas, MyText, NormalBtn } from '../../components';
 import { SCREEN_WIDTH } from '../../constants';
@@ -11,8 +12,10 @@ import { NavProps, ProfileProps } from '../../types';
 import { storeUserData } from '../../utils';
 import { ArchiveOutlineSvg } from '../../assets';
 import store from '../../store/store';
+import moment from 'moment';
 
 export default function App() {
+  const userData = useHookstate(store?.userData)?.get();
   const navigation = useNavigation<ProfileProps['navigation']>();
   const { colors } = useTheme();
 
@@ -44,17 +47,19 @@ export default function App() {
           rounded
           containerStyle={{ borderWidth: 0.6, borderColor: 'grey' }}
           source={{
-            uri: store.userData.get()?.image
-              ? store.userData.get()?.image
+            uri: userData?.image
+              ? userData?.image
               : 'https://randomuser.me/api/portraits/men/36.jpg',
           }}
           size={120}
         />
         <MyText textStyle={{ fontWeight: 'bold', fontSize: 24, marginTop: 10 }}>
-          {store.userData.get()?.userName}
+          {userData?.userName}
         </MyText>
         <MyText textStyle={{ fontWeight: 'bold', marginTop: 10, opacity: 0.5 }}>
-          Member for 2 Years
+          {`Member for ${moment
+            .unix(userData?.createdAt?.seconds!)
+            .fromNow(true)}`}
         </MyText>
         <View>
           <Divider
@@ -70,7 +75,7 @@ export default function App() {
           </MyText>
           <GapView mode="horizontal" />
           <Icon
-            name={Platform.OS == 'android' ? 'logo-google' : 'logo-apple'}
+            name={'logo-google'}
             type="ionicon"
             style={{ opacity: 0.2 }}
             color={colors.text}

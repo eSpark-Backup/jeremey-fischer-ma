@@ -1,13 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import {
-  AddNewGroup,
-  FriendsList,
-  GroupDetails,
-  GroupsList,
-  Home,
-} from '../screens';
+import { AddNewGroup, FriendsList, GroupDetails, GroupsList } from '../screens';
 import Details from '../screens/Home/Details';
 import { HomeStackParamList } from '../types';
 import { MyHeader } from '../components';

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
+import { useHookstate } from '@hookstate/core';
 
 import { CommunityNavProps, HomeNavProps, User } from '../../../types';
 import { colors } from '../../../theme';
@@ -23,7 +24,6 @@ import {
   ScreenLoader,
   SearchBar,
 } from '../../../components';
-import { useHookstate } from '@hookstate/core';
 import store from '../../../store/store';
 import { getFriends } from '../../../utils';
 import { getSearchedFriend, groupCreation } from '../utils/function';
