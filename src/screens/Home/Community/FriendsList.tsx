@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import { useHookstate } from '@hookstate/core';
 
@@ -18,13 +18,14 @@ import {
   acceptRequest,
   rejectRequest,
 } from '../../../api/friendRequest.controller';
-import { User } from '../../../types';
+import { FriendRequest, User } from '../../../types';
 
 export default function FriendsList() {
   const friendStore: any = useHookstate(store.friends);
   const friends: User[] = friendStore.get();
   const friendRequestsStore: any = useHookstate(store.friendRequests);
-  const friendRequests: User[] = friendRequestsStore.get();
+  const friendRequests: FriendRequest[] = friendRequestsStore.get();
+
   const { loadFriends, loadRequests } = useHookstate(store);
   const [searchVal, setSearchVal] = useState('');
 
@@ -47,6 +48,17 @@ export default function FriendsList() {
     });
   };
 
+  const checkSearchedEmail = (searchVal: string) => {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(searchVal)) {
+      getSearchedFriend(searchVal);
+    } else {
+      console.log('Please enter a valid email');
+    }
+  };
+
+  console.log('friend', friends);
+  console.log('friendREq', friendRequests);
+
   return (
     <MyCanvas>
       <SearchBar
@@ -54,7 +66,7 @@ export default function FriendsList() {
         placeholder="Search by email"
         onChangeText={setSearchVal}
         clearInput={clearSearch}
-        onSubmitEditing={() => getSearchedFriend(searchVal)}
+        onSubmitEditing={() => checkSearchedEmail(searchVal)}
       />
       <Tabs selectedTabId={1} />
       <View>
@@ -70,12 +82,12 @@ export default function FriendsList() {
             data={friendRequests}
             renderItem={({ item }) => (
               <CommunityCard
-                name={item.userName}
-                details={item.email}
-                image={item.image}
+                name={item.sender?.userName as string}
+                details={item.sender?.email as string}
+                image={item.sender?.image as string}
                 requestBtn={true}
-                onRequestAccept={() => acceptFriendRequest(item.uid)}
-                onRequestCancel={() => cancelFriendRequest(item.uid)}
+                onRequestAccept={() => acceptFriendRequest(item.id as string)}
+                onRequestCancel={() => cancelFriendRequest(item.id as string)}
               />
             )}
             ListEmptyComponent={
@@ -102,7 +114,6 @@ export default function FriendsList() {
                 details={item.email}
                 image={item.image}
                 addBtn={item.isFriend == false || !item.isFriend == undefined}
-                requested={item.isRequested}
                 onPressAddBtn={() => AddFriend(item.uid, item.email)}
               />
             )}

@@ -7,8 +7,13 @@ function extractFeeds(
   data: ImmutableArray<NewsFeed>,
   type: 'Audio' | 'Video' | 'Article' | 'Podcast',
 ) {
-  const articles: any = data.filter(item => item.content.mediaType == type);
-  return articles;
+  const media: ImmutableArray<NewsFeed> = data.filter(
+    item => item.content.mediaType == type,
+  );
+  const reduceArchived: any = media.filter(
+    item => item.content.isArchived == false,
+  );
+  return reduceArchived;
 }
 
 function extractFeedsByUser(data: ImmutableArray<NewsFeed>, uid: string) {

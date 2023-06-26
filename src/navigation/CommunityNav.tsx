@@ -3,13 +3,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { AddNewGroup, FriendsList, GroupDetails, GroupsList } from '../screens';
 import Details from '../screens/Home/Details';
-import { HomeStackParamList } from '../types';
+import { CommunityStackParamList, HomeStackParamList } from '../types';
 import { MyHeader } from '../components';
 import { useHookstate } from '@hookstate/core';
 import store from '../store/store';
 
 export default function CommunityNav() {
-  const Stack = createNativeStackNavigator<HomeStackParamList>();
+  const Stack = createNativeStackNavigator<CommunityStackParamList>();
   const { friends, loadFriends } = useHookstate(store);
 
   return (
@@ -48,7 +48,7 @@ export default function CommunityNav() {
         name="GroupDetails"
         component={GroupDetails}
         options={({ route }) => ({
-          title: route.params.title,
+          title: route.params.item.title,
           header: ({ route, navigation, options }) => (
             <MyHeader
               route={route}

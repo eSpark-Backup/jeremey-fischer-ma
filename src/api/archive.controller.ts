@@ -48,13 +48,30 @@ export const getAllArchive = async (userId: string) => {
         const archiveData: Archive = value.data();
         let content: Content | undefined = undefined;
         let user: User | undefined = undefined;
+        const innerPromises: Promise<void>[] = [];
 
         const fetchContent = db()
           .collection(collections.contents)
           .doc(archiveData?.contentId ?? '')
           .get()
-          .then((contentData: any) => {
+          .then(async (contentData: any) => {
             content = contentData.data();
+            let sender: User | undefined = undefined;
+            const fetchSender = db()
+              .collection(collections.users)
+              .where('uid', '==', content?.senderId ?? '')
+              .get()
+              .then(senderSnap => {
+                if (!senderSnap.empty) {
+                  senderSnap.forEach((senderData: any) => {
+                    sender = senderData.data();
+                  });
+                }
+              });
+            innerPromises.push(fetchSender);
+            await Promise.all([fetchSender]);
+            // @ts-ignore
+            content.sender = sender;
           });
 
         const fetchUser = db()
@@ -68,8 +85,9 @@ export const getAllArchive = async (userId: string) => {
               });
             }
           });
+
         promises.push(fetchContent, fetchUser);
-        await Promise.all([fetchContent, fetchUser]);
+        await Promise.all([fetchContent, fetchUser, ...innerPromises]);
         archiveData.content = content;
         archiveData.user = user;
         archives.push(archiveData);

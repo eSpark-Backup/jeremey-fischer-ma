@@ -242,70 +242,76 @@ export default function Share() {
           multiline
         />
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          marginTop: 10,
-          padding: 5,
-          zIndex: 99,
-          overflow: 'visible',
-        }}>
-        <MyText textStyle={{ fontSize: 18 }}>Select: </MyText>
-        <Dropdown
-          defaultLabel="Friends"
-          dataSource={[
-            { name: 'Friends', id: 'f' },
-            { name: 'Groups', id: 'g' },
-          ]}
-          toggleValue={dropDownToggle}
-          type="sendType"
-          handleLabel={val => setDdselection(val?.id!)}
-          handleToggle={() => setDropDownToggle(!dropDownToggle)}
+      <View style={{ flex: 1 }}>
+        <View
+          style={{
+            // flexDirection: 'row',
+            // justifyContent: 'space-between',
+            marginTop: 10,
+            padding: 5,
+            zIndex: 99,
+            overflow: 'visible',
+            width: '100%',
+          }}>
+          <MyText textStyle={{ fontSize: 18 }}>Select: </MyText>
+          <Dropdown
+            overlap
+            gapVal={20}
+            containerStyle={{ alignSelf: 'flex-end', paddingRight: 5 }}
+            defaultLabel="Friends"
+            dataSource={[
+              { name: 'Friends', id: 'f' },
+              { name: 'Groups', id: 'g' },
+            ]}
+            toggleValue={dropDownToggle}
+            type="sendType"
+            handleLabel={val => setDdselection(val?.id!)}
+            handleToggle={() => setDropDownToggle(!dropDownToggle)}
+          />
+        </View>
+        <FlatList
+          data={
+            ddSelection === 'f'
+              ? (friends as unknown as ArrayLike<Group & User>)
+              : (groups as unknown as ArrayLike<Group & User>)
+          }
+          showsVerticalScrollIndicator={false}
+          renderItem={({
+            item,
+            index,
+          }: {
+            item: Group & User;
+            index: number;
+          }) => {
+            if (ddSelection == 'f') {
+              return (
+                <CommunityCard
+                  key={index}
+                  name={item.userName}
+                  details={`${item.Friends?.length?.toString() ?? '0'} Friends`}
+                  image={Boolean(item.image) ? item.image : defaultImage}
+                  checkbox
+                  checked={Boolean(
+                    selectedFriends.filter(val => item.uid == val.uid).length,
+                  )}
+                  onChecked={isChecked => onSelectFriend(item, isChecked)}
+                />
+              );
+            } else {
+              return (
+                <CommunityCard
+                  key={index}
+                  name={item.groupName}
+                  details={`${item.Members?.length?.toString() ?? '0'} Members`}
+                  image={item.groupCreator?.image!}
+                  group
+                  onPress={() => setSelectedGroup(item)}
+                />
+              );
+            }
+          }}
         />
       </View>
-      <FlatList
-        data={
-          ddSelection === 'f'
-            ? (friends as unknown as ArrayLike<Group & User>)
-            : (groups as unknown as ArrayLike<Group & User>)
-        }
-        showsVerticalScrollIndicator={false}
-        renderItem={({
-          item,
-          index,
-        }: {
-          item: Group & User;
-          index: number;
-        }) => {
-          if (ddSelection == 'f') {
-            return (
-              <CommunityCard
-                key={index}
-                name={item.userName}
-                details={`${item.Friends?.length?.toString() ?? '0'} Friends`}
-                image={Boolean(item.image) ? item.image : defaultImage}
-                checkbox
-                checked={Boolean(
-                  selectedFriends.filter(val => item.uid == val.uid).length,
-                )}
-                onChecked={isChecked => onSelectFriend(item, isChecked)}
-              />
-            );
-          } else {
-            return (
-              <CommunityCard
-                key={index}
-                name={item.groupName}
-                details={`${item.Members?.length?.toString() ?? '0'} Members`}
-                image={defaultImage}
-                group
-                onPress={() => setSelectedGroup(item)}
-              />
-            );
-          }
-        }}
-      />
       <NormalBtn
         title="Share"
         titleStyle={{ fontSize: 18 }}

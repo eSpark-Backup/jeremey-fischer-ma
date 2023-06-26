@@ -11,9 +11,11 @@ import moment from 'moment';
 export default function ArchiveCard({
   contentData,
   senderData,
+  onRestore,
 }: {
   contentData: Content;
   senderData: User;
+  onRestore?: () => void;
 }) {
   return (
     <MyCard>
@@ -31,7 +33,7 @@ export default function ArchiveCard({
               position: 'absolute',
             }}
             source={{
-              uri: 'https://randomuser.me/api/portraits/men/11.jpg',
+              uri: contentData.sender.image,
             }}
           />
           {/* <Avatar
@@ -77,7 +79,7 @@ export default function ArchiveCard({
               justifyContent: 'flex-end',
               alignItems: 'center',
             }}>
-            <OutlineBtn title="RESTORE" />
+            <OutlineBtn title="RESTORE" onPress={onRestore} />
           </View>
         </View>
       </View>

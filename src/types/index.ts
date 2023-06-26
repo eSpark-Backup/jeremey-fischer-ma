@@ -1,3 +1,4 @@
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { FakeFeedType } from '../constants';
@@ -136,7 +137,7 @@ export type Archive = {
 
 // GLobalState type
 export type GlobalState = {
-  userData: null | User;
+  userData: User | FirebaseFirestoreTypes.DocumentData | null | undefined;
   screenLoading: boolean;
   loadFriends: boolean;
   friends: User[] | null;
