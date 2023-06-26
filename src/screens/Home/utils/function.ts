@@ -26,10 +26,10 @@ export const groupCreation = async (
   members: string[],
   navigation: NavigationProp<ParamListBase>,
 ) => {
-  const data = <Group>{
+  const data: Group = {
     groupName: groupName,
-    groupCreatorId: store.userData.get()?.uid,
-    Members: members,
+    groupCreatorId: store.userData.get()?.uid!,
+    Members: members!,
   };
   loaders.createGroup.set(true);
   createGroup(data).then(res => {

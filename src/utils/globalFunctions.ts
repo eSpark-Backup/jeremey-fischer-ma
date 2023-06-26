@@ -11,6 +11,11 @@ function extractFeeds(
   return articles;
 }
 
+function extractFeedsByUser(data: ImmutableArray<NewsFeed>, uid: string) {
+  const result: any = data.filter(item => item.content.senderId == uid);
+  return result;
+}
+
 const transformTime = (time: number) => {
   const splited = moment.unix(time).utc(false).fromNow(true).split(' ');
   const suffix =
@@ -19,4 +24,4 @@ const transformTime = (time: number) => {
   return prefix + suffix;
 };
 
-export { extractFeeds, transformTime };
+export { extractFeeds, transformTime, extractFeedsByUser };

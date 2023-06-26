@@ -115,19 +115,6 @@ export default function FriendsList() {
           />
         )}
       </View>
-      {/* <ScrollView>
-        <CommunityCard
-          name="John"
-          details="john@email.com"
-          image="https://randomuser.me/api/portraits/men/22.jpg"
-          addBtn={true}
-        />
-        <CommunityCard
-          name="John"
-          details="john@email.com"
-          image="https://randomuser.me/api/portraits/men/22.jpg"
-        />
-      </ScrollView> */}
     </MyCanvas>
   );
 }

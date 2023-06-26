@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, ViewStyle} from 'react-native';
+import { StyleSheet, Text, View, ViewStyle } from 'react-native';
 
 export default function MyCanvas({
   children,
@@ -8,7 +8,7 @@ export default function MyCanvas({
   children: React.ReactNode;
   style?: ViewStyle;
 }) {
-  return <View style={{...styles.container, ...style}}>{children}</View>;
+  return <View style={{ ...styles.container, ...style }}>{children}</View>;
 }
 
 const styles = StyleSheet.create({

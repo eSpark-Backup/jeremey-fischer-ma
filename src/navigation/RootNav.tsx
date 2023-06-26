@@ -14,6 +14,7 @@ import ProfileNav from './ProfileNav';
 import CommunityNav from './CommunityNav';
 import Details from '../screens/Home/Details';
 import Search from '../screens/Home/Search';
+import modalState from '../store/modalStates';
 
 const linking: LinkingOptions<RootStackParamList> = {
   prefixes: ['seaglass://'], // Specify the custom URL scheme for your app
@@ -27,6 +28,7 @@ const linking: LinkingOptions<RootStackParamList> = {
 export default function RootNav() {
   const Stack = createNativeStackNavigator<RootStackParamList>();
   const { userData } = useHookstate(store);
+  const searchModal = useHookstate(modalState.search);
 
   return (
     <NavigationContainer linking={linking} theme={MyTheme}>
@@ -62,7 +64,9 @@ export default function RootNav() {
               <MyHeader
                 route={route}
                 leftIcon={true}
-                onPressLeftIcon={() => navigation.goBack()}
+                onPressLeftIcon={() => {
+                  navigation.goBack(), searchModal?.set(false);
+                }}
               />
             ),
           }}

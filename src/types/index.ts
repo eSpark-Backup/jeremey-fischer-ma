@@ -100,7 +100,7 @@ export type Content = {
 export type Group = {
   id?: string; // DocId
   groupName: string;
-  Members: User[]; // Array of member UIDs
+  Members: User[] | string[]; // Array of member UIDs
   groupCreatorId: string;
   groupCreator?: User;
   contents?: Content[]; // Array of content IDs
