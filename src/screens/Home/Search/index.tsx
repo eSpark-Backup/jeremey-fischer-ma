@@ -29,7 +29,10 @@ import modalState from '../../../store/modalStates';
 import store from '../../../store/store';
 import { NewsFeed, User } from '../../../types';
 import { getFriends } from '../../../utils';
-import { extractFeedsByUser } from '../../../utils/globalFunctions';
+import {
+  extractFeedsByUser,
+  toggleViewed,
+} from '../../../utils/globalFunctions';
 import loaders from '../../../store/loaders';
 
 if (Platform.OS === 'android') {
@@ -42,6 +45,10 @@ export default function Search() {
   const { colors } = useTheme();
   const [toggle, setToggle] = useState<boolean>(false);
   const [data, setData] = useState<NewsFeed[]>([]);
+  const [selectedFriend, setSelectedFriend] = useState<{
+    id?: string;
+    name?: string;
+  }>({});
   const friendStore: any = useHookstate(store.friends);
   const newsFeed = useHookstate(store?.newsFeed).get();
   const friends: User[] = friendStore.get();
@@ -74,8 +81,9 @@ export default function Search() {
     }).start();
   };
 
-  const selectFriend = (uid: string) => {
-    setData(extractFeedsByUser(newsFeed, uid));
+  const selectFriend = (uid: string, userName: string) => {
+    setData(extractFeedsByUser(newsFeed, uid, toggle));
+    setSelectedFriend({ id: uid, name: userName });
     hideMenu();
   };
 
@@ -94,20 +102,20 @@ export default function Search() {
       <SearchBar placeholder="Seach content" />
       <View style={styles.btnContainer}>
         <Dropdown
-          type="from"
-          toggleValue={toggle}
-          handleToggle={() => setToggle(!toggle)}
-          defaultLabel="From"
-          dataSource={[
-            { id: '1', name: 'Option 1' },
-            { id: '2', name: 'Option 2' },
-          ]}
+          type="fri"
+          toggleValue={false}
+          handleToggle={() => showMenu()}
+          defaultLabel={selectedFriend?.name ?? 'Select Friend'}
+          dataSource={[]}
         />
         <GapView mode="horizontal" />
         <NormalBtn
-          title="Unread"
+          title={toggle ? 'Unread' : 'Read'}
           btnStyle={{ width: '30%' }}
-          onPress={() => showMenu()}
+          onPress={() => {
+            setToggle(!toggle);
+            setData(toggleViewed(newsFeed, selectedFriend?.id ?? '', toggle));
+          }}
         />
       </View>
       {loader ? (
@@ -176,7 +184,7 @@ export default function Search() {
                       item.isFriend == false || !item.isFriend == undefined
                     }
                     requested={item.isRequested}
-                    onPress={() => selectFriend(item?.uid!)}
+                    onPress={() => selectFriend(item?.uid!, item?.userName)}
                   />
                 )}
                 ItemSeparatorComponent={() => (

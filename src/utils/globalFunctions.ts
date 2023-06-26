@@ -16,8 +16,27 @@ function extractFeeds(
   return reduceArchived;
 }
 
-function extractFeedsByUser(data: ImmutableArray<NewsFeed>, uid: string) {
+function extractFeedsByUser(
+  data: ImmutableArray<NewsFeed>,
+  uid: string,
+  toggle: boolean,
+) {
   const result: any = data.filter(item => item.content.senderId == uid);
+  const final: NewsFeed[] = result.filter(
+    (item: any) => item.content.isViewed == toggle,
+  );
+  return final;
+}
+
+function toggleViewed(
+  data: ImmutableArray<NewsFeed>,
+  uid: string,
+  unRead?: boolean,
+) {
+  const temp: any = data.filter(item => item.content.senderId == uid);
+  const result: any = temp.filter(
+    (item: any) => item.content.isViewed == unRead,
+  );
   return result;
 }
 
@@ -29,4 +48,4 @@ const transformTime = (time: number) => {
   return prefix + suffix;
 };
 
-export { extractFeeds, transformTime, extractFeedsByUser };
+export { extractFeeds, transformTime, extractFeedsByUser, toggleViewed };

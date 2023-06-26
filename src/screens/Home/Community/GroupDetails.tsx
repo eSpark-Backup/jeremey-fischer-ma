@@ -34,7 +34,9 @@ export default function GroupDetails() {
   }, []);
 
   function renderGroupFeed({ item, index }: { item: Content; index: number }) {
-    return <FeedCard key={index} contentData={item} senderData={item.sender} />;
+    return (
+      <FeedCard key={index} contentData={item} senderData={item.sender!} />
+    );
   }
 
   return (
