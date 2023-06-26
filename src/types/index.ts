@@ -90,7 +90,7 @@ export type Content = {
   description: string;
   senderId?: string;
   message: string;
-  sender: User;
+  sender?: User;
   url?: string;
   isViewed?: boolean;
 };
