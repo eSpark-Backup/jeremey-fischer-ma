@@ -101,7 +101,7 @@ export const getNewsFeedContent = async (myUid: string) => {
     } else {
       response.forEach(async value => {
         const newsFeedData: any = value.data();
-        let content = null;
+        let content: any = null;
         let sender = null;
         let receiver = null;
         const innerPromises: Promise<void>[] = [];
@@ -112,6 +112,7 @@ export const getNewsFeedContent = async (myUid: string) => {
           .then(async contentData => {
             content = contentData.data();
             let isViewed = false;
+            let isArchived = false;
             const postViewFetch = db()
               .collection(collections.postViews)
               .where('contentId', '==', content?.id)
@@ -122,11 +123,24 @@ export const getNewsFeedContent = async (myUid: string) => {
                   isViewed = true;
                 }
               });
-            innerPromises.push(postViewFetch);
-            await Promise.all([postViewFetch]);
-            // @ts-ignore
+
+            const archiveFetch = db()
+              .collection(collections.archives)
+              .where('contentId', '==', content?.id)
+              .where('userId', '==', myUid)
+              .get()
+              .then(ArchiveSnap => {
+                if (!ArchiveSnap.empty) {
+                  isArchived = true;
+                }
+              });
+
+            innerPromises.push(postViewFetch, archiveFetch);
+            await Promise.all([postViewFetch, archiveFetch]);
             content.isViewed = isViewed;
+            content.isArchived = isArchived;
           });
+
         const fetchSender = db()
           .collection(collections.users)
           .where('uid', '==', newsFeedData?.senderId ?? '')
