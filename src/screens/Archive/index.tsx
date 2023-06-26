@@ -11,7 +11,7 @@ import {
 } from '../../components';
 import loaders from '../../store/loaders';
 import { Archive } from '../../types';
-import { getAllArchive } from '../../api/archive.controller';
+import { getAllArchive, removeToArchive } from '../../api/archive.controller';
 import store from '../../store/store';
 
 export default function App() {
@@ -25,6 +25,8 @@ export default function App() {
   useEffect(() => {
     getAllArchives();
   }, []);
+
+  console.log('getAllArchives', JSON.stringify(archives));
 
   async function getAllArchives() {
     try {
@@ -44,12 +46,25 @@ export default function App() {
     }
   }
 
+  async function removeFromArchive(id: string) {
+    try {
+      loader.set(true);
+      const res = await removeToArchive(id);
+      getAllArchives();
+      console.log('message', res.message);
+    } catch (e) {
+      console.log('err at remove archiive', e);
+      loader.set(false);
+    }
+  }
+
   function renderArchive({ item, index }: { item: Archive; index: number }) {
     return (
       <ArchiveCard
         key={index}
         contentData={item?.content!}
         senderData={item?.user!}
+        onRestore={() => removeFromArchive(item.id as string)}
       />
     );
   }

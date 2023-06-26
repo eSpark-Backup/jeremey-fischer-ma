@@ -1,3 +1,4 @@
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { FakeFeedType } from '../constants';
@@ -99,7 +100,7 @@ export type Content = {
 export type Group = {
   id?: string; // DocId
   groupName: string;
-  Members: User[]; // Array of member UIDs
+  Members: User[] | string[]; // Array of member UIDs
   groupCreatorId: string;
   groupCreator?: User;
   contents?: Content[]; // Array of content IDs
@@ -135,7 +136,7 @@ export type Archive = {
 
 // GLobalState type
 export type GlobalState = {
-  userData: null | User;
+  userData: User | FirebaseFirestoreTypes.DocumentData | null | undefined;
   screenLoading: boolean;
   loadFriends: boolean;
   friends: User[] | null;

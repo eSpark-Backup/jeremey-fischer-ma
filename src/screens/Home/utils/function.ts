@@ -26,16 +26,19 @@ export const groupCreation = async (
   members: string[],
   navigation: NavigationProp<ParamListBase>,
 ) => {
-  const data = <Group>{
-    groupName: groupName,
-    groupCreatorId: store.userData.get()?.uid,
-    Members: members,
-  };
-  loaders.createGroup.set(true);
-  createGroup(data).then(res => {
-    console.log('create Group', JSON.stringify(res));
-    loaders.createGroup.set(false);
-    getGroups();
-    navigation.navigate('GroupsList');
-  });
+  members.push(store.userData.get()?.uid);
+  console.log('members', members);
+
+  // const data = <Group>{
+  //   groupName: groupName,
+  //   groupCreatorId: store.userData.get()?.uid,
+  //   Members: members,
+  // };
+  // loaders.createGroup.set(true);
+  // createGroup(data).then(res => {
+  //   console.log('create Group', JSON.stringify(res));
+  //   loaders.createGroup.set(false);
+  //   getGroups();
+  //   navigation.navigate('GroupsList');
+  // });
 };
