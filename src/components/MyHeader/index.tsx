@@ -24,7 +24,11 @@ export default function MyHeader(props: Props) {
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
         {props?.leftIcon && (
           <Icon
             name={props?.leftIconName ? props?.leftIconName : 'arrow-back'}
@@ -34,7 +38,7 @@ export default function MyHeader(props: Props) {
             style={{ marginRight: 10 }}
           />
         )}
-        <MyText textStyle={styles.text}>
+        <MyText lines={1} textStyle={styles.text}>
           {props.title ?? props.route.name}
         </MyText>
       </View>
@@ -60,5 +64,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 32,
+    width: '85%',
   },
 });
