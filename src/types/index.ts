@@ -93,6 +93,7 @@ export type Content = {
   sender?: User;
   url?: string;
   isViewed?: boolean;
+  isArchived?: boolean;
 };
 
 // Group type
@@ -109,7 +110,7 @@ export type Group = {
 export type PostView = {
   id?: string; // DocId
   contentId: string;
-  viewerId: string;
+  userId: string;
 };
 
 // NewsFeed type

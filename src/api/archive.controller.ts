@@ -9,7 +9,9 @@ import { collections } from './constants';
  */
 export const addToArchive = async (data: Archive) => {
   try {
-    const response = await db().collection(collections.archives).add(data);
+    const response = await db()
+      .collection(collections.archives)
+      .add({ ...data, createdAt: new Date() });
     await db().collection(collections.archives).doc(response.id).update({
       id: response.id,
     });
