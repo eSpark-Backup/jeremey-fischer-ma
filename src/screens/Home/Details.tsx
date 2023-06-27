@@ -61,6 +61,8 @@ export default function Details() {
   }
 
   async function handleMoveToArchive() {
+    const ids = store.archiveIds.get();
+    const newIds = [...ids];
     loader.set(true);
     try {
       const res = await addToArchive({
@@ -70,7 +72,9 @@ export default function Details() {
       console.log('done', res);
       loader.set(false);
       getAllArchives();
-      store.archiveId.set(contentData.id!);
+      newIds.push(contentData.id!);
+      // store.archiveId.set(contentData.id!);
+      store.archiveIds.set(newIds);
     } catch (e) {
       console.log('error at add to Archive', e);
       loader.set(false);

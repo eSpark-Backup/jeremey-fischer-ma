@@ -13,6 +13,7 @@ const store = hookstate<GlobalState>({
   newsFeed: [],
   archives: [],
   archiveId: null,
+  archiveIds: [],
 });
 
 export default store;

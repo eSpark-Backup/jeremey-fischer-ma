@@ -148,4 +148,5 @@ export type GlobalState = {
   newsFeed: NewsFeed[];
   archives: Archive[];
   archiveId: string | null;
+  archiveIds: string[];
 };

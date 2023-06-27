@@ -21,6 +21,19 @@ export const getSearchedFriend = async (searchVal: string) => {
   });
 };
 
+export const getSearchedGroup = async (searchVal: string, data: Group[]) => {
+  // store.loadGroups.set(true);
+  // const groups = store.groups.get();
+  console.log('dataasdasd', data);
+
+  const chars = searchVal.toLowerCase();
+  const arrr = data?.filter(item =>
+    item.groupName.toLowerCase().includes(chars),
+  );
+  store.groups.set(arrr);
+  // store.loadGroups.set(false);
+};
+
 export const groupCreation = async (
   groupName: string,
   members: string[],

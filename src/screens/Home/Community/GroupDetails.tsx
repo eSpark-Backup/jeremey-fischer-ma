@@ -42,15 +42,13 @@ export default function GroupDetails() {
 
   useFocusEffect(
     React.useCallback(() => {
-      const reduceArchived: any = groupContent?.filter(
-        item => item.isArchived == false && item.id != store.archiveId.get(),
+      const ids = store.archiveIds.get();
+      const reduceArchived: any = contents?.filter(
+        item => item.isArchived == false && !ids.includes(item.id!),
       );
+      ids.map(item => item);
       setGroupContent(reduceArchived);
-      navigation.setParams({
-        item: { title: title, contents: reduceArchived },
-      });
       store.archiveId.set(null);
-      console.log('contents', contents);
     }, []),
   );
 
@@ -66,9 +64,6 @@ export default function GroupDetails() {
         ListEmptyComponent={<EmptyFeedLabel label="No Group Content Found" />}
         ItemSeparatorComponent={() => <GapView />}
       />
-      <TouchableOpacity>
-        <MyText children={'Update Params'} />
-      </TouchableOpacity>
     </MyCanvas>
   );
 }
