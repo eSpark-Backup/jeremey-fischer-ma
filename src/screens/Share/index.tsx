@@ -118,7 +118,6 @@ export default function Share() {
             navigation.navigate('Tab', { screen: 'Article' });
           } catch (error) {
             setLoader(false);
-
             console.log('shareContentWithFriend error', error);
           }
         }
@@ -133,18 +132,16 @@ export default function Share() {
             await shareContentToGroup(groupId ?? '', senderId, obj);
             Alert.alert('Alert', 'Post Share Successfully');
             setLoader(false);
-
             navigation.navigate('Tab', { screen: 'Article' });
           } catch (error) {
             setLoader(false);
-
             console.log('shareContentToGroup error', error);
           }
         }
       }
     } catch (error) {
-      console.log('error on share link', error);
-      console.log('error on share link', route.params?.url);
+      setLoader(false);
+      console.log(`onShare error ${Platform.OS}`, error);
     }
   };
 

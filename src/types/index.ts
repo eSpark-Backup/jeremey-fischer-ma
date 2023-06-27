@@ -9,7 +9,7 @@ export type RootStackParamList = {
     screen: 'Article' | 'Audio' | 'Podcast' | 'Video';
     params?: undefined;
   };
-  Details: { item: { senderData: User; contentData: Content } };
+  Details: { item: { senderData?: User; contentData: Content } };
   Search: undefined;
   ProfileNav: undefined;
   CommunityNav: undefined;
@@ -147,4 +147,13 @@ export type GlobalState = {
   friendRequests: FriendRequest[] | null;
   newsFeed: NewsFeed[];
   archives: Archive[];
+};
+
+// Notification Settings
+export type NotificationSetting = {
+  whenReceivedNewArticle: boolean;
+  whenReceivedNewMusic: boolean;
+  whenReceivedNewVideo: boolean;
+  whenReceivedNewPodcast: boolean;
+  all: boolean;
 };
