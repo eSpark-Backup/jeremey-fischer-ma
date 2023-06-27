@@ -48,7 +48,7 @@ export default function TabNav() {
   return (
     <Tab.Navigator
       tabBar={props => {
-        return <CustomTabBar {...props} />;
+        return <CustomTabBar {...props} onPress={() => getNewsFeed()} />;
       }}
       screenOptions={{
         tabBarShowLabel: false,
