@@ -54,7 +54,10 @@ export default function CommunityNav() {
               route={route}
               title={options.title}
               leftIcon={true}
-              onPressLeftIcon={() => navigation.goBack()}
+              onPressLeftIcon={() => {
+                navigation.goBack();
+                store.archiveIds.set([]);
+              }}
             />
           ),
         })}

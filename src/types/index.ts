@@ -147,6 +147,8 @@ export type GlobalState = {
   friendRequests: FriendRequest[] | null;
   newsFeed: NewsFeed[];
   archives: Archive[];
+  archiveId: string | null;
+  archiveIds: string[];
 };
 
 // Notification Settings

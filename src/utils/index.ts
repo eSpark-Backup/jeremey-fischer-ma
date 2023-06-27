@@ -66,10 +66,15 @@ export const getFriends = async () => {
 
 export const getGroups = async () => {
   store.loadGroups.set(true);
-  getMyGroups(store.userData.get()?.uid ?? '').then(res => {
+  try {
+    const res = await getMyGroups(store.userData.get()?.uid ?? '');
+    console.log('get all groups', JSON.stringify(res));
     store.groups.set(res.data);
     store.loadGroups.set(false);
-  });
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 /**
