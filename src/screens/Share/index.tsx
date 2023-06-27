@@ -19,6 +19,8 @@ import {
   ScreenLoader,
 } from '../../components';
 import { Icon } from '@rneui/themed';
+import { LinkPreview } from '@flyerhq/react-native-link-preview';
+
 import store from '../../store/store';
 import { useHookstate } from '@hookstate/core';
 import {
@@ -29,48 +31,11 @@ import {
 } from '../../utils';
 import { Content, Group, NavProps, User } from '../../types';
 import { defaultImage } from '../../constants';
-import { LinkPreview } from '@flyerhq/react-native-link-preview';
 import { getLinkPreview } from 'link-preview-js';
 import {
   shareContentToGroup,
   shareContentWithFriend,
 } from '../../api/content.controller';
-
-const groupData = [
-  {
-    name: 'Group 1',
-    details: '5 Members',
-    image: 'https://randomuser.me/api/portraits/men/22.jpg',
-  },
-  {
-    name: 'Group 2',
-    details: '3 Members',
-    image: 'https://randomuser.me/api/portraits/men/26.jpg',
-  },
-];
-
-const friendData = [
-  {
-    name: 'John',
-    details: '7 Friends',
-    image: 'https://randomuser.me/api/portraits/men/22.jpg',
-  },
-  {
-    name: 'John',
-    details: '7 Friends',
-    image: 'https://randomuser.me/api/portraits/men/22.jpg',
-  },
-  {
-    name: 'John',
-    details: '7 Friends',
-    image: 'https://randomuser.me/api/portraits/men/22.jpg',
-  },
-  {
-    name: 'John',
-    details: '7 Friends',
-    image: 'https://randomuser.me/api/portraits/men/22.jpg',
-  },
-];
 
 export default function Share() {
   const { colors } = useTheme();
@@ -126,6 +91,7 @@ export default function Share() {
       const linkPreviewData: any = await getLinkPreview(
         fixBrokenURL(route.params?.url) ?? '',
       );
+      console.log('xxxxx=====>>>', linkPreviewData);
       const obj: Content = {
         mediaType: type,
         title: fetchedData?.title ?? linkPreviewData?.title ?? '',

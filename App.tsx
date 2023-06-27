@@ -50,6 +50,7 @@ function App(): JSX.Element {
       console.log('Data not found on share', item);
       return;
     }
+    console.log('item=====>>>>>>>', item);
     const url =
       Platform.OS == 'android'
         ? item?.data
