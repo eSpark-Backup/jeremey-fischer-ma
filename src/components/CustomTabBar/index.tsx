@@ -23,9 +23,11 @@ import { getFriendRequests, getFriends } from '../../utils';
 const CustomTabBar = ({
   state,
   navigation,
+  onPress,
 }: {
   state: TabNavigationState<ParamListBase>;
   navigation: NavigationHelpers<ParamListBase>;
+  onPress?: () => void;
 }) => {
   const getNavigate = () => {
     getFriends();
@@ -58,7 +60,10 @@ const CustomTabBar = ({
       />
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate(state.routes[0].name)}
+          onPress={() => {
+            onPress?.();
+            navigation.navigate(state.routes[0].name);
+          }}
           style={{
             borderBottomWidth: 3,
             borderBottomColor:
@@ -69,7 +74,10 @@ const CustomTabBar = ({
           <ArticleSvg color={'#fff'} width={35} height={35} />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate(state.routes[1].name)}
+          onPress={() => {
+            onPress?.();
+            navigation.navigate(state.routes[1].name);
+          }}
           style={{
             borderBottomWidth: 3,
             borderBottomColor:
@@ -80,7 +88,10 @@ const CustomTabBar = ({
           <MusicNoteSvg color={'#fff'} width={35} height={35} />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate(state.routes[2].name)}
+          onPress={() => {
+            onPress?.();
+            navigation.navigate(state.routes[2].name);
+          }}
           style={{
             borderBottomWidth: 3,
             borderBottomColor:
@@ -91,7 +102,10 @@ const CustomTabBar = ({
           <MicNoneSvg color={'#fff'} width={35} height={35} />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate(state.routes[3].name)}
+          onPress={() => {
+            onPress?.();
+            navigation.navigate(state.routes[3].name);
+          }}
           style={{
             borderBottomWidth: 3,
             borderBottomColor:
