@@ -15,10 +15,8 @@ export default function Tabs({
   selectedTabId: string | number;
 }) {
   const navigation = useNavigation<CommunityNavProps['navigation']>();
-  const { groups, loadGroups } = useHookstate(store);
 
   const navigateToGroups = () => {
-    getGroups();
     navigation.navigate('GroupsList');
   };
 
