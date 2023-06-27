@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useHookstate } from '@hookstate/core';
 
 import { colors } from '../../theme';
 import MyText from '../MyText';
 import { CommunityNavProps, HomeNavProps } from '../../types';
-import { useHookstate } from '@hookstate/core';
 import store from '../../store/store';
-import { getFriends, getGroups } from '../../utils';
+import { getFriendRequests, getFriends, getGroups } from '../../utils';
 
 export default function Tabs({
   selectedTabId,
@@ -22,6 +22,7 @@ export default function Tabs({
 
   const navigateToFriends = () => {
     getFriends();
+    getFriendRequests();
     navigation.navigate('FriendsList');
   };
 

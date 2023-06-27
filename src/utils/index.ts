@@ -51,7 +51,6 @@ export const AddFriend = async (id: string, email: string) => {
 export const getFriendRequests = async () => {
   store.loadRequests.set(true);
   getAllRequest(store.userData.get()?.uid ?? '').then(res => {
-    console.log('get all friends request', JSON.stringify(res));
     store.friendRequests.set(res.data);
     store.loadRequests.set(false);
   });
@@ -60,7 +59,6 @@ export const getFriendRequests = async () => {
 export const getFriends = async () => {
   store.loadFriends.set(true);
   getAllFreinds(store.userData.get()?.uid ?? '').then(res => {
-    console.log('get all friends', JSON.stringify(res));
     store.friends.set(res.data);
     store.loadFriends.set(false);
   });
@@ -140,11 +138,21 @@ export const getContentTypeFromUrl = async (url: string) => {
  * @param {string} url - The URL to fix.
  * @returns {string} - The fixed URL.
  */
-export const fixBrokenURL = (url: string) => {
-  // Check if the URL starts with 'https:/' or 'http:/' instead of 'https://' or 'http://'
-  if (url.startsWith('https:/') || url.startsWith('http:/')) {
-    // Replace 'https:/' or 'http:/' with 'https://' or 'http://'
-    url = url.replace(/:\//, '://');
+export const fixBrokenURL = (text: string) => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const urls = text?.replace(/:\//, '://')?.match(urlRegex);
+  let url = text;
+  if (urls && urls.length > 0) {
+    url = urls[0];
+    if (url.startsWith('https:///')) {
+      // Replace 'https:///' with 'https://'
+      url = url.replace('https:///', 'https://');
+    } else if (url.startsWith('http:///')) {
+      url = url.replace('http:///', 'http://');
+    }
+    // if (url.startsWith('https:/') || url.startsWith('http:/')) {
+    //   url = url.replace(/:\//, '://');
+    // }
   }
   return url;
 };

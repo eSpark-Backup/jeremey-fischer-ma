@@ -35,13 +35,16 @@ export default function FriendsList() {
   };
 
   const acceptFriendRequest = (id: string) => {
+    loadRequests.set(true);
     acceptRequest(id).then(res => {
       console.log('accept friend request', JSON.stringify(res));
+      getFriends();
       getFriendRequests();
     });
   };
 
   const cancelFriendRequest = (id: string) => {
+    loadRequests.set(true);
     rejectRequest(id).then(res => {
       console.log('reject friend request', JSON.stringify(res));
       getFriendRequests();
