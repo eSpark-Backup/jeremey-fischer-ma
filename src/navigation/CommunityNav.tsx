@@ -18,7 +18,7 @@ export default function CommunityNav() {
         name="FriendsList"
         component={FriendsList}
         options={{
-          title: 'Friends List',
+          title: 'Friends',
           header: ({ route, navigation, options }) => (
             <MyHeader
               route={route}
@@ -33,7 +33,7 @@ export default function CommunityNav() {
         name="GroupsList"
         component={GroupsList}
         options={{
-          title: 'Groups List',
+          title: 'Groups',
           header: ({ route, navigation, options }) => (
             <MyHeader
               route={route}
