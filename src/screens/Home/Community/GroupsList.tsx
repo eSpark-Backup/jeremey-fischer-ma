@@ -17,8 +17,6 @@ import { useHookstate } from '@hookstate/core';
 import store from '../../../store/store';
 import { colors } from '../../../theme';
 import { getGroups } from '../../../utils';
-import useUpdateEffect from '../../../utils/hooks/useUpdateEffect';
-import { getSearchedGroup } from '../utils/function';
 
 export default function GroupsList() {
   const navigation = useNavigation<CommunityNavProps['navigation']>();
