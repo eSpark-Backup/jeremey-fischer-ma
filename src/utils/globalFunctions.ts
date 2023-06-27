@@ -23,7 +23,7 @@ function extractFeedsByUser(
 ) {
   const result: any = data.filter(item => item.content.senderId == uid);
   const final: NewsFeed[] = result.filter(
-    (item: any) => item.content.isViewed == toggle,
+    (item: any) => item.content.isViewed !== toggle,
   );
   return final;
 }

@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Icon } from '@rneui/themed';
 import { useHookstate } from '@hookstate/core';
+import { useIsFocused } from '@react-navigation/native';
 
 import { CustomTabBar } from '../components';
 import ArticleScreen from '../screens/Home/Article';
@@ -15,13 +16,18 @@ import store from '../store/store';
 import loaders from '../store/loaders';
 
 export default function TabNav() {
+  const isFocused = useIsFocused();
   const userData = useHookstate(store?.userData);
   const newsFeed = useHookstate(store?.newsFeed);
   const loadNewsFeed = useHookstate(loaders?.newsFeed);
   const Tab = createMaterialTopTabNavigator<TabNavParamList>();
   console.log('userData', userData.get()?.['uid']);
 
-  useCallback(async () => {
+  useEffect(() => {
+    getNewsFeed();
+  }, [isFocused]);
+
+  async function getNewsFeed() {
     try {
       loadNewsFeed.set(true);
       const data = await getNewsFeedContent(userData?.get()?.['uid'] ?? '');
@@ -37,7 +43,7 @@ export default function TabNav() {
       console.log('err at newsfeed fetch', e);
       loadNewsFeed.set(false);
     }
-  }, [])();
+  }
 
   return (
     <Tab.Navigator
