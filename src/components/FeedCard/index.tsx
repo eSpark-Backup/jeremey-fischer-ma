@@ -31,6 +31,11 @@ export default function FeedCard({
       <TouchableOpacity
         style={{ padding: 10 }}
         onPress={() => Linking.openURL(contentData?.url!)}>
+        {!contentData?.isViewed && (
+          <View style={{ position: 'absolute', top: 12, left: 10 }}>
+            <Dot show={true} />
+          </View>
+        )}
         <View
           style={{
             flexDirection: 'row',
@@ -39,38 +44,35 @@ export default function FeedCard({
           }}>
           <View
             style={{
-              alignSelf: 'flex-start',
-              width: '10%',
+              width: '40%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
             }}>
-            {contentData?.isViewed ? (
-              <GapView length={12} />
-            ) : (
-              <Dot show={true} />
-            )}
-            <GapView length={25} />
             <Image
               source={{ uri: contentData?.favIcon }}
               style={{ width: 25, height: 25 }}
             />
-          </View>
-          <View
-            style={{
-              width: '30%',
-            }}>
             <Image
               source={{ uri: contentData?.image }}
               style={{ width: 100, height: 80 }}
             />
           </View>
           <View style={{ width: '55%' }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Avatar rounded source={{ uri: senderData?.image }} />
-              <GapView mode="horizontal" length={5} />
-              <MyText
-                children={senderData?.userName}
-                textStyle={{ fontWeight: 'bold' }}
-              />
-              <GapView length={15} mode="horizontal" />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Avatar rounded source={{ uri: senderData?.image }} />
+                <GapView mode="horizontal" length={5} />
+                <MyText
+                  children={senderData?.userName}
+                  textStyle={{ fontWeight: 'bold' }}
+                />
+              </View>
               <MyText>{transformTime(contentData?.createdAt?.seconds!)}</MyText>
             </View>
             <GapView />
