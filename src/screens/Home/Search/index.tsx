@@ -45,6 +45,7 @@ export default function Search() {
   const { colors } = useTheme();
   const [toggle, setToggle] = useState<boolean>(false);
   const [data, setData] = useState<NewsFeed[]>([]);
+  const [search, setSearch] = useState('');
   const [selectedFriend, setSelectedFriend] = useState<{
     id?: string;
     name?: string;
@@ -82,9 +83,23 @@ export default function Search() {
   };
 
   const selectFriend = (uid: string, userName: string) => {
+    setSearch('');
     setData(extractFeedsByUser(newsFeed, uid, toggle));
     setSelectedFriend({ id: uid, name: userName });
     hideMenu();
+  };
+
+  const searchContent = (e: string) => {
+    setSearch(e);
+    if (e) {
+      const chars = e.toLowerCase();
+      const arrr = newsFeed?.filter(item =>
+        item.content.title.toLowerCase().includes(chars),
+      );
+      setData(extractFeedsByUser(arrr, selectedFriend.id!, toggle));
+    } else {
+      setData(extractFeedsByUser(newsFeed, selectedFriend.id!, toggle));
+    }
   };
 
   function renderFeed({ item, index }: { item: NewsFeed; index: number }) {
@@ -99,7 +114,11 @@ export default function Search() {
 
   return (
     <MyCanvas>
-      <SearchBar placeholder="Seach content" />
+      <SearchBar
+        value={search}
+        placeholder="Seach content"
+        onChangeText={searchContent}
+      />
       <View style={styles.btnContainer}>
         <Dropdown
           type="fri"
