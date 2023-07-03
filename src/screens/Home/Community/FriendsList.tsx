@@ -56,8 +56,6 @@ export default function FriendsList() {
     }
   };
 
-  console.log('friend', friends);
-  console.log('friendREq', friendRequests);
 
   return (
     <MyCanvas>
