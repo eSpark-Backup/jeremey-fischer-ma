@@ -50,7 +50,7 @@ export default function FriendsList() {
 
   const checkSearchedEmail = (searchVal: string) => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(searchVal)) {
-      getSearchedFriend(searchVal);
+      getSearchedFriend(searchVal?.toLowerCase());
     } else {
       console.log('Please enter a valid email');
     }
