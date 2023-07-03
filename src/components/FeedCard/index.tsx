@@ -22,7 +22,7 @@ export default function FeedCard({
   senderData,
 }: {
   contentData: Content;
-  senderData: User;
+  senderData?: User;
 }) {
   const navigation = useNavigation<NavProps['navigation']>();
 
