@@ -22,17 +22,16 @@ export default function GroupsList() {
   const navigation = useNavigation<CommunityNavProps['navigation']>();
   const groupsStore: any = useHookstate(store.groups);
   const groups: Group[] = groupsStore.get();
+  const userGroupsStore: any = useHookstate(store.userGroups);
+  const userGroups: Group[] = userGroupsStore.get();
   const { loadGroups } = useHookstate(store);
   const [groupSearch, setGroupSearch] = useState('');
-  const [userGroups, setUserGroups] = useState<Group[] | null>();
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getGroups().then(data => {
-        setUserGroups(data);
-      });
-    }, []),
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     getGroups();
+  //   }, []),
+  // );
 
   const searchGroup = (e: string) => {
     setGroupSearch(e);
@@ -41,15 +40,15 @@ export default function GroupsList() {
       const arrr = groups?.filter(item =>
         item.groupName.toLowerCase().includes(chars),
       );
-      setUserGroups(arrr);
+      userGroupsStore.set(arrr);
     } else {
-      setUserGroups(groups);
+      userGroupsStore.set(JSON.parse(JSON.stringify(groups)));
     }
   };
 
   const clearSearch = () => {
     setGroupSearch('');
-    setUserGroups(groups);
+    userGroupsStore.set(JSON.parse(JSON.stringify(groups)));
   };
 
   return (

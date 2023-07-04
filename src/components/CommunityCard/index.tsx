@@ -7,6 +7,7 @@ import MyText from '../MyText';
 import { OutlineBtn } from '../Button';
 import { Content, User } from '../../types';
 import GapView from '../GapView';
+import store from '../../store/store';
 
 export default function CommunityCard({
   name,
@@ -43,7 +44,9 @@ export default function CommunityCard({
   requested?: boolean;
   contents?: Content[];
 }) {
-  const unreadContents = contents.filter(val => !val.isViewed);
+  const unreadContents = contents.filter(
+    val => !val.isViewed && val.senderId != store.userData.get()?.uid,
+  );
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
