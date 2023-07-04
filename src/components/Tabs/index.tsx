@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useHookstate } from '@hookstate/core';
@@ -16,6 +16,14 @@ export default function Tabs({
 }) {
   const navigation = useNavigation<CommunityNavProps['navigation']>();
 
+  const friendRequest = store.friendRequests.get();
+  const groups = store.groups.get();
+
+  useEffect(() => {
+    getGroups();
+    getFriendRequests();
+  }, []);
+
   const navigateToGroups = () => {
     navigation.navigate('GroupsList');
   };
@@ -26,6 +34,25 @@ export default function Tabs({
     navigation.navigate('FriendsList');
   };
 
+  const isAnyNewUpdate = groups?.some(value => {
+    let isNewContent = false;
+    if (value?.contents?.length) {
+      for (
+        let index = 0;
+        index < (value?.contents ? value?.contents.length : 0);
+        index++
+      ) {
+        if (value?.contents[index].isViewed == false) {
+          isNewContent = true;
+          break;
+        }
+      }
+    }
+    return isNewContent;
+  });
+
+  // console.log("groups", JSON.stringify(groups));
+  
   return (
     <View
       style={{
@@ -47,6 +74,25 @@ export default function Tabs({
           alignItems: 'center',
           justifyContent: 'center',
         }}>
+        {Boolean(friendRequest?.length) && (
+          <View
+            style={{
+              height: 18,
+              width: 18,
+              backgroundColor: colors.primary,
+              borderRadius: 100,
+              position: 'absolute',
+              left: -5,
+              top: -4,
+              // zIndex: 1,X
+              alignItems: 'center',
+            }}>
+            <MyText
+              children={friendRequest?.length?.toString()}
+              textStyle={{ fontSize: 12, fontWeight: 'bold' }}
+            />
+          </View>
+        )}
         <MyText children="Friends" />
       </TouchableOpacity>
       <TouchableOpacity
@@ -58,6 +104,19 @@ export default function Tabs({
           alignItems: 'center',
           justifyContent: 'center',
         }}>
+        {isAnyNewUpdate && (
+          <View
+            style={{
+              height: 18,
+              width: 18,
+              backgroundColor: colors.primary,
+              borderRadius: 100,
+              position: 'absolute',
+              right: -5,
+              top: -4,
+              alignItems: 'center',
+            }} />
+        )}
         <MyText children="Groups" />
       </TouchableOpacity>
     </View>

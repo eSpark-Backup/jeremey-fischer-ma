@@ -86,6 +86,7 @@ export default function GroupsList() {
                   item: { title: item.groupName, contents: item.contents },
                 })
               }
+              contents={item.contents}
             />
           )}
           ListEmptyComponent={

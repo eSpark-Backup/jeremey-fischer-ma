@@ -16,6 +16,7 @@ import { PostView } from '../../api/postView.controller';
 import store from '../../store/store';
 import { addToArchive, getAllArchive } from '../../api/archive.controller';
 import loaders from '../../store/loaders';
+import { getGroups } from '../../utils';
 
 type DetailsScreenRouteProps = RouteProp<HomeStackParamList, 'Details'>;
 
@@ -37,6 +38,7 @@ export default function Details() {
   async function markAsSeen() {
     console.log(contentData?.id, userData?.get()?.['uid']);
     const res = await PostView(contentData?.id!, userData?.get()?.['uid']!);
+    getGroups()
     console.log('res mark as seen', res);
   }
 
