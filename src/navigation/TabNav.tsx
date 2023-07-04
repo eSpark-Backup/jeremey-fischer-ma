@@ -33,7 +33,6 @@ export default function TabNav() {
     try {
       loadNewsFeed.set(true);
       const data = await getNewsFeedContent(userData?.get()?.['uid'] ?? '');
-      console.log('aya contents', JSON.stringify(data));
       if (data?.data != null) {
         newsFeed.set(data?.data);
         loadNewsFeed.set(false);
@@ -51,7 +50,7 @@ export default function TabNav() {
     <>
       <Tab.Navigator
         tabBar={props => {
-          return <CustomTabBar {...props} />;
+          return <CustomTabBar {...props} onPress={() => getNewsFeed()} />;
         }}
         screenOptions={{
           tabBarShowLabel: false,

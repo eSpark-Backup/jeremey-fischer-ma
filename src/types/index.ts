@@ -69,6 +69,7 @@ export type User = {
   Group?: string[]; // Array of GroupIds
   Notification?: string[]; // Array of notification IDs
   isRequested?: boolean; // only for search friend with current userId
+  NotificationSetting?: NotificationSetting;
 };
 
 // FriendRequest type
@@ -152,7 +153,7 @@ export type GlobalState = {
 };
 
 // Notification Settings
-export type NotificationSetting = {
+type NotificationSetting = {
   whenReceivedNewArticle: boolean;
   whenReceivedNewMusic: boolean;
   whenReceivedNewVideo: boolean;

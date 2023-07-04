@@ -46,6 +46,13 @@ export const loginUser = async (data: User) => {
           Friends: [],
           Groups: [],
           Notification: [],
+          NotificationSetting: {
+            whenReceivedNewArticle: true,
+            whenReceivedNewMusic: true,
+            whenReceivedNewVideo: true,
+            whenReceivedNewPodcast: true,
+            all: true,
+          },
         });
       return { data: (await res.get()).data(), message: 'Login Successfully' };
     } else {

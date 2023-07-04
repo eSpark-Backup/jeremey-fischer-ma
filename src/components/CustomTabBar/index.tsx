@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Avatar } from '@rneui/themed';
 
@@ -18,20 +18,49 @@ import {
 import { colors } from '../../theme';
 import { useHookstate } from '@hookstate/core';
 import store from '../../store/store';
-import { getFriendRequests, getFriends } from '../../utils';
+import { getFriendRequests, getFriends, getGroups } from '../../utils';
 
 const CustomTabBar = ({
   state,
   navigation,
+  onPress,
 }: {
   state: TabNavigationState<ParamListBase>;
   navigation: NavigationHelpers<ParamListBase>;
+  onPress?: () => void;
 }) => {
+  const friendRequest = store.friendRequests.get();
+  const groups = store.groups.get();
+
+  useEffect(() => {
+    getGroups();
+    getFriendRequests();
+  }, []);
+
   const getNavigate = () => {
     getFriends();
     getFriendRequests();
     navigation.navigate('CommunityNav');
   };
+
+  const isAnyNewUpdate =
+    Boolean(friendRequest?.length) ||
+    groups?.some(value => {
+      let isNewContent = false;
+      if (value?.contents) {
+        for (
+          let index = 0;
+          index < (value?.contents ? value?.contents.length : 0);
+          index++
+        ) {
+          if (!value?.contents[index].isViewed) {
+            isNewContent = true;
+            break;
+          }
+        }
+      }
+      return isNewContent;
+    });
 
   return (
     <View
@@ -58,7 +87,10 @@ const CustomTabBar = ({
       />
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <TouchableOpacity
-          onPress={() => navigation.navigate(state.routes[0].name)}
+          onPress={() => {
+            onPress?.();
+            navigation.navigate(state.routes[0].name);
+          }}
           style={{
             borderBottomWidth: 3,
             borderBottomColor:
@@ -69,7 +101,10 @@ const CustomTabBar = ({
           <ArticleSvg color={'#fff'} width={35} height={35} />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate(state.routes[1].name)}
+          onPress={() => {
+            onPress?.();
+            navigation.navigate(state.routes[1].name);
+          }}
           style={{
             borderBottomWidth: 3,
             borderBottomColor:
@@ -80,7 +115,10 @@ const CustomTabBar = ({
           <MusicNoteSvg color={'#fff'} width={35} height={35} />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate(state.routes[2].name)}
+          onPress={() => {
+            onPress?.();
+            navigation.navigate(state.routes[2].name);
+          }}
           style={{
             borderBottomWidth: 3,
             borderBottomColor:
@@ -91,7 +129,10 @@ const CustomTabBar = ({
           <MicNoneSvg color={'#fff'} width={35} height={35} />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate(state.routes[3].name)}
+          onPress={() => {
+            onPress?.();
+            navigation.navigate(state.routes[3].name);
+          }}
           style={{
             borderBottomWidth: 3,
             borderBottomColor:
@@ -108,6 +149,20 @@ const CustomTabBar = ({
           paddingVertical: 8,
           marginHorizontal: 5,
         }}>
+        {isAnyNewUpdate && (
+          <View
+            style={{
+              height: 10,
+              width: 10,
+              backgroundColor: colors.primary,
+              borderRadius: 100,
+              position: 'absolute',
+              right: 2,
+              top: 8,
+              zIndex: 1,
+            }}
+          />
+        )}
         <GroupSvg color={'#fff'} width={35} height={35} />
       </TouchableOpacity>
     </View>
