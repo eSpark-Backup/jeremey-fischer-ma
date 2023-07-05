@@ -158,6 +158,10 @@ export const fixBrokenURL = (text: string) => {
   return url;
 };
 
+/**
+ * Just ask notification permission for IOS.
+ * @returns {null} - return nothing.
+ */
 export async function requestUserPermission() {
   const authStatus = await messaging().requestPermission();
   const enabled =
@@ -169,6 +173,10 @@ export async function requestUserPermission() {
   }
 }
 
+/**
+ * Get Device FCMToken
+ * @returns {string} - return fcm token.
+ */
 export const getFCMToken = async () => {
   try {
     await requestUserPermission();

@@ -20,6 +20,7 @@ import { ScreenLoader } from './src/components';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { colors } from './src/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getFcmsOfRequiredUser } from './src/api/notification.controller';
 
 function App(): JSX.Element {
   const { userData, screenLoading } = useHookstate(store);
@@ -76,6 +77,13 @@ function App(): JSX.Element {
     // Linking.openURL('seaglass://share');
     // You can receive extra data from your custom Share View
   }, []);
+
+  getFcmsOfRequiredUser(
+    ['XxXsEuYGcZcdIKF8QPKazeDHjMm2', 'ZGjV9vm1NlSWoZouyk28w8XELDs1'],
+    'Audio',
+  ).then(res => {
+    console.log('getFcmsOfRequiredUser', res);
+  });
 
   return (
     <SafeAreaProvider>
