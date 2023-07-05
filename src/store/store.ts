@@ -7,12 +7,12 @@ const store = hookstate<GlobalState>({
   loadFriends: false,
   friends: [],
   loadGroups: false,
+  userGroups: [],
   groups: [],
   loadRequests: false,
   friendRequests: [],
   newsFeed: [],
   archives: [],
-  archiveId: null,
   archiveIds: [],
 });
 

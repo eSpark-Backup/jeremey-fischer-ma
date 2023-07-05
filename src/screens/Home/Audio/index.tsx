@@ -55,13 +55,6 @@ export default function AudioScreen() {
           ListEmptyComponent={<EmptyFeedLabel label="No Audios Found" />}
         />
       )}
-      <FAB
-        style={{ position: 'absolute', bottom: 20, right: 20, zIndex: 1 }}
-        visible={true}
-        icon={{ name: 'search', color: 'white' }}
-        color={colors.card}
-        onPress={() => navigation.navigate('Search')}
-      />
     </MyCanvas>
   );
 }

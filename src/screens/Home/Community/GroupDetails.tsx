@@ -25,6 +25,7 @@ import store from '../../../store/store';
 import { colors } from '../../../theme';
 import { getGroupById } from '../../../api/groups.controller';
 import useUpdateEffect from '../../../utils/hooks/useUpdateEffect';
+import { useHookstate } from '@hookstate/core';
 
 type GroupDetailsScreenRouteProps = RouteProp<
   CommunityStackParamList,
@@ -34,6 +35,7 @@ type GroupDetailsScreenRouteProps = RouteProp<
 export default function GroupDetails() {
   const navigation = useNavigation<CommunityNavProps['navigation']>();
   const { params } = useRoute<GroupDetailsScreenRouteProps>();
+  const { loadGroups } = useHookstate(store);
   const {
     item: { title, contents },
   } = params;
@@ -48,7 +50,6 @@ export default function GroupDetails() {
       );
       ids.map(item => item);
       setGroupContent(reduceArchived);
-      store.archiveId.set(null);
     }, []),
   );
 
@@ -60,12 +61,22 @@ export default function GroupDetails() {
 
   return (
     <MyCanvas>
-      <FlatList
-        data={groupContent}
-        renderItem={renderGroupFeed}
-        ListEmptyComponent={<EmptyFeedLabel label="No Group Content Found" />}
-        ItemSeparatorComponent={() => <GapView />}
-      />
+      {loadGroups.get() ? (
+        <View style={{ flex: 1 }}>
+          <ActivityIndicator
+            size={'large'}
+            color={colors.primary}
+            style={{ marginTop: 10 }}
+          />
+        </View>
+      ) : (
+        <FlatList
+          data={groupContent}
+          renderItem={renderGroupFeed}
+          ListEmptyComponent={<EmptyFeedLabel label="No Group Content Found" />}
+          ItemSeparatorComponent={() => <GapView />}
+        />
+      )}
     </MyCanvas>
   );
 }

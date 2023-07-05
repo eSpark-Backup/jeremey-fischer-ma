@@ -69,6 +69,7 @@ export const getGroups = async () => {
   try {
     const res = await getMyGroups(store.userData.get()?.uid ?? '');
     console.log('get all groups', JSON.stringify(res));
+    store.userGroups.set(res.data);
     store.groups.set(res.data);
     store.loadGroups.set(false);
     return res.data;

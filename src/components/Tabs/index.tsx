@@ -19,12 +19,8 @@ export default function Tabs({
   const friendRequest = store.friendRequests.get();
   const groups = store.groups.get();
 
-  useEffect(() => {
-    getGroups();
-    getFriendRequests();
-  }, []);
-
   const navigateToGroups = () => {
+    getGroups();
     navigation.navigate('GroupsList');
   };
 
@@ -42,7 +38,10 @@ export default function Tabs({
         index < (value?.contents ? value?.contents.length : 0);
         index++
       ) {
-        if (value?.contents[index].isViewed == false) {
+        if (
+          value?.contents[index].isViewed == false &&
+          value?.contents[index].senderId != store.userData.get()?.uid
+        ) {
           isNewContent = true;
           break;
         }
@@ -52,7 +51,7 @@ export default function Tabs({
   });
 
   // console.log("groups", JSON.stringify(groups));
-  
+
   return (
     <View
       style={{
@@ -115,7 +114,8 @@ export default function Tabs({
               right: -5,
               top: -4,
               alignItems: 'center',
-            }} />
+            }}
+          />
         )}
         <MyText children="Groups" />
       </TouchableOpacity>
