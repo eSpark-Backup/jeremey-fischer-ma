@@ -1,4 +1,4 @@
-import { BackHandler } from 'react-native';
+import { BackHandler, Platform } from 'react-native';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
@@ -9,6 +9,7 @@ import { getAllRequest, sendRequest } from '../api/friendRequest.controller';
 import store from '../store/store';
 import { getMyGroups } from '../api/groups.controller';
 import { getSearchedFriend } from '../screens/Home/utils/function';
+import messaging from '@react-native-firebase/messaging';
 
 export const disableBackButton = () => {
   const backHandler = BackHandler.addEventListener(
@@ -68,7 +69,6 @@ export const getGroups = async () => {
   store.loadGroups.set(true);
   try {
     const res = await getMyGroups(store.userData.get()?.uid ?? '');
-    console.log('get all groups', JSON.stringify(res));
     store.userGroups.set(res.data);
     store.groups.set(res.data);
     store.loadGroups.set(false);
@@ -156,4 +156,51 @@ export const fixBrokenURL = (text: string) => {
     // }
   }
   return url;
+};
+
+export async function requestUserPermission() {
+  const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+  if (enabled) {
+    console.log('Authorization status:', authStatus);
+  }
+}
+
+export const getFCMToken = async () => {
+  try {
+    await requestUserPermission();
+    var token = '';
+    if (Platform.OS == 'ios') {
+      try {
+        await messaging().registerDeviceForRemoteMessages();
+        messaging().setAutoInitEnabled(true);
+        const apns = await messaging().getAPNSToken();
+        await AsyncStorage.setItem('apns', apns ?? '');
+        console.log('sx getAPNSToken', apns);
+        await messaging().setAPNSToken(apns ?? '');
+        // let tokenRefreshListenerUnsubscriber = messaging().onTokenRefresh(
+        //   token => {
+        //     console.log(
+        //       'we have a refreshed token and should do something with it: ' +
+        //         token,
+        //     );
+        //   },
+        // );
+        token = await messaging().getToken();
+        console.log('sx', apns, 'token \n', token);
+      } catch (e) {
+        console.log('err', e);
+      }
+    } else {
+      token = await messaging().getToken();
+    }
+    console.log(`${Platform.OS} token`, token);
+    return token;
+  } catch (error) {
+    console.log('catch error', error);
+    return '';
+  }
 };

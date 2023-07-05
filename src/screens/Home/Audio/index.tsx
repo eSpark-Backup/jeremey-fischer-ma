@@ -24,7 +24,6 @@ export default function AudioScreen() {
 
   useEffect(() => {
     if (!loader) {
-      console.log('audios', extractFeeds(newsFeedData, 'Audio'));
       setAudios(extractFeeds(newsFeedData, 'Audio'));
     }
   }, [loader]);
