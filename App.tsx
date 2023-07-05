@@ -15,7 +15,7 @@ import messaging from '@react-native-firebase/messaging';
 import ShareMenu from 'react-native-share-menu';
 import { RootNav } from './src/navigation';
 import store from './src/store/store';
-import { getContentTypeFromUrl, getUserData } from './src/utils';
+import { getContentTypeFromUrl, getFCMToken, getUserData } from './src/utils';
 import { ScreenLoader } from './src/components';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { colors } from './src/theme';
@@ -35,10 +35,12 @@ function App(): JSX.Element {
       webClientId:
         '213956113520-4e23h6t7tc4279r64t5r0vdrmt5j80va.apps.googleusercontent.com',
     });
+
     const getToken = async () => {
       let fcmToken = await AsyncStorage.getItem('fcmToken');
       if (!fcmToken) {
-        fcmToken = await messaging().getToken();
+        fcmToken = await getFCMToken();
+        console.log('fcmToken', Platform.OS, fcmToken);
         if (fcmToken) {
           // user has a device token
           await AsyncStorage.setItem('fcmToken', fcmToken);
