@@ -16,6 +16,7 @@ import { Content, NavProps, User } from '../../types';
 import { ArrowForward } from '../../assets';
 import GapView from '../GapView';
 import { transformTime } from '../../utils/globalFunctions';
+import store from '../../store/store';
 
 export default function FeedCard({
   contentData,
@@ -31,11 +32,12 @@ export default function FeedCard({
       <TouchableOpacity
         style={{ padding: 10 }}
         onPress={() => Linking.openURL(contentData?.url!)}>
-        {!contentData?.isViewed && (
-          <View style={{ position: 'absolute', top: 12, left: 10 }}>
-            <Dot show={true} />
-          </View>
-        )}
+        {!contentData?.isViewed &&
+          contentData.senderId != store.userData.get()?.uid && (
+            <View style={{ position: 'absolute', top: 12, left: 10 }}>
+              <Dot show={true} />
+            </View>
+          )}
         <View
           style={{
             flexDirection: 'row',

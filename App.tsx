@@ -9,6 +9,7 @@ import React, { useCallback, useEffect } from 'react';
 import { SafeAreaView, Linking, StatusBar, Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useHookstate } from '@hookstate/core';
+import messaging from '@react-native-firebase/messaging';
 
 // @ts-ignore
 import ShareMenu from 'react-native-share-menu';
@@ -18,6 +19,7 @@ import { getContentTypeFromUrl, getUserData } from './src/utils';
 import { ScreenLoader } from './src/components';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { colors } from './src/theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function App(): JSX.Element {
   const { userData, screenLoading } = useHookstate(store);
@@ -33,6 +35,17 @@ function App(): JSX.Element {
       webClientId:
         '213956113520-4e23h6t7tc4279r64t5r0vdrmt5j80va.apps.googleusercontent.com',
     });
+    const getToken = async () => {
+      let fcmToken = await AsyncStorage.getItem('fcmToken');
+      if (!fcmToken) {
+        fcmToken = await messaging().getToken();
+        if (fcmToken) {
+          // user has a device token
+          await AsyncStorage.setItem('fcmToken', fcmToken);
+        }
+      }
+    };
+    getToken();
     setUserData();
     ShareMenu.getInitialShare(handleShare);
   }, []);

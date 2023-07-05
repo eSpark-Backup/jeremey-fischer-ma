@@ -143,12 +143,12 @@ export type GlobalState = {
   loadFriends: boolean;
   friends: User[] | null;
   loadGroups: boolean;
+  userGroups: Group[] | null;
   groups: Group[] | null;
   loadRequests: boolean;
   friendRequests: FriendRequest[] | null;
   newsFeed: NewsFeed[];
   archives: Archive[];
-  archiveId: string | null;
   archiveIds: string[];
 };
 

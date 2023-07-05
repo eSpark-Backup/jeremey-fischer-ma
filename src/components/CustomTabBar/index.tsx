@@ -53,7 +53,10 @@ const CustomTabBar = ({
           index < (value?.contents ? value?.contents.length : 0);
           index++
         ) {
-          if (!value?.contents[index].isViewed) {
+          if (
+            !value?.contents[index].isViewed &&
+            value?.contents[index].senderId != store.userData.get()?.uid
+          ) {
             isNewContent = true;
             break;
           }
