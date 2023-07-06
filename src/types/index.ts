@@ -153,7 +153,7 @@ export type GlobalState = {
 };
 
 // Notification Settings
-type NotificationSetting = {
+export type NotificationSetting = {
   whenReceivedNewArticle: boolean;
   whenReceivedNewMusic: boolean;
   whenReceivedNewVideo: boolean;

@@ -2,6 +2,10 @@ import { db } from '.';
 import { Content, NewsFeed } from '../types';
 import { collections } from './constants';
 import firestore from '@react-native-firebase/firestore';
+import {
+  getFcmsOfRequiredUser,
+  sendNotification,
+} from './notification.controller';
 
 /**
  * Share Content to specific group
@@ -32,6 +36,17 @@ export const shareContentToGroup = async (
       .update({
         contents: firestore.FieldValue.arrayUnion(response.id),
       });
+    const groups: any = await db()
+      .collection(collections.groups)
+      .doc(groupId)
+      .get();
+    const members = groups.data().Members;
+    const receivers = members.filter((item: any) => item != senderId);
+    const fcmsTokens = await getFcmsOfRequiredUser(
+      receivers,
+      Content.mediaType,
+    );
+    sendNotification(fcmsTokens, Content.title, Content.description);
     return { data: null, message: 'Post Shared Successfully' };
   } catch (error) {
     console.log('error shareContentToGroup', error);
@@ -76,6 +91,11 @@ export const shareContentWithFriend = async (
         .doc(newsFeedRespone.id)
         .update({ id: newsFeedRespone.id });
     }
+    const fcmsTokens = await getFcmsOfRequiredUser(
+      receiverIds,
+      Content.mediaType,
+    );
+    sendNotification(fcmsTokens, Content.title, Content.description);
     return { data: null, message: 'Post Shared Successfully' };
   } catch (error) {
     console.log('error shareContentWithFriend', error);

@@ -29,7 +29,7 @@ export const _signIn = async (
           userName: user.displayName,
           image: user.photoURL,
           uid: user.uid,
-          fcmToken: fcmToken,
+          fcmToken: fcmToken ?? '',
         };
         loginUser(data)
           .then(({ data }) => {
