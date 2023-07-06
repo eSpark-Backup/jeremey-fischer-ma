@@ -20,7 +20,10 @@ import { ScreenLoader } from './src/components';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { colors } from './src/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getFcmsOfRequiredUser } from './src/api/notification.controller';
+import {
+  UpdateUserNotificationSetting,
+  getFcmsOfRequiredUser,
+} from './src/api/notification.controller';
 
 function App(): JSX.Element {
   const { userData, screenLoading } = useHookstate(store);
@@ -78,11 +81,14 @@ function App(): JSX.Element {
     // You can receive extra data from your custom Share View
   }, []);
 
-  getFcmsOfRequiredUser(
-    ['XxXsEuYGcZcdIKF8QPKazeDHjMm2', 'ZGjV9vm1NlSWoZouyk28w8XELDs1'],
-    'Audio',
-  ).then(res => {
-    console.log('getFcmsOfRequiredUser', res);
+  UpdateUserNotificationSetting('XxXsEuYGcZcdIKF8QPKazeDHjMm2', {
+    all: true,
+    whenReceivedNewArticle: true,
+    whenReceivedNewMusic: true,
+    whenReceivedNewPodcast: true,
+    whenReceivedNewVideo: true,
+  }).then(res => {
+    console.log('UpdateUserNotificationSetting', res);
   });
 
   return (

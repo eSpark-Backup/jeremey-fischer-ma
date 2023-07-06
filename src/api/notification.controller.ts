@@ -1,5 +1,5 @@
 import { db } from '.';
-import { User } from '../types';
+import { NotificationSetting, User } from '../types';
 import { collections } from './constants';
 
 /**
@@ -95,4 +95,47 @@ export const sendNotification = async (
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.log('error', error));
+};
+
+/**
+ * Update Notfication Setting
+ * @param {uid} - user id which notification setting is need to be update
+ * @param {NotificationSetting} - updated NotificationSetting
+ * @return {User} - updated user Data
+ */
+export const UpdateUserNotificationSetting = async (
+  uid: string,
+  NotificationSetting: NotificationSetting,
+) => {
+  try {
+    const response = await db()
+      .collection(collections.users)
+      .where('uid', '==', uid)
+      .get();
+
+    if (response.empty) {
+      return { data: null, message: 'User Not Found!' };
+    } else {
+      let docId: string = '';
+      let updatedUser: any | User = undefined;
+      const promises: Promise<any>[] = [];
+      response.forEach(async (user: any) => {
+        updatedUser = user.data();
+        docId = user.id;
+        const updateSettingPromise = db()
+          .collection(collections.users)
+          .doc(user.id)
+          .update({
+            NotificationSetting: NotificationSetting,
+          });
+        promises.push(updateSettingPromise);
+        await Promise.all([updateSettingPromise]);
+      });
+      await Promise.all(promises);
+      updatedUser.NotificationSetting = NotificationSetting;
+      return { data: updatedUser, message: 'Updated User' };
+    }
+  } catch (error) {
+    return { data: null, message: error };
+  }
 };
