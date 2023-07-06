@@ -10,7 +10,7 @@ import { collections } from './constants';
  */
 export const getFcmsOfRequiredUser = async (
   receiverIds: string[],
-  postType: 'Audio' | 'Video' | 'Podcast' | 'Article',
+  postType: 'Audio' | 'Video' | 'Podcast' | 'Article' | 'FriendRequest',
 ) => {
   try {
     const users: User[] = [];
@@ -44,6 +44,9 @@ export const getFcmsOfRequiredUser = async (
             if (userNotificationSetting?.whenReceivedNewPodcast) {
               users.push(userData);
             }
+            break;
+          case 'FriendRequest':
+            users.push(userData);
             break;
           default:
             break;

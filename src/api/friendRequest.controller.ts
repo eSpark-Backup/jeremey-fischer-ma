@@ -2,6 +2,10 @@ import firestore from '@react-native-firebase/firestore';
 import { db } from '.';
 import { FriendRequest, User } from '../types';
 import { collections } from './constants';
+import {
+  getFcmsOfRequiredUser,
+  sendNotification,
+} from './notification.controller';
 
 /**
  * Fetch User FriendRequest
@@ -55,13 +59,18 @@ export const getAllRequest = async (uid: string) => {
  * @param {FriendRequest}  FriendRequest - `FriendRequest` send Required data to send request
  * @returns {string} `message` Return message wheter it success or failed
  */
-export const sendRequest = async (data: FriendRequest) => {
+export const sendRequest = async (data: FriendRequest, senderName: string) => {
   try {
     const res: any = await db()
       .collection(collections.friendRequests)
       .add({ ...data, status: 'pending' });
     const requestData: FriendRequest = (await res.get()).data();
     requestData.id = (await res.get()).id;
+    const fcmsTokens = await getFcmsOfRequiredUser(
+      [requestData.receiverId],
+      'FriendRequest',
+    );
+    sendNotification(fcmsTokens, `${senderName} sent a request`, '');
     return { data: requestData, message: 'Request Send Successfully' };
   } catch (error) {
     console.log('sendRequest', error);
@@ -74,7 +83,7 @@ export const sendRequest = async (data: FriendRequest) => {
  * @param {id}  id - `id` id of friend request
  * @returns {string} `message` Return message wheter it success or failed
  */
-export const acceptRequest = async (id: string) => {
+export const acceptRequest = async (id: string, userName: string) => {
   try {
     const isRequestExist = await db()
       .collection(collections.friendRequests)
@@ -120,6 +129,15 @@ export const acceptRequest = async (id: string) => {
           ),
         });
 
+      const fcmsTokens = await getFcmsOfRequiredUser(
+        [isRequestExist.data()?.senderId],
+        'FriendRequest',
+      );
+      sendNotification(
+        fcmsTokens,
+        `${userName} accept your friend request`,
+        '',
+      );
       return { data: null, message: 'Request accepted' };
     } else {
       return { data: null, message: 'Request not found' };
@@ -135,7 +153,7 @@ export const acceptRequest = async (id: string) => {
  * @param {id}  id - `id` id of friend request
  * @returns {string} `message` Return message wheter it success or failed
  */
-export const rejectRequest = async (id: string) => {
+export const rejectRequest = async (id: string, userName: string) => {
   try {
     const isRequestExist = await db()
       .collection(collections.friendRequests)
@@ -146,6 +164,15 @@ export const rejectRequest = async (id: string) => {
         .collection(collections.friendRequests)
         .doc(id)
         .update({ status: 'reject' });
+      const fcmsTokens = await getFcmsOfRequiredUser(
+        [isRequestExist.data()?.senderId],
+        'FriendRequest',
+      );
+      sendNotification(
+        fcmsTokens,
+        `${userName} reject your friend request`,
+        '',
+      );
       return { data: null, message: 'Request rejected' };
     } else {
       return { data: null, message: 'Request not found' };
