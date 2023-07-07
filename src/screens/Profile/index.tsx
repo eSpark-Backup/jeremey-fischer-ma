@@ -34,6 +34,7 @@ export default function App() {
     try {
       await GoogleSignin.signOut();
       storeUserData(null);
+      store.currentUserNotificationSetting.set(null);
       navigation.navigate('Login');
     } catch (error) {
       console.error(error);

@@ -10,7 +10,6 @@ import store from '../store/store';
 
 export default function CommunityNav() {
   const Stack = createNativeStackNavigator<CommunityStackParamList>();
-  const { friends, loadFriends } = useHookstate(store);
 
   return (
     <Stack.Navigator initialRouteName="FriendsList">

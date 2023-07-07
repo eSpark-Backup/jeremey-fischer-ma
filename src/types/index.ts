@@ -150,6 +150,7 @@ export type GlobalState = {
   newsFeed: NewsFeed[];
   archives: Archive[];
   archiveIds: string[];
+  currentUserNotificationSetting: NotificationSetting | null;
 };
 
 // Notification Settings

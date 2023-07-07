@@ -14,6 +14,7 @@ const store = hookstate<GlobalState>({
   newsFeed: [],
   archives: [],
   archiveIds: [],
+  currentUserNotificationSetting: null,
 });
 
 export default store;
