@@ -2,14 +2,8 @@ import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
 import { createGroup } from '../../../api/groups.controller';
 import { searchUser } from '../../../api/user.controller';
-import loaders from '../../../store/loaders';
 import store from '../../../store/store';
-import {
-  CommunityNavProps,
-  CommunityStackParamList,
-  Group,
-  User,
-} from '../../../types';
+import { Group } from '../../../types';
 import { getGroups } from '../../../utils';
 
 export const getSearchedFriend = async (searchVal: string) => {
@@ -32,10 +26,10 @@ export const groupCreation = async (
     groupCreatorId: store.userData.get()?.uid!,
     Members: members!,
   };
-  loaders.createGroup.set(true);
+  store.screenLoading.set(true);
   createGroup(data).then(res => {
     console.log('create Group', JSON.stringify(res));
-    loaders.createGroup.set(false);
+    store.screenLoading.set(false);
     getGroups();
     navigation.navigate('GroupsList');
   });

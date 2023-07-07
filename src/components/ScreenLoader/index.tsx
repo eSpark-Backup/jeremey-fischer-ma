@@ -1,6 +1,5 @@
 import React from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import { useTheme } from '@react-navigation/native';
 
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants';
 import { colors } from '../../theme';

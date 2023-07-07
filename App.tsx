@@ -9,21 +9,16 @@ import React, { useCallback, useEffect } from 'react';
 import { SafeAreaView, Linking, StatusBar, Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useHookstate } from '@hookstate/core';
-import messaging from '@react-native-firebase/messaging';
 
 // @ts-ignore
 import ShareMenu from 'react-native-share-menu';
 import { RootNav } from './src/navigation';
 import store from './src/store/store';
-import { getContentTypeFromUrl, getFCMToken, getUserData } from './src/utils';
+import { getFCMToken, getUserData } from './src/utils';
 import { ScreenLoader } from './src/components';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { colors } from './src/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  UpdateUserNotificationSetting,
-  getFcmsOfRequiredUser,
-} from './src/api/notification.controller';
 
 function App(): JSX.Element {
   const { userData, screenLoading } = useHookstate(store);
@@ -80,16 +75,6 @@ function App(): JSX.Element {
     // Linking.openURL('seaglass://share');
     // You can receive extra data from your custom Share View
   }, []);
-
-  UpdateUserNotificationSetting('XxXsEuYGcZcdIKF8QPKazeDHjMm2', {
-    all: true,
-    whenReceivedNewArticle: true,
-    whenReceivedNewMusic: true,
-    whenReceivedNewPodcast: true,
-    whenReceivedNewVideo: true,
-  }).then(res => {
-    console.log('UpdateUserNotificationSetting', res);
-  });
 
   return (
     <SafeAreaProvider>

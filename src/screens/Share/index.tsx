@@ -16,7 +16,6 @@ import {
   MyCanvas,
   MyText,
   NormalBtn,
-  ScreenLoader,
 } from '../../components';
 import { Icon } from '@rneui/themed';
 import { LinkPreview } from '@flyerhq/react-native-link-preview';
@@ -43,7 +42,6 @@ export default function Share() {
   const navigation = useNavigation<NavProps['navigation']>();
 
   const [dropDownToggle, setDropDownToggle] = useState(false);
-  const [loader, setLoader] = useState(false);
   const [ddSelection, setDdselection] = useState('f');
   const [selectedFriends, setSelectedFriends] = useState<User[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<Group | undefined>(
@@ -86,7 +84,7 @@ export default function Share() {
 
   const onShare = async () => {
     try {
-      setLoader(true);
+      store.screenLoading.set(true);
       const type = await getContentTypeFromUrl(route.params?.url ?? '');
       const linkPreviewData: any = await getLinkPreview(
         fixBrokenURL(route.params?.url) ?? '',
@@ -105,7 +103,7 @@ export default function Share() {
 
       if (ddSelection == 'f') {
         if (!Boolean(selectedFriends.length)) {
-          setLoader(false);
+          store.screenLoading.set(false);
           Alert.alert('Alert', 'Please select any friend to share content');
         } else {
           const senderId = userData.uid;
@@ -114,40 +112,39 @@ export default function Share() {
             await shareContentWithFriend(senderId, receiverIds, obj);
 
             Alert.alert('Alert', 'Post Share Successfully');
-            setLoader(false);
+            store.screenLoading.set(false);
             navigation.navigate('Tab', { screen: 'Article' });
           } catch (error) {
-            setLoader(false);
+            store.screenLoading.set(false);
             console.log('shareContentWithFriend error', error);
           }
         }
       } else {
         if (!Boolean(selectedGroup)) {
           Alert.alert('Alert', 'Please select any group to share content');
-          setLoader(false);
+          store.screenLoading.set(false);
         } else {
           const senderId = userData.uid;
           const groupId = selectedGroup?.id;
           try {
             await shareContentToGroup(groupId ?? '', senderId, obj);
             Alert.alert('Alert', 'Post Share Successfully');
-            setLoader(false);
+            store.screenLoading.set(false);
             navigation.navigate('Tab', { screen: 'Article' });
           } catch (error) {
-            setLoader(false);
+            store.screenLoading.set(false);
             console.log('shareContentToGroup error', error);
           }
         }
       }
     } catch (error) {
-      setLoader(false);
+      store.screenLoading.set(false);
       console.log(`onShare error ${Platform.OS}`, error);
     }
   };
 
   return (
     <MyCanvas>
-      <ScreenLoader show={loader} />
       <LinkPreview
         onPreviewDataFetched={(data: any) => {
           if (!fetchedData) {

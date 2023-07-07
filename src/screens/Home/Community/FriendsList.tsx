@@ -36,7 +36,7 @@ export default function FriendsList() {
 
   const acceptFriendRequest = (id: string) => {
     loadRequests.set(true);
-    acceptRequest(id).then(res => {
+    acceptRequest(id, store.userData.get()?.userName).then(res => {
       console.log('accept friend request', JSON.stringify(res));
       getFriends();
       getFriendRequests();
@@ -45,7 +45,7 @@ export default function FriendsList() {
 
   const cancelFriendRequest = (id: string) => {
     loadRequests.set(true);
-    rejectRequest(id).then(res => {
+    rejectRequest(id, store.userData.get()?.userName).then(res => {
       console.log('reject friend request', JSON.stringify(res));
       getFriendRequests();
     });
@@ -58,7 +58,6 @@ export default function FriendsList() {
       console.log('Please enter a valid email');
     }
   };
-
 
   return (
     <MyCanvas>

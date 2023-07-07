@@ -43,7 +43,7 @@ export const AddFriend = async (id: string, email: string) => {
     status: 'pending',
   };
   store.loadFriends.set(true);
-  sendRequest(data).then(res => {
+  sendRequest(data, store.userData.get()?.userName).then(res => {
     console.log('request sent', JSON.stringify(res));
     getSearchedFriend(email);
   });

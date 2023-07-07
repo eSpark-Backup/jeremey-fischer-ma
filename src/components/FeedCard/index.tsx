@@ -83,7 +83,10 @@ export default function FeedCard({
               textStyle={{ fontWeight: 'bold' }}
             />
             <GapView />
-            <MyText lines={3} children={contentData?.description} />
+            <MyText
+              lines={3}
+              children={contentData?.message ?? contentData?.description}
+            />
           </View>
         </View>
         <View style={{ alignSelf: 'flex-end' }}>

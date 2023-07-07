@@ -6,6 +6,9 @@ import { Archive, Profile } from '../screens';
 import Settings from '../screens/Profile/Details';
 import { ProfileStackParamList } from '../types';
 import { MyHeader } from '../components';
+import { UpdateUserNotificationSetting } from '../api/notification.controller';
+import store from '../store/store';
+import { storeUserData } from '../utils';
 
 export default function ProfileNav() {
   const Stack = createNativeStackNavigator<ProfileStackParamList>();
@@ -38,7 +41,21 @@ export default function ProfileNav() {
             <MyHeader
               route={route}
               leftIcon={true}
-              onPressLeftIcon={() => navigation.goBack()}
+              onPressLeftIcon={() => {
+                navigation.goBack();
+                const data = {
+                  ...store.userData.get(),
+                  NotificationSetting:
+                    store.currentUserNotificationSetting.get(),
+                };
+                if (store.currentUserNotificationSetting.get() != null) {
+                  storeUserData(data);
+                  UpdateUserNotificationSetting(
+                    store.userData.get()?.uid,
+                    store.currentUserNotificationSetting.get()!,
+                  );
+                }
+              }}
             />
           ),
         }}
