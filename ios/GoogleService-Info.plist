@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>213956113520-i2nsdltmir2vm86ab75ahmu0idgnj1f7.apps.googleusercontent.com</string>
+	<string>213956113520-hj63741f0i18frdogf2acevb83s85sb9.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.213956113520-i2nsdltmir2vm86ab75ahmu0idgnj1f7</string>
+	<string>com.googleusercontent.apps.213956113520-hj63741f0i18frdogf2acevb83s85sb9</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>213956113520-e656fue1ibpmhb2lh3deqg1nlol7pqoh.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDToletxnvH7n8DzJz3Jw_b5IugdVnZkNg</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.seaglass</string>
+	<string>com.seaglass.seaglass</string>
 	<key>PROJECT_ID</key>
 	<string>seaglass-app</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +31,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:213956113520:ios:0e19b6727fd625429af0b5</string>
+	<string>1:213956113520:ios:4bfdc4bd2326399c9af0b5</string>
+	<key>DATABASE_URL</key>
+	<string>https://seaglass-app-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

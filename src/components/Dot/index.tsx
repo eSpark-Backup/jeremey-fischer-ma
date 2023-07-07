@@ -1,17 +1,16 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {useTheme} from '@react-navigation/native';
+import { StyleSheet, Text, View } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 
-export default function Dot({show = false}: {show?: boolean}) {
-  const {colors} = useTheme();
+export default function Dot({ show = false }: { show?: boolean }) {
+  const { colors } = useTheme();
   return show ? (
     <View
       style={{
-        backgroundColor: colors.primary,
-        borderWidth: 1.2,
+        backgroundColor: '#1284fa',
         borderRadius: 50,
-        width: 20,
-        height: 20,
+        width: 12,
+        height: 12,
       }}
     />
   ) : (

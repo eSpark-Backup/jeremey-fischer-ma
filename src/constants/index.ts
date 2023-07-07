@@ -1,7 +1,10 @@
-import {Dimensions} from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 
-const {width, height} = Dimensions.get('screen');
-export {width as SCREEN_WIDTH, height as SCREEN_HEIGHT};
+const { width, height } = Dimensions.get('screen');
+export { width as SCREEN_WIDTH, height as SCREEN_HEIGHT };
+
+export const FontFamily =
+  Platform.OS == 'ios' ? 'Verdana' : 'sans-serif-medium';
 
 const date = new Date();
 
@@ -13,8 +16,8 @@ export const fakeFeedData: FakeFeedType[] = [
     seen: false,
     imageURI: '',
     senders: [
-      {id: 1, name: 'John Doe', imageURI: ''},
-      {id: 2, name: 'Adam Wish', imageURI: ''},
+      { id: 1, name: 'John Doe', imageURI: '' },
+      { id: 2, name: 'Adam Wish', imageURI: '' },
     ],
     timeStamp: date,
     mediaType: 'Audio',
@@ -27,7 +30,10 @@ export type FakeFeedType = {
   description: string;
   seen: boolean;
   imageURI: string;
-  senders: {id: number; name: string; imageURI: string}[];
+  senders: { id: number; name: string; imageURI: string }[];
   timeStamp: Date;
   mediaType: 'Audio' | 'Video' | 'Podcast' | 'Article';
 };
+
+export const defaultImage: string =
+  'https://randomuser.me/api/portraits/men/22.jpg';

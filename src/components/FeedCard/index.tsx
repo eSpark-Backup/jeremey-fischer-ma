@@ -1,0 +1,100 @@
+import React from 'react';
+import { TouchableOpacity, View, Image, Linking } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Avatar } from '@rneui/themed';
+
+import MyText from '../MyText';
+import Dot from '../Dot';
+import MyCard from '../MyCard';
+import { Content, NavProps, User } from '../../types';
+import { ArrowForward } from '../../assets';
+import GapView from '../GapView';
+import { transformTime } from '../../utils/globalFunctions';
+import store from '../../store/store';
+
+export default function FeedCard({
+  contentData,
+  senderData,
+}: {
+  contentData: Content;
+  senderData?: User;
+}) {
+  const navigation = useNavigation<NavProps['navigation']>();
+
+  return (
+    <MyCard>
+      <TouchableOpacity
+        style={{ padding: 10 }}
+        onPress={() => Linking.openURL(contentData?.url!)}>
+        {!contentData?.isViewed &&
+          contentData.senderId != store.userData.get()?.uid && (
+            <View style={{ position: 'absolute', top: 12, left: 10 }}>
+              <Dot show={true} />
+            </View>
+          )}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <View
+            style={{
+              width: '40%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <Image
+              source={{ uri: contentData?.favIcon }}
+              style={{ width: 25, height: 25 }}
+            />
+            <Image
+              source={{ uri: contentData?.image }}
+              style={{ width: 100, height: 80 }}
+            />
+          </View>
+          <View style={{ width: '55%' }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Avatar rounded source={{ uri: senderData?.image }} />
+                <GapView mode="horizontal" length={5} />
+                <MyText
+                  children={senderData?.userName}
+                  textStyle={{ fontWeight: 'bold' }}
+                />
+              </View>
+              <MyText>{transformTime(contentData?.createdAt?.seconds!)}</MyText>
+            </View>
+            <GapView />
+            <MyText
+              children={contentData.title}
+              textStyle={{ fontWeight: 'bold' }}
+            />
+            <GapView />
+            <MyText
+              lines={3}
+              children={contentData?.message ?? contentData?.description}
+            />
+          </View>
+        </View>
+        <View style={{ alignSelf: 'flex-end' }}>
+          <GapView length={5} />
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Details', {
+                item: { contentData, senderData },
+              })
+            }>
+            <ArrowForward />
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
+    </MyCard>
+  );
+}

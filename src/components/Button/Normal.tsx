@@ -1,16 +1,23 @@
 import React from 'react';
 import {
   View,
-  Text,
   TouchableOpacity,
   ViewStyle,
   TextStyle,
   StyleSheet,
 } from 'react-native';
 
-import {SCREEN_WIDTH} from '../../constants';
-import {colors} from '../../theme';
+import { colors } from '../../theme';
+import MyText from '../MyText';
 
+interface BtnProps {
+  btnStyle?: ViewStyle;
+  titleStyle?: TextStyle;
+  title?: string;
+  disabled?: boolean;
+  icon?: React.ReactNode;
+  onPress?: () => void;
+}
 const Button = ({
   btnStyle = {},
   titleStyle = {},
@@ -18,14 +25,7 @@ const Button = ({
   disabled = false,
   icon = null,
   onPress,
-}: {
-  btnStyle?: ViewStyle;
-  titleStyle?: TextStyle;
-  title?: string;
-  disabled?: boolean;
-  icon?: React.ReactNode;
-  onPress?: () => void;
-}) => {
+}: BtnProps) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -34,11 +34,11 @@ const Button = ({
       style={[
         styles.btnContainer,
         btnStyle,
-        disabled && {opacity: 0.6},
-        icon != null && {flexDirection: 'row', paddingHorizontal: 20},
+        disabled && { opacity: 0.6 },
+        icon != null && { flexDirection: 'row', paddingHorizontal: 20 },
       ]}>
       <View>
-        <Text style={[styles.titleStyle, titleStyle]}>{title}</Text>
+        <MyText textStyle={{ ...titleStyle }}>{title}</MyText>
       </View>
       {icon && <>{icon}</>}
     </TouchableOpacity>
@@ -46,15 +46,21 @@ const Button = ({
 };
 
 const styles = StyleSheet.create({
-  titleStyle: {color: '#fff'},
   btnContainer: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.card,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
-    // width: SCREEN_WIDTH - 80,
-    width: '90%',
+    width: '100%',
   },
 });
 

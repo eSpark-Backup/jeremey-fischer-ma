@@ -1,21 +1,21 @@
 import React from 'react';
-import {StyleSheet, Text, View, Platform, TextStyle} from 'react-native';
-import {useTheme} from '@react-navigation/native';
+import { StyleSheet, Text, View, Platform, TextStyle } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 
 export default function MyText({
   children,
   textStyle,
   lines = 3,
 }: {
-  children: string;
+  children?: string | string[];
   textStyle?: TextStyle;
   lines?: number;
 }) {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
 
   return (
     <Text
-      style={{...styles.text, ...textStyle, color: colors.text}}
+      style={{ ...styles.text, ...textStyle, color: colors.text }}
       numberOfLines={lines}>
       {children}
     </Text>
@@ -24,6 +24,6 @@ export default function MyText({
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: Platform.OS == 'ios' ? 'Chalkduster' : 'sans-serif-medium',
+    fontFamily: 'DMSans-Regular',
   },
 });

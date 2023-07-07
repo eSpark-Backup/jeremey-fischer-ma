@@ -1,72 +1,125 @@
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Icon, Avatar} from '@rneui/themed';
+import React, { useEffect } from 'react';
+import { StyleSheet } from 'react-native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { FAB, Icon } from '@rneui/themed';
+import { useHookstate } from '@hookstate/core';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 
-import {Archive, Profile} from '../screens';
-import {ArchiveOutlineSvg, ArchiveSvg} from '../assets';
-import {MyHeader} from '../components';
-
-import HomeNav from './HomeNav';
+import { CustomTabBar } from '../components';
+import ArticleScreen from '../screens/Home/Article';
+import AudioScreen from '../screens/Home/Audio';
+import PodcastScreen from '../screens/Home/Podcast/indexs';
+import VideoScreen from '../screens/Home/Video';
+import { NavProps, TabNavParamList } from '../types';
+import { getNewsFeedContent } from '../api/content.controller';
+import store from '../store/store';
+import loaders from '../store/loaders';
+import { colors } from '../theme';
 
 export default function TabNav() {
-  const Tab = createBottomTabNavigator();
+  const isFocused = useIsFocused();
+  const userData = useHookstate(store?.userData);
+  const newsFeed = useHookstate(store?.newsFeed);
+  const loadNewsFeed = useHookstate(loaders?.newsFeed);
+  const Tab = createMaterialTopTabNavigator<TabNavParamList>();
+  const navigation = useNavigation<NavProps['navigation']>();
+  console.log('userData', userData.get()?.['uid']);
 
-  const renderArchive = (focused: boolean, color: string) => {
-    return focused ? (
-      <ArchiveSvg color={color} width={35} height={35} />
-    ) : (
-      <ArchiveOutlineSvg color={color} width={35} height={35} />
-    );
-  };
+  useEffect(() => {
+    getNewsFeed();
+  }, [isFocused]);
+
+  async function getNewsFeed() {
+    try {
+      loadNewsFeed.set(true);
+      const data = await getNewsFeedContent(userData?.get()?.['uid'] ?? '');
+      if (data?.data != null) {
+        newsFeed.set(data?.data);
+        loadNewsFeed.set(false);
+      } else {
+        console.log('message', data.message);
+        loadNewsFeed.set(false);
+      }
+    } catch (e) {
+      console.log('err at newsfeed fetch', e);
+      loadNewsFeed.set(false);
+    }
+  }
 
   return (
-    <Tab.Navigator
-      initialRouteName="Home"
-      screenOptions={{
-        tabBarShowLabel: false,
-        header: ({route}) => <MyHeader route={route} />,
-      }}>
-      <Tab.Screen
-        name="HomeNav"
-        component={HomeNav}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({color, focused, size}) => (
-            <Icon
-              name={focused ? 'ios-home' : 'ios-home-outline'}
-              type="ionicon"
-              color={color}
-              size={30}
-            />
-          ),
+    <>
+      <Tab.Navigator
+        tabBar={props => {
+          return <CustomTabBar {...props} onPress={() => getNewsFeed()} />;
         }}
-      />
-      <Tab.Screen
-        name="Archive"
-        component={Archive}
-        options={{
-          tabBarIcon: ({color, focused, size}) => {
-            return renderArchive(focused, color);
-          },
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarIcon: ({color, focused, size}) => {
-            return (
-              <Avatar
-                rounded
-                containerStyle={{borderWidth: 2, borderColor: color}}
-                source={{uri: 'https://randomuser.me/api/portraits/men/36.jpg'}}
+        screenOptions={{
+          tabBarShowLabel: false,
+        }}>
+        <Tab.Screen
+          name="Article"
+          component={ArticleScreen}
+          options={{
+            tabBarIcon: ({ color, focused }) => (
+              <Icon
+                name={focused ? 'ios-home' : 'ios-home-outline'}
+                type="ionicon"
+                color={color}
+                size={30}
               />
-            );
-          },
-        }}
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Audio"
+          component={AudioScreen}
+          options={{
+            tabBarIcon: ({ color, focused }) => (
+              <Icon
+                name={focused ? 'ios-home' : 'ios-home-outline'}
+                type="ionicon"
+                color={color}
+                size={30}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Podcast"
+          component={PodcastScreen}
+          options={{
+            tabBarIcon: ({ color, focused }) => (
+              <Icon
+                name={focused ? 'ios-home' : 'ios-home-outline'}
+                type="ionicon"
+                color={color}
+                size={30}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Video"
+          component={VideoScreen}
+          options={{
+            tabBarIcon: ({ color, focused }) => (
+              <Icon
+                name={focused ? 'ios-home' : 'ios-home-outline'}
+                type="ionicon"
+                color={color}
+                size={30}
+              />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+      <FAB
+        style={{ position: 'absolute', bottom: 20, right: 20, zIndex: 1 }}
+        visible={true}
+        icon={{ name: 'search', color: 'white' }}
+        color={colors.card}
+        onPress={() => navigation.navigate('Search')}
       />
-    </Tab.Navigator>
+    </>
   );
 }
 

@@ -1,20 +1,58 @@
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-
-import {FakeFeedType} from '../constants';
+import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
   Login: undefined;
-  Tab: undefined;
+  Tab: {
+    screen: 'Article' | 'Audio' | 'Podcast' | 'Video';
+    params?: undefined;
+  };
+  Details: { item: { senderData?: User; contentData: Content } };
+  Search: undefined;
+  ProfileNav: undefined;
+  CommunityNav: undefined;
+  Share: undefined;
 };
 
 export type HomeStackParamList = {
   Home: undefined;
-  Details: {item: FakeFeedType};
+  Details: { item: { senderData: User; contentData: Content } };
+  FriendsList: undefined;
+  GroupsList: undefined;
+  GroupDetails: { title: string };
+  AddNewGroup: undefined;
+  Search: undefined;
+};
+
+export type ProfileStackParamList = {
+  Profile: undefined;
+  Archive: undefined;
+  Settings: undefined;
+};
+
+export type CommunityStackParamList = {
+  FriendsList: undefined;
+  GroupsList: undefined;
+  GroupDetails: { item: { title: string; contents?: Content[] } };
+  AddNewGroup: undefined;
+};
+
+export type TabNavParamList = {
+  Article: undefined;
+  Audio: undefined;
+  Podcast: undefined;
+  Video: undefined;
 };
 
 export type NavProps = NativeStackScreenProps<RootStackParamList>;
 
 export type HomeNavProps = NativeStackScreenProps<HomeStackParamList>;
+
+export type CommunityNavProps = NativeStackScreenProps<CommunityStackParamList>;
+
+export type ProfileProps = NativeStackScreenProps<
+  ProfileStackParamList & RootStackParamList
+>;
 
 // User type
 export type User = {
@@ -23,51 +61,101 @@ export type User = {
   uid: string;
   image: string;
   fcmToken: string;
-  createdAt?: string;
+  createdAt?: { seconds: number; nanoseconds: number };
+  isFriend?: boolean;
   Friends?: string[]; // Array of friend UIDs
   Group?: string[]; // Array of GroupIds
-  Notifications?: string[]; // Array of notification IDs
+  Notification?: string[]; // Array of notification IDs
+  isRequested?: boolean; // only for search friend with current userId
+  NotificationSetting?: NotificationSetting;
 };
 
 // FriendRequest type
 export type FriendRequest = {
   senderId: string;
   receiverId: string;
-  status: string;
+  sender?: User;
+  status?: 'pending' | 'accept' | 'reject';
+  id?: string; // DocId
 };
 
 // Content type
 export type Content = {
-  contentId: string;
-  mediaType: string;
-  createdAt: string;
+  id?: string; // DocId
+  mediaType: 'Audio' | 'Video' | 'Podcast' | 'Article';
+  createdAt?: { seconds: number; nanoseconds: number };
   title: string;
   image: string;
+  favIcon: string;
   description: string;
-  channel: string;
-  duration: number;
-  artist: string;
-  album: string;
-  author: string;
+  senderId?: string;
+  message: string;
+  sender?: User;
+  url?: string;
+  isViewed?: boolean;
+  isArchived?: boolean;
 };
 
 // Group type
 export type Group = {
+  id?: string; // DocId
   groupName: string;
-  Members: string[]; // Array of member UIDs
-  groupCreator: string;
-  contents: string[]; // Array of content IDs
+  Members: User[] | string[]; // Array of member UIDs
+  groupCreatorId: string;
+  groupCreator?: User;
+  contents?: Content[]; // Array of content IDs
 };
 
 // PostView type
 export type PostView = {
+  id?: string; // DocId
   contentId: string;
-  viewerId: string;
+  userId: string;
 };
 
 // NewsFeed type
 export type NewsFeed = {
+  id?: string; // DocId
   contentId: string;
   senderId: string;
   receiverId: string;
+  content: Content;
+  sender: User;
+  receiver: User;
+};
+
+// Archive type
+export type Archive = {
+  id?: string;
+  userId: string;
+  contentId: string;
+  user?: User;
+  content?: Content;
+  createdAt?: string | Date;
+};
+
+// GLobalState type
+export type GlobalState = {
+  userData: User | FirebaseFirestoreTypes.DocumentData | null | undefined;
+  screenLoading: boolean;
+  loadFriends: boolean;
+  friends: User[] | null;
+  loadGroups: boolean;
+  userGroups: Group[] | null;
+  groups: Group[] | null;
+  loadRequests: boolean;
+  friendRequests: FriendRequest[] | null;
+  newsFeed: NewsFeed[];
+  archives: Archive[];
+  archiveIds: string[];
+  currentUserNotificationSetting: NotificationSetting | null;
+};
+
+// Notification Settings
+export type NotificationSetting = {
+  whenReceivedNewArticle: boolean;
+  whenReceivedNewMusic: boolean;
+  whenReceivedNewVideo: boolean;
+  whenReceivedNewPodcast: boolean;
+  all: boolean;
 };
