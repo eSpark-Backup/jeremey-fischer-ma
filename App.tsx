@@ -6,7 +6,13 @@
  */
 
 import React, { useCallback, useEffect } from 'react';
-import { SafeAreaView, Linking, StatusBar, Platform } from 'react-native';
+import {
+  SafeAreaView,
+  Linking,
+  StatusBar,
+  Platform,
+  Alert,
+} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useHookstate } from '@hookstate/core';
 
@@ -71,7 +77,11 @@ function App(): JSX.Element {
         : item.data?.length > 1
         ? item?.data[1].data
         : item?.data[0].data;
-    Linking.openURL(`seaglass://share?url=${url}`);
+    if (userData.get()) {
+      Linking.openURL(`seaglass://share?url=${url}`);
+    } else {
+      Alert.alert('Please Login to share content with friends!');
+    }
     // Linking.openURL('seaglass://share');
     // You can receive extra data from your custom Share View
   }, []);
