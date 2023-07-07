@@ -6,7 +6,7 @@
  */
 
 import React, { useCallback, useEffect } from 'react';
-import { SafeAreaView, Linking, StatusBar, Platform } from 'react-native';
+import { SafeAreaView, Linking, Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useHookstate } from '@hookstate/core';
 

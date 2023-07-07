@@ -1,8 +1,6 @@
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { FakeFeedType } from '../constants';
-
 export type RootStackParamList = {
   Login: undefined;
   Tab: {

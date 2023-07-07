@@ -1,8 +1,6 @@
 import { BackHandler, Platform } from 'react-native';
-import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
-import { State } from '@hookstate/core';
 import { FriendRequest, User } from '../types';
 import { getAllFreinds } from '../api/user.controller';
 import { getAllRequest, sendRequest } from '../api/friendRequest.controller';

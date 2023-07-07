@@ -21,13 +21,9 @@ export const _signIn = async (
     const googleCredential = auth.GoogleAuthProvider.credential(
       userInfo.idToken,
     );
-    console.log('chala kia');
-
     const user_sign = auth().signInWithCredential(googleCredential);
-    console.log('chala kia 2');
     user_sign
       .then(({ user }) => {
-        console.log('chala kia 3');
         const data = <User>{
           email: user.email,
           userName: user.displayName,

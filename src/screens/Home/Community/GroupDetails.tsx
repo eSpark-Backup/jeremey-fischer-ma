@@ -1,11 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  View,
-  ActivityIndicator,
-} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, FlatList, View, ActivityIndicator } from 'react-native';
 import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -14,7 +8,6 @@ import {
   FeedCard,
   GapView,
   MyCanvas,
-  MyText,
 } from '../../../components';
 import {
   CommunityNavProps,
@@ -23,8 +16,7 @@ import {
 } from '../../../types';
 import store from '../../../store/store';
 import { colors } from '../../../theme';
-import { getGroupById } from '../../../api/groups.controller';
-import useUpdateEffect from '../../../utils/hooks/useUpdateEffect';
+
 import { useHookstate } from '@hookstate/core';
 
 type GroupDetailsScreenRouteProps = RouteProp<

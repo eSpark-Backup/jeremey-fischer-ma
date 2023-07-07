@@ -1,11 +1,6 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Image, View, ActivityIndicator } from 'react-native';
-import {
-  useRoute,
-  useTheme,
-  RouteProp,
-  useFocusEffect,
-} from '@react-navigation/native';
+import { useRoute, useTheme, RouteProp } from '@react-navigation/native';
 import moment from 'moment';
 import { Avatar } from '@rneui/themed';
 import { useHookstate } from '@hookstate/core';

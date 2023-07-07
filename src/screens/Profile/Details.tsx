@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SectionList, FlatList } from 'react-native';
+import { StyleSheet, View, SectionList, FlatList } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { CheckBox } from '@rneui/themed';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-import { Dropdown, GapView, MyCanvas, MyText } from '../../components';
+import { MyCanvas, MyText } from '../../components';
 import { TouchableOpacity } from 'react-native';
 import store from '../../store/store';
 import { getUserData } from '../../utils';

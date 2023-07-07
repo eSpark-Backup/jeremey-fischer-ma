@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
-import { useNavigation, useTheme } from '@react-navigation/native';
+import React from 'react';
+import { View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
-import { useHookstate, State } from '@hookstate/core';
+import { useHookstate } from '@hookstate/core';
 
 import store from '../../store/store';
-import { colors } from '../../theme';
 import { NormalBtn, GapView, MyCanvas, MyText } from '../../components';
 import { NavProps } from '../../types';
 import { _signIn } from './utils/funtions';
