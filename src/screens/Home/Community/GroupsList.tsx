@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, ActivityIndicator, FlatList } from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
 
 import {
@@ -12,11 +12,10 @@ import {
   SearchBar,
   Tabs,
 } from '../../../components';
-import { CommunityNavProps, Group, HomeNavProps } from '../../../types';
+import { CommunityNavProps, Group } from '../../../types';
 import { useHookstate } from '@hookstate/core';
 import store from '../../../store/store';
 import { colors } from '../../../theme';
-import { getGroups } from '../../../utils';
 
 export default function GroupsList() {
   const navigation = useNavigation<CommunityNavProps['navigation']>();
@@ -26,12 +25,6 @@ export default function GroupsList() {
   const userGroups: Group[] = userGroupsStore.get();
   const { loadGroups } = useHookstate(store);
   const [groupSearch, setGroupSearch] = useState('');
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     getGroups();
-  //   }, []),
-  // );
 
   const searchGroup = (e: string) => {
     setGroupSearch(e);

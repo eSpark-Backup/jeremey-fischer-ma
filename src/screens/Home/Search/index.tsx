@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   Animated,
   UIManager,

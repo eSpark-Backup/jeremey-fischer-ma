@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useHookstate } from '@hookstate/core';
 
 import { colors } from '../../theme';
 import MyText from '../MyText';
-import { CommunityNavProps, HomeNavProps } from '../../types';
+import { CommunityNavProps } from '../../types';
 import store from '../../store/store';
 import { getFriendRequests, getFriends, getGroups } from '../../utils';
 

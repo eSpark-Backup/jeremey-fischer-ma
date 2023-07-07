@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Image,
-  Linking,
-} from 'react-native';
+import { TouchableOpacity, View, Image, Linking } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from '@rneui/themed';
 

@@ -2,10 +2,8 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { AddNewGroup, FriendsList, GroupDetails, GroupsList } from '../screens';
-import Details from '../screens/Home/Details';
-import { CommunityStackParamList, HomeStackParamList } from '../types';
+import { CommunityStackParamList } from '../types';
 import { MyHeader } from '../components';
-import { useHookstate } from '@hookstate/core';
 import store from '../store/store';
 
 export default function CommunityNav() {
