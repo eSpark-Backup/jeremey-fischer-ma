@@ -15,6 +15,7 @@ import { getNewsFeedContent } from '../api/content.controller';
 import store from '../store/store';
 import loaders from '../store/loaders';
 import { colors } from '../theme';
+import { extractAllFeeds, extractFeeds } from '../utils/globalFunctions';
 
 export default function TabNav() {
   const isFocused = useIsFocused();
@@ -35,6 +36,7 @@ export default function TabNav() {
       const data = await getNewsFeedContent(userData?.get()?.['uid'] ?? '');
       if (data?.data != null) {
         newsFeed.set(data?.data);
+        extractAllFeeds(data?.data);
         loadNewsFeed.set(false);
       } else {
         console.log('message', data.message);

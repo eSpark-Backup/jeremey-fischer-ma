@@ -112,6 +112,7 @@ export default function Details() {
       <View
         style={{
           flexDirection: 'row',
+          alignItems: 'center',
         }}>
         <Avatar rounded size={40} source={{ uri: senderData.image }} />
         <GapView mode="horizontal" />
@@ -122,8 +123,8 @@ export default function Details() {
             width: '80%',
             textAlignVertical: 'center',
           }}>
-          {senderData.userName}:
-          {contentData?.message != '' ? contentData?.message! : '...'}
+          {senderData.userName}:{' '}
+          {contentData?.message != '' ? contentData?.message! : ''}
         </MyText>
       </View>
       <View

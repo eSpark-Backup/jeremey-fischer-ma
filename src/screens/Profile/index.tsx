@@ -34,6 +34,10 @@ export default function App() {
     try {
       await GoogleSignin.signOut();
       storeUserData(null);
+      store.articles.set([]);
+      store.audios.set([]);
+      store.podcasts.set([]);
+      store.videos.set([]);
       store.currentUserNotificationSetting.set(null);
       navigation.navigate('Login');
     } catch (error) {

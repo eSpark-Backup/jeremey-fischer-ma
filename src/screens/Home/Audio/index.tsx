@@ -17,11 +17,14 @@ import { extractFeeds } from '../../../utils/globalFunctions';
 export default function AudioScreen() {
   const newsFeedData = useHookstate(store?.newsFeed).get();
   const [audios, setAudios] = useState<NewsFeed[]>([]);
+  const audiosStore: any = useHookstate(store?.audios);
+  const audio = audiosStore.get();
   const loader = useHookstate(loaders.newsFeed).get();
 
   useEffect(() => {
     if (!loader) {
-      setAudios(extractFeeds(newsFeedData, 'Audio'));
+      // setAudios(extractFeeds(newsFeedData, 'Audio'));
+      setAudios(audio);
     }
   }, [loader]);
 
@@ -29,8 +32,8 @@ export default function AudioScreen() {
     return (
       <FeedCard
         key={index}
-        contentData={item.content}
-        senderData={item.sender}
+        contentData={item?.content}
+        senderData={item?.sender}
       />
     );
   }

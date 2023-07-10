@@ -1,18 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import { useHookstate } from '@hookstate/core';
 
-import {
-  CommunityCard,
-  MyCanvas,
-  MyText,
-  SearchBar,
-  SubHeader,
-  Tabs,
-} from '../../../components';
+import { CommunityCard, MyText, SubHeader } from '../../../components';
 import store from '../../../store/store';
 import { colors } from '../../../theme';
-import { getSearchedFriend } from '../utils/function';
 import { AddFriend, getFriendRequests, getFriends } from '../../../utils';
 import {
   acceptRequest,
@@ -27,12 +19,6 @@ export default function FriendsList() {
   const friendRequests: FriendRequest[] = friendRequestsStore.get();
 
   const { loadFriends, loadRequests } = useHookstate(store);
-  const [searchVal, setSearchVal] = useState('');
-
-  const clearSearch = () => {
-    setSearchVal('');
-    getFriends();
-  };
 
   const acceptFriendRequest = (id: string) => {
     loadRequests.set(true);
@@ -51,24 +37,8 @@ export default function FriendsList() {
     });
   };
 
-  const checkSearchedEmail = (searchVal: string) => {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(searchVal)) {
-      getSearchedFriend(searchVal?.toLowerCase());
-    } else {
-      console.log('Please enter a valid email');
-    }
-  };
-
   return (
-    <MyCanvas>
-      <SearchBar
-        value={searchVal}
-        placeholder="Search by email"
-        onChangeText={setSearchVal}
-        clearInput={clearSearch}
-        onSubmitEditing={() => checkSearchedEmail(searchVal)}
-      />
-      <Tabs selectedTabId={1} />
+    <View>
       <View>
         <SubHeader title="Friend Requests" />
         {loadRequests.get() ? (
@@ -127,7 +97,7 @@ export default function FriendsList() {
           />
         )}
       </View>
-    </MyCanvas>
+    </View>
   );
 }
 

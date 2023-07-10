@@ -37,6 +37,8 @@ function App(): JSX.Element {
 
     const getToken = async () => {
       let fcmToken = await AsyncStorage.getItem('fcmToken');
+      console.log('Token mila', fcmToken);
+
       if (!fcmToken) {
         fcmToken = await getFCMToken();
         console.log('fcmToken', Platform.OS, fcmToken);

@@ -15,6 +15,10 @@ const store = hookstate<GlobalState>({
   archives: [],
   archiveIds: [],
   currentUserNotificationSetting: null,
+  articles: [],
+  audios: [],
+  podcasts: [],
+  videos: [],
 });
 
 export default store;

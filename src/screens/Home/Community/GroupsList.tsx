@@ -1,17 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, ActivityIndicator, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
 
-import {
-  CommunityCard,
-  GapView,
-  MyCanvas,
-  MyText,
-  NormalBtn,
-  SearchBar,
-  Tabs,
-} from '../../../components';
+import { CommunityCard, GapView, MyText, NormalBtn } from '../../../components';
 import { CommunityNavProps, Group } from '../../../types';
 import { useHookstate } from '@hookstate/core';
 import store from '../../../store/store';
@@ -19,40 +11,12 @@ import { colors } from '../../../theme';
 
 export default function GroupsList() {
   const navigation = useNavigation<CommunityNavProps['navigation']>();
-  const groupsStore: any = useHookstate(store.groups);
-  const groups: Group[] = groupsStore.get();
   const userGroupsStore: any = useHookstate(store.userGroups);
   const userGroups: Group[] = userGroupsStore.get();
   const { loadGroups } = useHookstate(store);
-  const [groupSearch, setGroupSearch] = useState('');
-
-  const searchGroup = (e: string) => {
-    setGroupSearch(e);
-    if (e) {
-      const chars = e.toLowerCase();
-      const arrr = groups?.filter(item =>
-        item.groupName.toLowerCase().includes(chars),
-      );
-      userGroupsStore.set(arrr);
-    } else {
-      userGroupsStore.set(JSON.parse(JSON.stringify(groups)));
-    }
-  };
-
-  const clearSearch = () => {
-    setGroupSearch('');
-    userGroupsStore.set(JSON.parse(JSON.stringify(groups)));
-  };
 
   return (
-    <MyCanvas>
-      <SearchBar
-        value={groupSearch}
-        placeholder="Search by group name"
-        onChangeText={searchGroup}
-        clearInput={clearSearch}
-      />
-      <Tabs selectedTabId={2} />
+    <View style={{ flex: 1 }}>
       {loadGroups.get() ? (
         <View style={{ flex: 1 }}>
           <ActivityIndicator
@@ -99,7 +63,7 @@ export default function GroupsList() {
         icon={<Icon name="user-plus" type="font-awesome-5" color={'#ffffff'} />}
       />
       <GapView length={5} />
-    </MyCanvas>
+    </View>
   );
 }
 
