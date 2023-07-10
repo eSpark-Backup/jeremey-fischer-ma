@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Avatar } from '@rneui/themed';
 
@@ -29,12 +29,12 @@ const CustomTabBar = ({
   navigation: NavigationHelpers<ParamListBase>;
   onPress?: () => void;
 }) => {
-  const friendRequest = store.friendRequests.get();
-  const groups = store.groups.get();
-  const articles = store.articles.get();
-  const audios = store.audios.get();
-  const podcasts = store.podcasts.get();
-  const videos = store.videos.get();
+  const friendRequest = useHookstate(store.friendRequests).get();
+  const groups = useHookstate(store.groups).get();
+  const articles = useHookstate(store.articles).get();
+  const audios = useHookstate(store.audios).get();
+  const podcasts = useHookstate(store.podcasts).get();
+  const videos = useHookstate(store.videos).get();
 
   useEffect(() => {
     getGroups();

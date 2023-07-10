@@ -199,7 +199,12 @@ export const getNewsFeedContent = async (myUid: string) => {
         newsFeed.push(newsFeedData);
       });
       await Promise.all(promises);
-      return { data: newsFeed, message: 'Your Newsfeed Contents' };
+      return {
+        data: newsFeed.sort(
+          (b, a) => a.content.createdAt - b.content.createdAt,
+        ),
+        message: 'Your Newsfeed Contents',
+      };
     }
   } catch (error) {
     console.log('error getNewsFeedContent', error);

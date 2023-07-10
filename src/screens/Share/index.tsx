@@ -110,10 +110,14 @@ export default function Share() {
       const linkPreviewData: any = await getLinkPreview(
         fixBrokenURL(route.params?.url) ?? '',
       );
-      console.log('xxxxx=====>>>', linkPreviewData);
+      console.log('xxxxx=====>>>', fetchedData?.title, linkPreviewData?.title);
+
       const obj: Content = {
         mediaType: type,
-        title: fetchedData?.title ?? linkPreviewData?.title ?? '',
+        title:
+          fetchedData?.title == 'Unsupported browser'
+            ? linkPreviewData?.title ?? fetchedData?.title
+            : fetchedData?.title ?? linkPreviewData?.title ?? '',
         description:
           fetchedData?.description ?? linkPreviewData?.description ?? '',
         favIcon: linkPreviewData?.favicons[0] ?? fetchedData?.image?.url ?? '',

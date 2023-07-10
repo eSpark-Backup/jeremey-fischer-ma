@@ -18,6 +18,7 @@ const store = hookstate<GlobalState>({
   articles: [],
   audios: [],
   podcasts: [],
+  fcmToken: null,
   videos: [],
 });
 

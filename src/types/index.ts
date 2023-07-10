@@ -154,6 +154,7 @@ export type GlobalState = {
   audios: NewsFeed[];
   podcasts: NewsFeed[];
   videos: NewsFeed[];
+  fcmToken: string | null;
 };
 
 // Notification Settings

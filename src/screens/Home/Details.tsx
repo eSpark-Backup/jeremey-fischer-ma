@@ -26,7 +26,7 @@ export default function Details() {
   } = params;
 
   useEffect(() => {
-    markAsSeen();
+    !contentData?.isViewed && markAsSeen();
     getAllArchives();
   }, []);
 

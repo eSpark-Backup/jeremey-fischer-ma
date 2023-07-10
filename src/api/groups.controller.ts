@@ -153,7 +153,10 @@ export const getMyGroups = async (myUid: string) => {
       });
 
       await Promise.all(promises);
-      return { data: groups, message: 'All Groups' };
+      return {
+        data: groups.sort((a, b) => a.groupName.localeCompare(b.groupName)),
+        message: 'All Groups',
+      };
     }
   } catch (error) {
     console.log('error getAllGroups', error);

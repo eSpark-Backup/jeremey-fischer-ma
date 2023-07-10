@@ -30,6 +30,7 @@ export default function GroupsList() {
           data={userGroups}
           renderItem={({ item }) => (
             <CommunityCard
+              key={item.id}
               group
               name={item.groupName}
               details={`${item.Members.length} Members`}

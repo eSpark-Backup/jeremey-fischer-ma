@@ -40,6 +40,7 @@ export default function TabNav() {
         loadNewsFeed.set(false);
       } else {
         console.log('message', data.message);
+        newsFeed.set([]);
         loadNewsFeed.set(false);
       }
     } catch (e) {
