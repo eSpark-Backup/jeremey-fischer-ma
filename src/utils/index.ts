@@ -1,4 +1,4 @@
-import { BackHandler, Platform } from 'react-native';
+import { BackHandler, PermissionsAndroid, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { FriendRequest, User } from '../types';
@@ -161,13 +161,33 @@ export const fixBrokenURL = (text: string) => {
  * @returns {null} - return nothing.
  */
 export async function requestUserPermission() {
-  const authStatus = await messaging().requestPermission();
-  const enabled =
-    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  try {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
 
-  if (enabled) {
-    console.log('Authorization status:', authStatus);
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      {
+        title: 'Seaglass Notification Permission',
+        message:
+          'Seaglass needs access to your notifications ' +
+          'so you can recieve notifications',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('You can use the notifications');
+    } else {
+      console.log('notifications permission denied');
+    }
+  } catch (err) {
+    console.warn(err);
   }
 }
 
