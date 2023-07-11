@@ -38,7 +38,7 @@ export default function GroupDetails() {
     React.useCallback(() => {
       const ids = store.archiveIds.get();
       const reduceArchived: any = contents?.filter(
-        item => item.isArchived == false && !ids.includes(item.id!),
+        item => item?.isArchived == false && !ids.includes(item?.id!),
       );
       ids.map(item => item);
       setGroupContent(reduceArchived);
@@ -47,7 +47,7 @@ export default function GroupDetails() {
 
   function renderGroupFeed({ item, index }: { item: Content; index: number }) {
     return (
-      <FeedCard key={index} contentData={item} senderData={item?.sender} />
+      <FeedCard key={item.id} contentData={item} senderData={item?.sender} />
     );
   }
 

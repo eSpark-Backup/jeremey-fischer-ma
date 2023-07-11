@@ -19,12 +19,14 @@ import { extractFeeds } from '../../../utils/globalFunctions';
 
 export default function ArticleScreen() {
   const [articles, setArticles] = useState<NewsFeed[]>([]);
-  const newsFeedData = useHookstate(store?.newsFeed).get();
+  const articlesStore: any = useHookstate(store?.articles);
+  const article = articlesStore.get();
   const loader = useHookstate(loaders.newsFeed).get();
   const navigation = useNavigation<NavProps['navigation']>();
   useEffect(() => {
     if (!loader) {
-      setArticles(extractFeeds(newsFeedData, 'Article'));
+      // setArticles(extractFeeds(newsFeedData, 'Article'));
+      setArticles(article);
     }
   }, [loader]);
 
@@ -32,8 +34,8 @@ export default function ArticleScreen() {
     return (
       <FeedCard
         key={index}
-        contentData={item.content}
-        senderData={item.sender}
+        contentData={item?.content}
+        senderData={item?.sender}
       />
     );
   }

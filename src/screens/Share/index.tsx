@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,6 +6,9 @@ import {
   Platform,
   FlatList,
   Alert,
+  InputAccessoryView,
+  Button,
+  Keyboard,
 } from 'react-native';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 
@@ -19,6 +22,8 @@ import {
 } from '../../components';
 import { Icon } from '@rneui/themed';
 import { LinkPreview } from '@flyerhq/react-native-link-preview';
+// @ts-ignore
+import ShareMenu from 'react-native-share-menu';
 
 import store from '../../store/store';
 import { useHookstate } from '@hookstate/core';
@@ -40,6 +45,7 @@ export default function Share() {
   const { colors } = useTheme();
   const route: any = useRoute();
   const navigation = useNavigation<NavProps['navigation']>();
+  const inputAccessoryViewID = '007';
 
   const [dropDownToggle, setDropDownToggle] = useState(false);
   const [ddSelection, setDdselection] = useState('f');
@@ -70,6 +76,21 @@ export default function Share() {
     }
   }, [ddSelection]);
 
+  useEffect(() => {
+    ShareMenu.getInitialShare(handleShare);
+  }, []);
+
+  const handleShare = useCallback(async (item?: any) => {
+    if (!item || !Boolean(item?.data?.length)) {
+      console.log('Data not found on share', item);
+      return;
+    }
+    console.log('item=====>>>>>>> TEST', item);
+    setMessage(item.data[0].data);
+    // Linking.openURL('seaglass://share');
+    // You can receive extra data from your custom Share View
+  }, []);
+
   const onSelectFriend = (friend: User, isChecked: Boolean) => {
     const index = selectedFriends.findIndex(item => item.uid === friend.uid);
     if (index !== -1 || !isChecked) {
@@ -89,10 +110,14 @@ export default function Share() {
       const linkPreviewData: any = await getLinkPreview(
         fixBrokenURL(route.params?.url) ?? '',
       );
-      console.log('xxxxx=====>>>', linkPreviewData);
+      console.log('xxxxx=====>>>', fetchedData?.title, linkPreviewData?.title);
+
       const obj: Content = {
         mediaType: type,
-        title: fetchedData?.title ?? linkPreviewData?.title ?? '',
+        title:
+          fetchedData?.title == 'Unsupported browser'
+            ? linkPreviewData?.title ?? fetchedData?.title
+            : fetchedData?.title ?? linkPreviewData?.title ?? '',
         description:
           fetchedData?.description ?? linkPreviewData?.description ?? '',
         favIcon: linkPreviewData?.favicons[0] ?? fetchedData?.image?.url ?? '',
@@ -111,9 +136,10 @@ export default function Share() {
           try {
             await shareContentWithFriend(senderId, receiverIds, obj);
 
-            Alert.alert('Alert', 'Post Share Successfully');
+            // Alert.alert('Alert', 'Post Share Successfully');
             store.screenLoading.set(false);
             navigation.navigate('Tab', { screen: 'Article' });
+            setSelectedFriends([]);
           } catch (error) {
             store.screenLoading.set(false);
             console.log('shareContentWithFriend error', error);
@@ -128,9 +154,10 @@ export default function Share() {
           const groupId = selectedGroup?.id;
           try {
             await shareContentToGroup(groupId ?? '', senderId, obj);
-            Alert.alert('Alert', 'Post Share Successfully');
+            // Alert.alert('Alert', 'Post Share Successfully');
             store.screenLoading.set(false);
             navigation.navigate('Tab', { screen: 'Article' });
+            setSelectedGroup(undefined);
           } catch (error) {
             store.screenLoading.set(false);
             console.log('shareContentToGroup error', error);
@@ -180,20 +207,23 @@ export default function Share() {
         ) : null}
       </View>
       <View style={{ marginVertical: 5 }}>
-        <MyText textStyle={{ fontSize: 18 }}>Message: </MyText>
+        <MyText textStyle={{ fontSize: 18 }}>Write a Message: </MyText>
       </View>
       <View
         style={{
           padding: 5,
         }}>
         <TextInput
-          autoCorrect={false}
-          autoCapitalize="none"
+          value={message}
+          inputAccessoryViewID={inputAccessoryViewID}
+          autoCorrect={true}
+          autoCapitalize="words"
           placeholder="Enter a Message Body with the share content..."
           placeholderTextColor={'#ffffff55'}
           style={{
             color: colors.text,
             fontFamily: 'DMSans-Regular',
+            fontSize: 16,
             textAlignVertical: 'top',
             borderWidth: 2,
             borderColor: 'grey',
@@ -204,6 +234,18 @@ export default function Share() {
           onChangeText={text => setMessage(text)}
           multiline
         />
+        {Platform.OS == 'ios' ? (
+          <InputAccessoryView nativeID={inputAccessoryViewID}>
+            <View
+              style={{
+                backgroundColor: '#FAFAFAEE',
+                alignItems: 'flex-end',
+                paddingHorizontal: 8,
+              }}>
+              <Button onPress={() => Keyboard.dismiss()} title="Done" />
+            </View>
+          </InputAccessoryView>
+        ) : null}
       </View>
       <View style={{ flex: 1 }}>
         <View

@@ -37,12 +37,19 @@ function App(): JSX.Element {
 
     const getToken = async () => {
       let fcmToken = await AsyncStorage.getItem('fcmToken');
+      console.log('Token mila', fcmToken);
+
       if (!fcmToken) {
+        store.screenLoading.set(true);
         fcmToken = await getFCMToken();
         console.log('fcmToken', Platform.OS, fcmToken);
         if (fcmToken) {
           // user has a device token
+          store.fcmToken.set(fcmToken);
           await AsyncStorage.setItem('fcmToken', fcmToken);
+          store.screenLoading.set(false);
+        } else {
+          store.screenLoading.set(false);
         }
       }
     };
@@ -71,8 +78,12 @@ function App(): JSX.Element {
         : item.data?.length > 1
         ? item?.data[1].data
         : item?.data[0].data;
+
+    console.log('linkOpen', url, userData.get());
+
     if (userData.get()) {
-      Linking.openURL(`seaglass://share?url=${url}`);
+      const linkOpen = await Linking.openURL(`seaglass://share?url=${url}`);
+      console.log('linkOpen', linkOpen);
     } else {
       Alert.alert('Please Login to share content with friends!');
     }

@@ -15,29 +15,27 @@ import { getAllArchive, removeToArchive } from '../../api/archive.controller';
 import store from '../../store/store';
 
 export default function App() {
-  const [archives, setArchives] = useState<Archive[]>([]);
   const loader = useHookstate(loaders?.archive);
   const userData = useHookstate(store?.userData);
   const archiveData = useHookstate(store?.archives);
-
+  const archives = archiveData.get();
   const { colors } = useTheme();
 
   useEffect(() => {
     getAllArchives();
   }, []);
 
-  console.log('getAllArchives', JSON.stringify(archives));
-
   async function getAllArchives() {
     try {
       loader.set(true);
       const res = await getAllArchive(userData?.get()?.['uid'] ?? '');
       if (res?.data != null) {
+        console.log('res?.data getAllArchive', res?.data);
         archiveData.set(res?.data);
-        setArchives(res?.data);
         loader.set(false);
       } else {
         console.log('message', res.message);
+        archiveData.set([]);
         loader.set(false);
       }
     } catch (e) {

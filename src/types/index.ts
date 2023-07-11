@@ -31,8 +31,9 @@ export type ProfileStackParamList = {
 };
 
 export type CommunityStackParamList = {
-  FriendsList: undefined;
-  GroupsList: undefined;
+  CommunityTab: undefined;
+  // FriendsList: undefined;
+  // GroupsList: undefined;
   GroupDetails: { item: { title: string; contents?: Content[] } };
   AddNewGroup: undefined;
 };
@@ -149,6 +150,11 @@ export type GlobalState = {
   archives: Archive[];
   archiveIds: string[];
   currentUserNotificationSetting: NotificationSetting | null;
+  articles: NewsFeed[];
+  audios: NewsFeed[];
+  podcasts: NewsFeed[];
+  videos: NewsFeed[];
+  fcmToken: string | null;
 };
 
 // Notification Settings

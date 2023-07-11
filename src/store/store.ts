@@ -15,6 +15,11 @@ const store = hookstate<GlobalState>({
   archives: [],
   archiveIds: [],
   currentUserNotificationSetting: null,
+  articles: [],
+  audios: [],
+  podcasts: [],
+  fcmToken: null,
+  videos: [],
 });
 
 export default store;
