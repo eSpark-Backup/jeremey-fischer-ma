@@ -22,8 +22,6 @@ import {
 } from '../../components';
 import { Icon } from '@rneui/themed';
 import { LinkPreview } from '@flyerhq/react-native-link-preview';
-// @ts-ignore
-import ShareMenu from 'react-native-share-menu';
 
 import store from '../../store/store';
 import { useHookstate } from '@hookstate/core';
@@ -75,21 +73,6 @@ export default function Share() {
       setSelectedFriends([]);
     }
   }, [ddSelection]);
-
-  useEffect(() => {
-    ShareMenu.getInitialShare(handleShare);
-  }, []);
-
-  const handleShare = useCallback(async (item?: any) => {
-    if (!item || !Boolean(item?.data?.length)) {
-      console.log('Data not found on share', item);
-      return;
-    }
-    console.log('item=====>>>>>>> TEST', item);
-    setMessage(item.data[0].data);
-    // Linking.openURL('seaglass://share');
-    // You can receive extra data from your custom Share View
-  }, []);
 
   const onSelectFriend = (friend: User, isChecked: Boolean) => {
     const index = selectedFriends.findIndex(item => item.uid === friend.uid);
@@ -174,6 +157,8 @@ export default function Share() {
     <MyCanvas>
       <LinkPreview
         onPreviewDataFetched={(data: any) => {
+          console.log('data kia hai??', fixBrokenURL(route.params?.url));
+
           if (!fetchedData) {
             setFetchedData(data);
           }
@@ -207,7 +192,7 @@ export default function Share() {
         ) : null}
       </View>
       <View style={{ marginVertical: 5 }}>
-        <MyText textStyle={{ fontSize: 18 }}>Write a Message: </MyText>
+        <MyText textStyle={{ fontSize: 18 }}>Message: </MyText>
       </View>
       <View
         style={{
@@ -217,8 +202,7 @@ export default function Share() {
           value={message}
           inputAccessoryViewID={inputAccessoryViewID}
           autoCorrect={true}
-          autoCapitalize="words"
-          placeholder="Enter a Message Body with the share content..."
+          placeholder="Write a Message"
           placeholderTextColor={'#ffffff55'}
           style={{
             color: colors.text,

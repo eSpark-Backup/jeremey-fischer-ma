@@ -25,8 +25,30 @@ function App(): JSX.Element {
 
   const setUserData = async () => {
     const storedData = await getUserData();
-    console.log('storedData', storedData);
     userData.set(storedData);
+  };
+
+  const getToken = async () => {
+    try {
+      const fcmToken = await AsyncStorage.getItem('fcmToken');
+      console.log('Token mila', fcmToken);
+      if (!fcmToken) {
+        store.screenLoading.set(true);
+        const token = await getFCMToken();
+        console.log('fcmToken', Platform.OS, fcmToken);
+        if (token) {
+          // user has a device token
+          store.fcmToken.set(token);
+          await AsyncStorage.setItem('fcmToken', token);
+          store.screenLoading.set(false);
+        } else {
+          store.screenLoading.set(false);
+          console.log('get se nhi mila');
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -34,25 +56,6 @@ function App(): JSX.Element {
       webClientId:
         '213956113520-4e23h6t7tc4279r64t5r0vdrmt5j80va.apps.googleusercontent.com',
     });
-
-    const getToken = async () => {
-      let fcmToken = await AsyncStorage.getItem('fcmToken');
-      console.log('Token mila', fcmToken);
-
-      if (!fcmToken) {
-        store.screenLoading.set(true);
-        fcmToken = await getFCMToken();
-        console.log('fcmToken', Platform.OS, fcmToken);
-        if (fcmToken) {
-          // user has a device token
-          store.fcmToken.set(fcmToken);
-          await AsyncStorage.setItem('fcmToken', fcmToken);
-          store.screenLoading.set(false);
-        } else {
-          store.screenLoading.set(false);
-        }
-      }
-    };
     getToken();
     setUserData();
     ShareMenu.getInitialShare(handleShare);
@@ -82,8 +85,9 @@ function App(): JSX.Element {
     console.log('linkOpen', url, userData.get());
 
     if (userData.get()) {
-      const linkOpen = await Linking.openURL(`seaglass://share?url=${url}`);
-      console.log('linkOpen', linkOpen);
+      const linkOpen = await Linking.openURL(
+        `seaglass://share?url=${encodeURIComponent(url)}`,
+      );
     } else {
       Alert.alert('Please Login to share content with friends!');
     }
