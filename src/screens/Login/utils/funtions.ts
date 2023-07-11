@@ -5,8 +5,9 @@ import { State } from '@hookstate/core';
 
 import { User } from '../../../types';
 import { loginUser } from '../../../api/user.controller';
-import { storeUserData } from '../../../utils';
+import { getFCMToken, storeUserData } from '../../../utils';
 import store from '../../../store/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const _signIn = async (
   navigation: NavigationProp<ParamListBase>,
@@ -15,6 +16,7 @@ export const _signIn = async (
   try {
     screenLoading.set(true);
     await GoogleSignin.hasPlayServices();
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
     const userInfo = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(
       userInfo.idToken,
@@ -27,8 +29,11 @@ export const _signIn = async (
           userName: user.displayName,
           image: user.photoURL,
           uid: user.uid,
-          fcmToken: '',
+          fcmToken: fcmToken ?? '',
         };
+        getFCMToken().then(res => {
+          console.log('fcmToken', fcmToken, 'res', res);
+        });
         loginUser(data)
           .then(({ data }) => {
             storeUserData(data);

@@ -1,68 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, ActivityIndicator, FlatList } from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
 
-import {
-  CommunityCard,
-  GapView,
-  MyCanvas,
-  MyText,
-  NormalBtn,
-  SearchBar,
-  Tabs,
-} from '../../../components';
-import { CommunityNavProps, Group, HomeNavProps } from '../../../types';
+import { CommunityCard, GapView, MyText, NormalBtn } from '../../../components';
+import { CommunityNavProps, Group } from '../../../types';
 import { useHookstate } from '@hookstate/core';
 import store from '../../../store/store';
 import { colors } from '../../../theme';
-import { getGroups } from '../../../utils';
-import useUpdateEffect from '../../../utils/hooks/useUpdateEffect';
-import { getSearchedGroup } from '../utils/function';
 
 export default function GroupsList() {
   const navigation = useNavigation<CommunityNavProps['navigation']>();
-  const groupsStore: any = useHookstate(store.groups);
-  const groups: Group[] = groupsStore.get();
+  const userGroupsStore: any = useHookstate(store.userGroups);
+  const userGroups: Group[] = userGroupsStore.get();
   const { loadGroups } = useHookstate(store);
-  const [groupSearch, setGroupSearch] = useState('');
-  const [userGroups, setUserGroups] = useState<Group[] | null>();
-
-  useFocusEffect(
-    React.useCallback(() => {
-      getGroups().then(data => {
-        setUserGroups(data);
-      });
-    }, []),
-  );
-
-  const searchGroup = (e: string) => {
-    setGroupSearch(e);
-    if (e) {
-      const chars = e.toLowerCase();
-      const arrr = groups?.filter(item =>
-        item.groupName.toLowerCase().includes(chars),
-      );
-      setUserGroups(arrr);
-    } else {
-      setUserGroups(groups);
-    }
-  };
-
-  const clearSearch = () => {
-    setGroupSearch('');
-    setUserGroups(groups);
-  };
 
   return (
-    <MyCanvas>
-      <SearchBar
-        value={groupSearch}
-        placeholder="Search by group name"
-        onChangeText={searchGroup}
-        clearInput={clearSearch}
-      />
-      <Tabs selectedTabId={2} />
+    <View style={{ flex: 1 }}>
       {loadGroups.get() ? (
         <View style={{ flex: 1 }}>
           <ActivityIndicator
@@ -76,6 +30,7 @@ export default function GroupsList() {
           data={userGroups}
           renderItem={({ item }) => (
             <CommunityCard
+              key={item.id}
               group
               name={item.groupName}
               details={`${item.Members.length} Members`}
@@ -86,6 +41,7 @@ export default function GroupsList() {
                   item: { title: item.groupName, contents: item.contents },
                 })
               }
+              contents={item.contents}
             />
           )}
           ListEmptyComponent={
@@ -108,7 +64,7 @@ export default function GroupsList() {
         icon={<Icon name="user-plus" type="font-awesome-5" color={'#ffffff'} />}
       />
       <GapView length={5} />
-    </MyCanvas>
+    </View>
   );
 }
 

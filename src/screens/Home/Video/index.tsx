@@ -19,12 +19,15 @@ import { extractFeeds } from '../../../utils/globalFunctions';
 export default function VideoScreen() {
   const [articles, setArticles] = useState<NewsFeed[]>([]);
   const newsFeedData = useHookstate(store?.newsFeed).get();
+  const videosStore: any = useHookstate(store?.videos);
+  const video = videosStore.get();
   const loader = useHookstate(loaders?.newsFeed).get();
   const navigation = useNavigation<NavProps['navigation']>();
 
   useEffect(() => {
     if (!loader) {
-      setArticles(extractFeeds(newsFeedData, 'Video'));
+      // setArticles(extractFeeds(newsFeedData, 'Video'));
+      setArticles(video);
     }
   }, [loader]);
 
@@ -32,8 +35,8 @@ export default function VideoScreen() {
     return (
       <FeedCard
         key={index}
-        contentData={item.content}
-        senderData={item.sender}
+        contentData={item?.content}
+        senderData={item?.sender}
       />
     );
   }
@@ -54,13 +57,6 @@ export default function VideoScreen() {
           ListEmptyComponent={<EmptyFeedLabel label="No Videos Found" />}
         />
       )}
-      <FAB
-        style={{ position: 'absolute', bottom: 20, right: 20, zIndex: 1 }}
-        visible={true}
-        icon={{ name: 'search', color: 'white' }}
-        color={colors.card}
-        onPress={() => navigation.navigate('Search')}
-      />
     </MyCanvas>
   );
 }

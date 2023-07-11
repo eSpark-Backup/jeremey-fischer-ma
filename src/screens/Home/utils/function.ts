@@ -2,14 +2,8 @@ import { NavigationProp, ParamListBase } from '@react-navigation/native';
 
 import { createGroup } from '../../../api/groups.controller';
 import { searchUser } from '../../../api/user.controller';
-import loaders from '../../../store/loaders';
 import store from '../../../store/store';
-import {
-  CommunityNavProps,
-  CommunityStackParamList,
-  Group,
-  User,
-} from '../../../types';
+import { Group } from '../../../types';
 import { getGroups } from '../../../utils';
 
 export const getSearchedFriend = async (searchVal: string) => {
@@ -21,33 +15,21 @@ export const getSearchedFriend = async (searchVal: string) => {
   });
 };
 
-export const getSearchedGroup = async (searchVal: string, data: Group[]) => {
-  // store.loadGroups.set(true);
-  // const groups = store.groups.get();
-  console.log('dataasdasd', data);
-
-  const chars = searchVal.toLowerCase();
-  const arrr = data?.filter(item =>
-    item.groupName.toLowerCase().includes(chars),
-  );
-  store.groups.set(arrr);
-  // store.loadGroups.set(false);
-};
-
 export const groupCreation = async (
   groupName: string,
   members: string[],
   navigation: NavigationProp<ParamListBase>,
 ) => {
+  members.push(store.userData.get()?.uid);
   const data: Group = {
     groupName: groupName,
     groupCreatorId: store.userData.get()?.uid!,
     Members: members!,
   };
-  loaders.createGroup.set(true);
+  store.screenLoading.set(true);
   createGroup(data).then(res => {
     console.log('create Group', JSON.stringify(res));
-    loaders.createGroup.set(false);
+    store.screenLoading.set(false);
     getGroups();
     navigation.navigate('GroupsList');
   });

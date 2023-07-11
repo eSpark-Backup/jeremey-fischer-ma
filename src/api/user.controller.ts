@@ -46,14 +46,44 @@ export const loginUser = async (data: User) => {
           Friends: [],
           Groups: [],
           Notification: [],
+          NotificationSetting: {
+            whenReceivedNewArticle: true,
+            whenReceivedNewMusic: true,
+            whenReceivedNewVideo: true,
+            whenReceivedNewPodcast: true,
+            all: true,
+          },
         });
       return { data: (await res.get()).data(), message: 'Login Successfully' };
     } else {
+      let userDocId = '';
       isUserExist.forEach(res => {
         const data: any = res.data();
+        userDocId = res.id;
         userData = data;
       });
-      return { data: userData, message: 'Login Successfully' };
+      if (Boolean(userDocId)) {
+        await db().collection(collections.users).doc(userDocId).update({
+          fcmToken: data.fcmToken,
+        });
+        !userData?.NotificationSetting &&
+          (await db()
+            .collection(collections.users)
+            .doc(userDocId)
+            .update({
+              NotificationSetting: {
+                whenReceivedNewArticle: true,
+                whenReceivedNewMusic: true,
+                whenReceivedNewVideo: true,
+                whenReceivedNewPodcast: true,
+                all: true,
+              },
+            }));
+      }
+      return {
+        data: { ...userData, fcmToken: data.fcmToken },
+        message: 'Login Successfully',
+      };
     }
   } catch (error) {
     console.log('err', error);

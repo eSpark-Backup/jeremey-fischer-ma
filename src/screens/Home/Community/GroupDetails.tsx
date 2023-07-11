@@ -1,11 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  View,
-  ActivityIndicator,
-} from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, FlatList, View, ActivityIndicator } from 'react-native';
 import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -14,7 +8,6 @@ import {
   FeedCard,
   GapView,
   MyCanvas,
-  MyText,
 } from '../../../components';
 import {
   CommunityNavProps,
@@ -23,8 +16,8 @@ import {
 } from '../../../types';
 import store from '../../../store/store';
 import { colors } from '../../../theme';
-import { getGroupById } from '../../../api/groups.controller';
-import useUpdateEffect from '../../../utils/hooks/useUpdateEffect';
+
+import { useHookstate } from '@hookstate/core';
 
 type GroupDetailsScreenRouteProps = RouteProp<
   CommunityStackParamList,
@@ -34,6 +27,7 @@ type GroupDetailsScreenRouteProps = RouteProp<
 export default function GroupDetails() {
   const navigation = useNavigation<CommunityNavProps['navigation']>();
   const { params } = useRoute<GroupDetailsScreenRouteProps>();
+  const { loadGroups } = useHookstate(store);
   const {
     item: { title, contents },
   } = params;
@@ -44,28 +38,37 @@ export default function GroupDetails() {
     React.useCallback(() => {
       const ids = store.archiveIds.get();
       const reduceArchived: any = contents?.filter(
-        item => item.isArchived == false && !ids.includes(item.id!),
+        item => item?.isArchived == false && !ids.includes(item?.id!),
       );
       ids.map(item => item);
       setGroupContent(reduceArchived);
-      store.archiveId.set(null);
     }, []),
   );
 
   function renderGroupFeed({ item, index }: { item: Content; index: number }) {
     return (
-      <FeedCard key={index} contentData={item} senderData={item?.sender} />
+      <FeedCard key={item.id} contentData={item} senderData={item?.sender} />
     );
   }
 
   return (
     <MyCanvas>
-      <FlatList
-        data={groupContent}
-        renderItem={renderGroupFeed}
-        ListEmptyComponent={<EmptyFeedLabel label="No Group Content Found" />}
-        ItemSeparatorComponent={() => <GapView />}
-      />
+      {loadGroups.get() ? (
+        <View style={{ flex: 1 }}>
+          <ActivityIndicator
+            size={'large'}
+            color={colors.primary}
+            style={{ marginTop: 10 }}
+          />
+        </View>
+      ) : (
+        <FlatList
+          data={groupContent}
+          renderItem={renderGroupFeed}
+          ListEmptyComponent={<EmptyFeedLabel label="No Group Content Found" />}
+          ItemSeparatorComponent={() => <GapView />}
+        />
+      )}
     </MyCanvas>
   );
 }

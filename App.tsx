@@ -6,7 +6,7 @@
  */
 
 import React, { useCallback, useEffect } from 'react';
-import { SafeAreaView, Linking, StatusBar, Platform } from 'react-native';
+import { SafeAreaView, Linking, Platform, Alert } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useHookstate } from '@hookstate/core';
 
@@ -14,10 +14,11 @@ import { useHookstate } from '@hookstate/core';
 import ShareMenu from 'react-native-share-menu';
 import { RootNav } from './src/navigation';
 import store from './src/store/store';
-import { getContentTypeFromUrl, getUserData } from './src/utils';
+import { getFCMToken, getUserData } from './src/utils';
 import { ScreenLoader } from './src/components';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { colors } from './src/theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function App(): JSX.Element {
   const { userData, screenLoading } = useHookstate(store);
@@ -33,6 +34,26 @@ function App(): JSX.Element {
       webClientId:
         '213956113520-4e23h6t7tc4279r64t5r0vdrmt5j80va.apps.googleusercontent.com',
     });
+
+    const getToken = async () => {
+      let fcmToken = await AsyncStorage.getItem('fcmToken');
+      console.log('Token mila', fcmToken);
+
+      if (!fcmToken) {
+        store.screenLoading.set(true);
+        fcmToken = await getFCMToken();
+        console.log('fcmToken', Platform.OS, fcmToken);
+        if (fcmToken) {
+          // user has a device token
+          store.fcmToken.set(fcmToken);
+          await AsyncStorage.setItem('fcmToken', fcmToken);
+          store.screenLoading.set(false);
+        } else {
+          store.screenLoading.set(false);
+        }
+      }
+    };
+    getToken();
     setUserData();
     ShareMenu.getInitialShare(handleShare);
   }, []);
@@ -57,7 +78,15 @@ function App(): JSX.Element {
         : item.data?.length > 1
         ? item?.data[1].data
         : item?.data[0].data;
-    Linking.openURL(`seaglass://share?url=${url}`);
+
+    console.log('linkOpen', url, userData.get());
+
+    if (userData.get()) {
+      const linkOpen = await Linking.openURL(`seaglass://share?url=${url}`);
+      console.log('linkOpen', linkOpen);
+    } else {
+      Alert.alert('Please Login to share content with friends!');
+    }
     // Linking.openURL('seaglass://share');
     // You can receive extra data from your custom Share View
   }, []);

@@ -1,8 +1,6 @@
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { FakeFeedType } from '../constants';
-
 export type RootStackParamList = {
   Login: undefined;
   Tab: {
@@ -33,8 +31,9 @@ export type ProfileStackParamList = {
 };
 
 export type CommunityStackParamList = {
-  FriendsList: undefined;
-  GroupsList: undefined;
+  CommunityTab: undefined;
+  // FriendsList: undefined;
+  // GroupsList: undefined;
   GroupDetails: { item: { title: string; contents?: Content[] } };
   AddNewGroup: undefined;
 };
@@ -69,6 +68,7 @@ export type User = {
   Group?: string[]; // Array of GroupIds
   Notification?: string[]; // Array of notification IDs
   isRequested?: boolean; // only for search friend with current userId
+  NotificationSetting?: NotificationSetting;
 };
 
 // FriendRequest type
@@ -142,13 +142,19 @@ export type GlobalState = {
   loadFriends: boolean;
   friends: User[] | null;
   loadGroups: boolean;
+  userGroups: Group[] | null;
   groups: Group[] | null;
   loadRequests: boolean;
   friendRequests: FriendRequest[] | null;
   newsFeed: NewsFeed[];
   archives: Archive[];
-  archiveId: string | null;
   archiveIds: string[];
+  currentUserNotificationSetting: NotificationSetting | null;
+  articles: NewsFeed[];
+  audios: NewsFeed[];
+  podcasts: NewsFeed[];
+  videos: NewsFeed[];
+  fcmToken: string | null;
 };
 
 // Notification Settings

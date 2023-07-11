@@ -1,11 +1,6 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Image, View, ActivityIndicator } from 'react-native';
-import {
-  useRoute,
-  useTheme,
-  RouteProp,
-  useFocusEffect,
-} from '@react-navigation/native';
+import { useRoute, useTheme, RouteProp } from '@react-navigation/native';
 import moment from 'moment';
 import { Avatar } from '@rneui/themed';
 import { useHookstate } from '@hookstate/core';
@@ -16,6 +11,7 @@ import { PostView } from '../../api/postView.controller';
 import store from '../../store/store';
 import { addToArchive, getAllArchive } from '../../api/archive.controller';
 import loaders from '../../store/loaders';
+import { getGroups } from '../../utils';
 
 type DetailsScreenRouteProps = RouteProp<HomeStackParamList, 'Details'>;
 
@@ -30,13 +26,14 @@ export default function Details() {
   } = params;
 
   useEffect(() => {
-    markAsSeen();
+    !contentData?.isViewed && markAsSeen();
     getAllArchives();
   }, []);
 
   async function markAsSeen() {
     console.log(contentData?.id, userData?.get()?.['uid']);
     const res = await PostView(contentData?.id!, userData?.get()?.['uid']!);
+    contentData.sender ? getGroups() : null;
     console.log('res mark as seen', res);
   }
 
@@ -61,8 +58,8 @@ export default function Details() {
   }
 
   async function handleMoveToArchive() {
-    const ids = store.archiveIds.get();
-    const newIds = [...ids];
+    // const ids = store.archiveIds.get();
+    // const newIds = [...ids];
     loader.set(true);
     try {
       const res = await addToArchive({
@@ -71,10 +68,10 @@ export default function Details() {
       });
       console.log('done', res);
       loader.set(false);
+      contentData.sender ? getGroups() : null;
       getAllArchives();
-      newIds.push(contentData.id!);
-      // store.archiveId.set(contentData.id!);
-      store.archiveIds.set(newIds);
+      // newIds.push(contentData.id!);
+      // store.archiveIds.set(newIds);
     } catch (e) {
       console.log('error at add to Archive', e);
       loader.set(false);
@@ -115,6 +112,7 @@ export default function Details() {
       <View
         style={{
           flexDirection: 'row',
+          alignItems: 'center',
         }}>
         <Avatar rounded size={40} source={{ uri: senderData.image }} />
         <GapView mode="horizontal" />
@@ -126,7 +124,7 @@ export default function Details() {
             textAlignVertical: 'center',
           }}>
           {senderData.userName}:{' '}
-          {contentData?.message != '' ? contentData?.message! : '...'}
+          {contentData?.message != '' ? contentData?.message! : ''}
         </MyText>
       </View>
       <View

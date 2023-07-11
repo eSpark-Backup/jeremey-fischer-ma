@@ -1,30 +1,65 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useHookstate } from '@hookstate/core';
+import {
+  NavigationHelpers,
+  ParamListBase,
+  TabNavigationState,
+} from '@react-navigation/native';
 
 import { colors } from '../../theme';
 import MyText from '../MyText';
-import { CommunityNavProps, HomeNavProps } from '../../types';
+import { CommunityNavProps } from '../../types';
 import store from '../../store/store';
 import { getFriendRequests, getFriends, getGroups } from '../../utils';
+import { MaterialTopTabNavigationEventMap } from '@react-navigation/material-top-tabs/lib/typescript/src/types';
 
 export default function Tabs({
-  selectedTabId,
+  state,
+  navigation,
+  updateTab,
 }: {
-  selectedTabId: string | number;
+  state: TabNavigationState<ParamListBase>;
+  navigation: NavigationHelpers<
+    ParamListBase,
+    MaterialTopTabNavigationEventMap
+  >;
+  updateTab: (index: number) => void;
 }) {
-  const navigation = useNavigation<CommunityNavProps['navigation']>();
+  const friendRequest = store.friendRequests.get();
+  const groups = store.groups.get();
 
   const navigateToGroups = () => {
-    navigation.navigate('GroupsList');
+    getGroups();
+    navigation.navigate('GroupsTab');
+    updateTab(1);
   };
 
   const navigateToFriends = () => {
     getFriends();
     getFriendRequests();
-    navigation.navigate('FriendsList');
+    navigation.navigate('FriendsTab');
+    updateTab(0);
   };
+
+  const isAnyNewUpdate = groups?.some(value => {
+    let isNewContent = false;
+    if (value?.contents?.length) {
+      for (
+        let index = 0;
+        index < (value?.contents ? value?.contents.length : 0);
+        index++
+      ) {
+        if (
+          value?.contents[index].isViewed == false &&
+          value?.contents[index].senderId != store.userData.get()?.uid
+        ) {
+          isNewContent = true;
+          break;
+        }
+      }
+    }
+    return isNewContent;
+  });
 
   return (
     <View
@@ -43,10 +78,29 @@ export default function Tabs({
         style={{
           width: '50%',
           height: '100%',
-          backgroundColor: selectedTabId == 1 ? colors.background : colors.card,
+          backgroundColor: state.index == 0 ? colors.background : colors.card,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
+        {Boolean(friendRequest?.length) && (
+          <View
+            style={{
+              height: 18,
+              width: 18,
+              backgroundColor: colors.primary,
+              borderRadius: 100,
+              position: 'absolute',
+              left: -5,
+              top: -4,
+              // zIndex: 1,X
+              alignItems: 'center',
+            }}>
+            <MyText
+              children={friendRequest?.length?.toString()}
+              textStyle={{ fontSize: 12, fontWeight: 'bold' }}
+            />
+          </View>
+        )}
         <MyText children="Friends" />
       </TouchableOpacity>
       <TouchableOpacity
@@ -54,10 +108,24 @@ export default function Tabs({
         style={{
           width: '50%',
           height: '100%',
-          backgroundColor: selectedTabId == 2 ? colors.background : colors.card,
+          backgroundColor: state.index == 1 ? colors.background : colors.card,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
+        {isAnyNewUpdate && (
+          <View
+            style={{
+              height: 18,
+              width: 18,
+              backgroundColor: colors.primary,
+              borderRadius: 100,
+              position: 'absolute',
+              right: -5,
+              top: -4,
+              alignItems: 'center',
+            }}
+          />
+        )}
         <MyText children="Groups" />
       </TouchableOpacity>
     </View>

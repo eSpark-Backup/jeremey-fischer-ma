@@ -5,8 +5,9 @@ import { Avatar, CheckBox, Icon } from '@rneui/themed';
 import { colors } from '../../theme';
 import MyText from '../MyText';
 import { OutlineBtn } from '../Button';
-import { User } from '../../types';
+import { Content, User } from '../../types';
 import GapView from '../GapView';
+import store from '../../store/store';
 
 export default function CommunityCard({
   name,
@@ -24,6 +25,7 @@ export default function CommunityCard({
   onChecked,
   checked = false,
   requested,
+  contents = [],
 }: {
   name: string;
   details: string;
@@ -40,9 +42,33 @@ export default function CommunityCard({
   onRequestAccept?: () => void;
   onChecked?: (isChecked: boolean) => void;
   requested?: boolean;
+  contents?: Content[];
 }) {
+  const unreadContents = contents.filter(
+    val => !val.isViewed && val.senderId != store.userData.get()?.uid,
+  );
+
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
+      {Boolean(unreadContents?.length) && (
+        <View
+          style={{
+            height: 18,
+            width: 18,
+            backgroundColor: colors.primary,
+            borderRadius: 100,
+            position: 'absolute',
+            right: -5,
+            top: -4,
+            // zIndex: 1,X
+            alignItems: 'center',
+          }}>
+          <MyText
+            children={unreadContents?.length?.toString()}
+            textStyle={{ fontSize: 12, fontWeight: 'bold' }}
+          />
+        </View>
+      )}
       <View style={{ ...styles.row, flex: 1 }}>
         <Avatar
           rounded

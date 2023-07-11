@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SectionList, FlatList } from 'react-native';
+import { StyleSheet, View, SectionList, FlatList } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { CheckBox } from '@rneui/themed';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-import { Dropdown, GapView, MyCanvas, MyText } from '../../components';
+import { MyCanvas, MyText } from '../../components';
 import { TouchableOpacity } from 'react-native';
+import store from '../../store/store';
+import { getUserData } from '../../utils';
 
 interface ListProps {
   title: string;
@@ -16,13 +18,14 @@ interface CheckBoxData {
   label: string;
   value: boolean;
   time?: string;
+  disabled?: boolean;
 }
 
 const data: CheckBoxData[] = [
-  { label: 'New Articles', value: true },
-  { label: 'New Videos', value: false },
-  { label: 'New Music', value: false },
-  { label: 'New Podcasts', value: true },
+  { label: 'New Articles', value: false, disabled: false },
+  { label: 'New Videos', value: false, disabled: false },
+  { label: 'New Music', value: false, disabled: false },
+  { label: 'New Podcasts', value: false, disabled: false },
 ];
 
 const List: ListProps[] = [
@@ -35,10 +38,7 @@ const List: ListProps[] = [
       },
       {
         title: 'Notify me:',
-        data: [
-          { label: 'Every Time I recieve new content', value: false },
-          { label: 'Once a day at', value: false, time: '00:00 AM' },
-        ],
+        data: [{ label: 'Every Time I recieve new content', value: false }],
       },
     ],
   },
@@ -65,6 +65,88 @@ const SettingList = ({ data }: { data: ListProps[] }) => {
     setDatePickerVisibility(false);
   };
 
+  const setUserNotifications = () => {
+    console.log('list1', List[0].data[0]);
+    console.log('list2', List[0].data[1]);
+
+    store.currentUserNotificationSetting.set({
+      all: List[0].data[1].data[0].value,
+      whenReceivedNewArticle: List[0].data[0].data[0].value,
+      whenReceivedNewVideo: List[0].data[0].data[1].value,
+      whenReceivedNewMusic: List[0].data[0].data[2].value,
+      whenReceivedNewPodcast: List[0].data[0].data[3].value,
+    });
+  };
+
+  const getNotificationSettings = async () => {
+    const storedData = await getUserData();
+    let tempData = [...data];
+    const NotificationSetting = storedData?.NotificationSetting;
+
+    console.log(
+      'whenReceivedNewArticle',
+      NotificationSetting?.whenReceivedNewArticle,
+    );
+    console.log(
+      'whenReceivedNewVideo',
+      NotificationSetting?.whenReceivedNewVideo,
+    );
+    console.log(
+      'whenReceivedNewMusic',
+      NotificationSetting?.whenReceivedNewMusic,
+    );
+    console.log(
+      'whenReceivedNewPodcast',
+      NotificationSetting?.whenReceivedNewPodcast,
+    );
+
+    if (NotificationSetting?.all) {
+      tempData[0].data[1].data[0].value = true;
+      tempData[0].data[0].data.forEach(item => {
+        item.value = true;
+        item.disabled = true;
+      });
+    }
+    if (
+      !NotificationSetting?.all &&
+      NotificationSetting?.whenReceivedNewArticle == true
+    ) {
+      tempData[0].data[0].data[0].value = true;
+      tempData[0].data[1].data[0].value = false;
+    }
+    if (
+      !NotificationSetting?.all &&
+      NotificationSetting?.whenReceivedNewVideo == true
+    ) {
+      tempData[0].data[0].data[1].value = true;
+      tempData[0].data[1].data[0].value = false;
+    }
+    if (
+      !NotificationSetting?.all &&
+      NotificationSetting?.whenReceivedNewMusic == true
+    ) {
+      tempData[0].data[0].data[2].value = true;
+      tempData[0].data[1].data[0].value = false;
+    }
+    if (
+      !NotificationSetting?.all &&
+      NotificationSetting?.whenReceivedNewPodcast == true
+    ) {
+      tempData[0].data[0].data[3].value = true;
+      tempData[0].data[1].data[0].value = false;
+    }
+
+    setListData([...tempData]);
+  };
+
+  useEffect(() => {
+    data[0].data[0].data.forEach(item => {
+      item.value = false;
+      item.disabled = false;
+    });
+    getNotificationSettings();
+  }, []);
+
   const handleConfirm = (date: Date) => {
     const time = new Date(date).toLocaleTimeString([], {
       hour: 'numeric',
@@ -81,11 +163,30 @@ const SettingList = ({ data }: { data: ListProps[] }) => {
     hideDatePicker();
   };
   const reMap = (item: CheckBoxData, index: number, index2: number) => {
-    console.log('item', item, index, index2);
+    console.log('item', item, index, index2, !item?.value);
     let tempData = [...data];
-    let tempItem = { ...item, value: !item?.value };
-    tempData[0].data[index].data[index2] = tempItem;
-    setListData([...tempData]);
+
+    if (index == 1 && index2 == 0 && !item.value == true) {
+      let tempItem = { ...item, value: !item?.value };
+      tempData[0].data[index].data[index2] = tempItem;
+      List[0].data[0].data.map((i, ind) => {
+        tempData[0].data[0].data[ind].value = tempItem.value;
+        tempData[0].data[0].data[ind].disabled = tempItem.value;
+      });
+      setListData([...tempData]);
+    } else if (index == 1 && index2 == 0 && !item.value == false) {
+      let tempItem = { ...item, value: !item?.value };
+      tempData[0].data[index].data[index2] = tempItem;
+      List[0].data[0].data.map((i, ind) => {
+        tempData[0].data[0].data[ind].disabled = tempItem.value;
+      });
+      setListData([...tempData]);
+    } else {
+      let tempItem = { ...item, value: !item?.value };
+      tempData[0].data[index].data[index2] = tempItem;
+      setListData([...tempData]);
+    }
+    setUserNotifications();
   };
 
   return (
@@ -110,8 +211,10 @@ const SettingList = ({ data }: { data: ListProps[] }) => {
                   style={{
                     ...styles.nestedItem,
                     alignItems: toggle ? 'flex-start' : 'center',
+                    opacity: item.disabled ? 0.5 : 1,
                   }}>
                   <CheckBox
+                    disabled={item.disabled}
                     center
                     checked={item?.value}
                     checkedColor={colors.primary}

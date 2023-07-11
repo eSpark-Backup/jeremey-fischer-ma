@@ -19,12 +19,14 @@ import { extractFeeds } from '../../../utils/globalFunctions';
 
 export default function ArticleScreen() {
   const [articles, setArticles] = useState<NewsFeed[]>([]);
-  const newsFeedData = useHookstate(store?.newsFeed).get();
+  const articlesStore: any = useHookstate(store?.articles);
+  const article = articlesStore.get();
   const loader = useHookstate(loaders.newsFeed).get();
   const navigation = useNavigation<NavProps['navigation']>();
   useEffect(() => {
     if (!loader) {
-      setArticles(extractFeeds(newsFeedData, 'Article'));
+      // setArticles(extractFeeds(newsFeedData, 'Article'));
+      setArticles(article);
     }
   }, [loader]);
 
@@ -32,8 +34,8 @@ export default function ArticleScreen() {
     return (
       <FeedCard
         key={index}
-        contentData={item.content}
-        senderData={item.sender}
+        contentData={item?.content}
+        senderData={item?.sender}
       />
     );
   }
@@ -54,13 +56,6 @@ export default function ArticleScreen() {
           ListEmptyComponent={<EmptyFeedLabel label="No Articles Found" />}
         />
       )}
-      <FAB
-        style={{ position: 'absolute', bottom: 20, right: 20, zIndex: 1 }}
-        visible={true}
-        icon={{ name: 'search', color: 'white' }}
-        color={colors.card}
-        onPress={() => navigation.navigate('Search')}
-      />
     </MyCanvas>
   );
 }

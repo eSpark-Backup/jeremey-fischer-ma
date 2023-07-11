@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   TextInput,
-  ScrollView,
-  Platform,
   ActivityIndicator,
   FlatList,
 } from 'react-native';
@@ -13,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
 import { useHookstate } from '@hookstate/core';
 
-import { CommunityNavProps, HomeNavProps, User } from '../../../types';
+import { CommunityNavProps, User } from '../../../types';
 import { colors } from '../../../theme';
 import {
   CommunityCard,
@@ -21,20 +18,17 @@ import {
   MyCanvas,
   MyText,
   NormalBtn,
-  ScreenLoader,
   SearchBar,
 } from '../../../components';
 import store from '../../../store/store';
 import { getFriends } from '../../../utils';
 import { getSearchedFriend, groupCreation } from '../utils/function';
-import loaders from '../../../store/loaders';
 
 export default function AddNewGroup() {
   const navigation = useNavigation<CommunityNavProps['navigation']>();
   const friendStore: any = useHookstate(store.friends);
   const friends: User[] = friendStore.get();
   const { loadFriends } = useHookstate(store).get();
-  const { createGroup } = useHookstate(loaders).get();
   const [groupName, setGroupName] = useState('');
   const [searchVal, setSearchVal] = useState('');
   const [selectedFriends, setSelectedFriends] = useState<User[]>([]);
@@ -69,7 +63,6 @@ export default function AddNewGroup() {
 
   return (
     <MyCanvas>
-      <ScreenLoader show={createGroup} />
       <View style={{ alignSelf: 'center', width: '95%' }}>
         <MyText children="Enter Group Name" />
         <GapView />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { NavigationContainer, LinkingOptions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useHookstate } from '@hookstate/core';
@@ -8,7 +8,6 @@ import { MyTheme } from '../theme';
 import { Login, Share } from '../screens';
 import { RootStackParamList } from '../types';
 import { MyHeader } from '../components';
-import { getUserData } from '../utils';
 import store from '../store/store';
 import ProfileNav from './ProfileNav';
 import CommunityNav from './CommunityNav';

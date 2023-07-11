@@ -19,12 +19,15 @@ import { extractFeeds } from '../../../utils/globalFunctions';
 export default function PodcastScreen() {
   const [podcasts, setPodcasts] = useState<NewsFeed[]>([]);
   const newsFeedData = useHookstate(store?.newsFeed).get();
+  const podcastsStore: any = useHookstate(store?.podcasts);
+  const podcast = podcastsStore.get();
   const loader = useHookstate(loaders?.newsFeed).get();
   const navigation = useNavigation<NavProps['navigation']>();
 
   useEffect(() => {
     if (!loader) {
-      setPodcasts(extractFeeds(newsFeedData, 'Podcast'));
+      // setPodcasts(extractFeeds(newsFeedData, 'Podcast'));
+      setPodcasts(podcast);
     }
   }, [loader]);
 
@@ -32,8 +35,8 @@ export default function PodcastScreen() {
     return (
       <FeedCard
         key={index}
-        contentData={item.content}
-        senderData={item.sender}
+        contentData={item?.content}
+        senderData={item?.sender}
       />
     );
   }
@@ -54,13 +57,6 @@ export default function PodcastScreen() {
           ListEmptyComponent={<EmptyFeedLabel label="No Podcasts Found" />}
         />
       )}
-      <FAB
-        style={{ position: 'absolute', bottom: 20, right: 20, zIndex: 1 }}
-        visible={true}
-        icon={{ name: 'search', color: 'white' }}
-        color={colors.card}
-        onPress={() => navigation.navigate('Search')}
-      />
     </MyCanvas>
   );
 }

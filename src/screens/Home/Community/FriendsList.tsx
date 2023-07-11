@@ -1,18 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import { useHookstate } from '@hookstate/core';
 
-import {
-  CommunityCard,
-  MyCanvas,
-  MyText,
-  SearchBar,
-  SubHeader,
-  Tabs,
-} from '../../../components';
+import { CommunityCard, MyText, SubHeader } from '../../../components';
 import store from '../../../store/store';
 import { colors } from '../../../theme';
-import { getSearchedFriend } from '../utils/function';
 import { AddFriend, getFriendRequests, getFriends } from '../../../utils';
 import {
   acceptRequest,
@@ -27,16 +19,10 @@ export default function FriendsList() {
   const friendRequests: FriendRequest[] = friendRequestsStore.get();
 
   const { loadFriends, loadRequests } = useHookstate(store);
-  const [searchVal, setSearchVal] = useState('');
-
-  const clearSearch = () => {
-    setSearchVal('');
-    getFriends();
-  };
 
   const acceptFriendRequest = (id: string) => {
     loadRequests.set(true);
-    acceptRequest(id).then(res => {
+    acceptRequest(id, store.userData.get()?.userName).then(res => {
       console.log('accept friend request', JSON.stringify(res));
       getFriends();
       getFriendRequests();
@@ -45,33 +31,14 @@ export default function FriendsList() {
 
   const cancelFriendRequest = (id: string) => {
     loadRequests.set(true);
-    rejectRequest(id).then(res => {
+    rejectRequest(id, store.userData.get()?.userName).then(res => {
       console.log('reject friend request', JSON.stringify(res));
       getFriendRequests();
     });
   };
 
-  const checkSearchedEmail = (searchVal: string) => {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(searchVal)) {
-      getSearchedFriend(searchVal);
-    } else {
-      console.log('Please enter a valid email');
-    }
-  };
-
-  console.log('friend', friends);
-  console.log('friendREq', friendRequests);
-
   return (
-    <MyCanvas>
-      <SearchBar
-        value={searchVal}
-        placeholder="Search by email"
-        onChangeText={setSearchVal}
-        clearInput={clearSearch}
-        onSubmitEditing={() => checkSearchedEmail(searchVal)}
-      />
-      <Tabs selectedTabId={1} />
+    <View>
       <View>
         <SubHeader title="Friend Requests" />
         {loadRequests.get() ? (
@@ -130,7 +97,7 @@ export default function FriendsList() {
           />
         )}
       </View>
-    </MyCanvas>
+    </View>
   );
 }
 

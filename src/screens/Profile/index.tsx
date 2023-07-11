@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform, Alert } from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
 import { Avatar } from '@rneui/base';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import { Divider, Icon } from '@rneui/themed';
@@ -8,7 +8,7 @@ import { useHookstate } from '@hookstate/core';
 
 import { GapView, MyCanvas, MyText, NormalBtn } from '../../components';
 import { SCREEN_WIDTH } from '../../constants';
-import { NavProps, ProfileProps } from '../../types';
+import { ProfileProps } from '../../types';
 import { storeUserData } from '../../utils';
 import { ArchiveOutlineSvg } from '../../assets';
 import store from '../../store/store';
@@ -34,6 +34,11 @@ export default function App() {
     try {
       await GoogleSignin.signOut();
       storeUserData(null);
+      store.articles.set([]);
+      store.audios.set([]);
+      store.podcasts.set([]);
+      store.videos.set([]);
+      store.currentUserNotificationSetting.set(null);
       navigation.navigate('Login');
     } catch (error) {
       console.error(error);
