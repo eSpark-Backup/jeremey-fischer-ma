@@ -51,7 +51,7 @@ export default function AudioScreen() {
           data={audios}
           renderItem={renderFeed}
           ItemSeparatorComponent={() => <GapView />}
-          ListEmptyComponent={<EmptyFeedLabel label="No Audios Found" />}
+          ListEmptyComponent={<EmptyFeedLabel label="No Music Found" />}
         />
       )}
     </MyCanvas>
