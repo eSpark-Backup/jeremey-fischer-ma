@@ -25,7 +25,6 @@ function App(): JSX.Element {
 
   const setUserData = async () => {
     const storedData = await getUserData();
-    console.log('storedData', storedData);
     userData.set(storedData);
   };
 
@@ -82,8 +81,9 @@ function App(): JSX.Element {
     console.log('linkOpen', url, userData.get());
 
     if (userData.get()) {
-      const linkOpen = await Linking.openURL(`seaglass://share?url=${url}`);
-      console.log('linkOpen', linkOpen);
+      const linkOpen = await Linking.openURL(
+        `seaglass://share?url=${encodeURIComponent(url)}`,
+      );
     } else {
       Alert.alert('Please Login to share content with friends!');
     }

@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Image, View, ActivityIndicator } from 'react-native';
-import { useRoute, useTheme, RouteProp } from '@react-navigation/native';
+import {
+  useRoute,
+  useTheme,
+  RouteProp,
+  useNavigation,
+} from '@react-navigation/native';
 import moment from 'moment';
 import { Avatar } from '@rneui/themed';
 import { useHookstate } from '@hookstate/core';
 
 import { GapView, MyCanvas, MyText, OutlineBtn } from '../../components';
-import { HomeStackParamList } from '../../types';
+import { HomeStackParamList, NavProps } from '../../types';
 import { PostView } from '../../api/postView.controller';
 import store from '../../store/store';
 import { addToArchive, getAllArchive } from '../../api/archive.controller';
@@ -16,6 +21,7 @@ import { getGroups } from '../../utils';
 type DetailsScreenRouteProps = RouteProp<HomeStackParamList, 'Details'>;
 
 export default function Details() {
+  const navigation = useNavigation<NavProps['navigation']>();
   const [isArchived, setIsArchived] = useState<boolean>(false);
   const userData = useHookstate(store?.userData);
   const loader = useHookstate(loaders?.contentDetails);
@@ -68,7 +74,10 @@ export default function Details() {
       });
       console.log('done', res);
       loader.set(false);
-      contentData.sender ? getGroups() : null;
+      // navigation.goBack();
+      contentData.sender
+        ? getGroups().then(data => navigation.goBack())
+        : navigation.goBack();
       getAllArchives();
       // newIds.push(contentData.id!);
       // store.archiveIds.set(newIds);
@@ -117,7 +126,7 @@ export default function Details() {
         <Avatar rounded size={40} source={{ uri: senderData.image }} />
         <GapView mode="horizontal" />
         <MyText
-          lines={3}
+          lines={1000}
           textStyle={{
             flexWrap: 'wrap',
             width: '80%',
