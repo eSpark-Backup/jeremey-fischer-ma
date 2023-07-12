@@ -19,16 +19,23 @@ export const createGroup = async (data: Group) => {
     await db().collection(collections.groups).doc(response.id).update({
       id: response.id,
     });
-    await shareContentToGroup(response.id, data.groupCreatorId, {
-      mediaType: 'Article',
-      title: "Welcome to the group!",
-      image: 'https://img.freepik.com/premium-vector/colorful-welcome-design-template-welcome-letters-banner-welcome-text-design_471203-519.jpg?w=2000',
-      favIcon: 'https://img.freepik.com/premium-vector/colorful-welcome-design-template-welcome-letters-banner-welcome-text-design_471203-519.jpg?w=2000',
-      description: "This is a new group",
-      senderId: data.groupCreatorId,
-      message: "",
-      url: "https://img.freepik.com/premium-vector/colorful-welcome-design-template-welcome-letters-banner-welcome-text-design_471203-519.jpg?w=2000",
-    })
+    await shareContentToGroup(
+      response.id,
+      data.groupCreatorId,
+      {
+        mediaType: 'Article',
+        title: 'Welcome to the group!',
+        image:
+          'https://img.freepik.com/premium-vector/colorful-welcome-design-template-welcome-letters-banner-welcome-text-design_471203-519.jpg?w=2000',
+        favIcon:
+          'https://img.freepik.com/premium-vector/colorful-welcome-design-template-welcome-letters-banner-welcome-text-design_471203-519.jpg?w=2000',
+        description: 'This is a new group',
+        senderId: data.groupCreatorId,
+        message: '',
+        url: 'https://img.freepik.com/premium-vector/colorful-welcome-design-template-welcome-letters-banner-welcome-text-design_471203-519.jpg?w=2000',
+      },
+      '',
+    );
     return {
       data: { ...response.data(), id: response.id },
       message: 'Group Created Successfully',
