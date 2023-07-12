@@ -30,10 +30,14 @@ function App(): JSX.Element {
   };
 
   messaging().onNotificationOpenedApp(async notification => {
-    console.log('notification', notification.data);
+    console.log(
+      'notification',
+      notification.data,
+      `seaglass://community_nav/group_details?groudId=${notification.data?.groupId}`,
+    );
     if (userData.get() && notification.data?.type == 'GROUP_NOTIFICATION') {
       await Linking.openURL(
-        `seaglass://community_nav/group_details?groudId=${notification.data?.groupId}`,
+        `seaglass://community_nav/group_details?groupId=${notification.data?.groupId}`,
       );
     }
   });

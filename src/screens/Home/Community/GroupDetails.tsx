@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, FlatList, View, ActivityIndicator } from 'react-native';
 import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import {
   EmptyFeedLabel,
@@ -33,13 +33,13 @@ export default function GroupDetails() {
   const groupContent: Content[] = groupContentStore.get();
   const { groupId } = params;
 
-  // const [groupContent, setGroupContent] = useState<Content[]>();
-
-  useEffect(() => {
-    getGroupContent(groupId!).then(data =>
-      navigation.setParams({ ...params, title: data?.groupName }),
-    );
-  }, [useIsFocused]);
+  useFocusEffect(
+    React.useCallback(() => {
+      getGroupContent(groupId!).then(data =>
+        navigation.setParams({ ...params, title: data?.groupName }),
+      );
+    }, []),
+  );
 
   function renderGroupFeed({ item, index }: { item: Content; index: number }) {
     return (
