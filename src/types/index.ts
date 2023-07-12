@@ -34,7 +34,7 @@ export type CommunityStackParamList = {
   CommunityTab: undefined;
   // FriendsList: undefined;
   // GroupsList: undefined;
-  GroupDetails: { item: { title: string; contents?: Content[] } };
+  GroupDetails: { title?: string | undefined; groupId: string | undefined };
   AddNewGroup: undefined;
 };
 
@@ -144,6 +144,7 @@ export type GlobalState = {
   loadGroups: boolean;
   userGroups: Group[] | null;
   groups: Group[] | null;
+  groupContent: Content[] | null;
   loadRequests: boolean;
   friendRequests: FriendRequest[] | null;
   newsFeed: NewsFeed[];

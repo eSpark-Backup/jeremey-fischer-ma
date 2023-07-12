@@ -60,11 +60,11 @@ export default function CommunityNav() {
         name="GroupDetails"
         component={GroupDetails}
         options={({ route }) => ({
-          title: route.params.item.title,
+          title: route.params.title,
           header: ({ route, navigation, options }) => (
             <MyHeader
               route={route}
-              title={options.title}
+              title={options.title ?? ''}
               leftIcon={true}
               onPressLeftIcon={() => {
                 navigation.goBack();

@@ -5,7 +5,7 @@ import { FriendRequest, User } from '../types';
 import { getAllFreinds } from '../api/user.controller';
 import { getAllRequest, sendRequest } from '../api/friendRequest.controller';
 import store from '../store/store';
-import { getMyGroups } from '../api/groups.controller';
+import { getGroupById, getMyGroups } from '../api/groups.controller';
 import { getSearchedFriend } from '../screens/Home/utils/function';
 import messaging from '@react-native-firebase/messaging';
 
@@ -72,6 +72,25 @@ export const getGroups = async () => {
     store.loadGroups.set(false);
     return res.data;
   } catch (error) {
+    store.loadGroups.set(false);
+    console.error(error);
+  }
+};
+
+export const getGroupContent = async (id: string) => {
+  store.loadGroups.set(true);
+  try {
+    const res = await getGroupById(id, store.userData.get()?.uid);
+    const ids = store.archiveIds.get();
+    const reduceArchived: any = res.data?.contents?.filter(
+      item => item?.isArchived == false && !ids.includes(item?.id!),
+    );
+    ids.map(item => item);
+    store.groupContent.set(reduceArchived);
+    store.loadGroups.set(false);
+    return res.data;
+  } catch (error) {
+    store.loadGroups.set(false);
     console.error(error);
   }
 };

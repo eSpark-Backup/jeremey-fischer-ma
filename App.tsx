@@ -35,7 +35,7 @@ function App(): JSX.Element {
       if (!fcmToken) {
         store.screenLoading.set(true);
         const token = await getFCMToken();
-        console.log('fcmToken', Platform.OS, fcmToken);
+        console.log('fcmToken', Platform.OS, token);
         if (token) {
           // user has a device token
           store.fcmToken.set(token);

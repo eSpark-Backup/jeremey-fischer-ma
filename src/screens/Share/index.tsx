@@ -9,6 +9,7 @@ import {
   InputAccessoryView,
   Button,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native';
 import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 
@@ -44,6 +45,7 @@ export default function Share() {
   const route: any = useRoute();
   const navigation = useNavigation<NavProps['navigation']>();
   const inputAccessoryViewID = '007';
+  const { loadFriends, loadGroups } = useHookstate(store);
 
   const [dropDownToggle, setDropDownToggle] = useState(false);
   const [ddSelection, setDdselection] = useState('f');
@@ -258,48 +260,60 @@ export default function Share() {
             handleToggle={() => setDropDownToggle(!dropDownToggle)}
           />
         </View>
-        <FlatList
-          data={
-            ddSelection === 'f'
-              ? (friends as unknown as ArrayLike<Group & User>)
-              : (groups as unknown as ArrayLike<Group & User>)
-          }
-          showsVerticalScrollIndicator={false}
-          renderItem={({
-            item,
-            index,
-          }: {
-            item: Group & User;
-            index: number;
-          }) => {
-            if (ddSelection == 'f') {
-              return (
-                <CommunityCard
-                  key={index}
-                  name={item.userName}
-                  details={`${item.Friends?.length?.toString() ?? '0'} Friends`}
-                  image={Boolean(item.image) ? item.image : defaultImage}
-                  checkbox
-                  checked={Boolean(
-                    selectedFriends.filter(val => item.uid == val.uid).length,
-                  )}
-                  onChecked={isChecked => onSelectFriend(item, isChecked)}
-                />
-              );
-            } else {
-              return (
-                <CommunityCard
-                  key={index}
-                  name={item.groupName}
-                  details={`${item.Members?.length?.toString() ?? '0'} Members`}
-                  image={item.groupCreator?.image!}
-                  group
-                  onPress={() => setSelectedGroup(item)}
-                />
-              );
+        {loadFriends.get() || loadGroups.get() ? (
+          <ActivityIndicator
+            size={'large'}
+            color={colors.primary}
+            style={{ marginTop: 10 }}
+          />
+        ) : (
+          <FlatList
+            data={
+              ddSelection === 'f'
+                ? (friends as unknown as ArrayLike<Group & User>)
+                : (groups as unknown as ArrayLike<Group & User>)
             }
-          }}
-        />
+            showsVerticalScrollIndicator={false}
+            renderItem={({
+              item,
+              index,
+            }: {
+              item: Group & User;
+              index: number;
+            }) => {
+              if (ddSelection == 'f') {
+                return (
+                  <CommunityCard
+                    key={index}
+                    name={item.userName}
+                    details={`${
+                      item.Friends?.length?.toString() ?? '0'
+                    } Friends`}
+                    image={Boolean(item.image) ? item.image : defaultImage}
+                    checkbox
+                    checked={Boolean(
+                      selectedFriends.filter(val => item.uid == val.uid).length,
+                    )}
+                    onChecked={isChecked => onSelectFriend(item, isChecked)}
+                  />
+                );
+              } else {
+                return (
+                  <CommunityCard
+                    key={index}
+                    name={item.groupName}
+                    details={`${
+                      item.Members?.length?.toString() ?? '0'
+                    } Members`}
+                    image={item.groupCreator?.image!}
+                    group
+                    onPress={() => setSelectedGroup(item)}
+                  />
+                );
+              }
+            }}
+          />
+        )}
       </View>
       <NormalBtn
         title="Share"

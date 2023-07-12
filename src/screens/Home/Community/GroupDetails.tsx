@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, FlatList, View, ActivityIndicator } from 'react-native';
 import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 
 import {
   EmptyFeedLabel,
@@ -18,6 +18,7 @@ import store from '../../../store/store';
 import { colors } from '../../../theme';
 
 import { useHookstate } from '@hookstate/core';
+import { getGroupContent } from '../../../utils';
 
 type GroupDetailsScreenRouteProps = RouteProp<
   CommunityStackParamList,
@@ -28,22 +29,17 @@ export default function GroupDetails() {
   const navigation = useNavigation<CommunityNavProps['navigation']>();
   const { params } = useRoute<GroupDetailsScreenRouteProps>();
   const { loadGroups } = useHookstate(store);
-  const {
-    item: { title, contents },
-  } = params;
+  const groupContentStore: any = useHookstate(store.groupContent);
+  const groupContent: Content[] = groupContentStore.get();
+  const { groupId } = params;
 
-  const [groupContent, setGroupContent] = useState<Content[]>(contents!);
+  // const [groupContent, setGroupContent] = useState<Content[]>();
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const ids = store.archiveIds.get();
-      const reduceArchived: any = contents?.filter(
-        item => item?.isArchived == false && !ids.includes(item?.id!),
-      );
-      ids.map(item => item);
-      setGroupContent(reduceArchived);
-    }, []),
-  );
+  useEffect(() => {
+    getGroupContent(groupId!).then(data =>
+      navigation.setParams({ ...params, title: data?.groupName }),
+    );
+  }, [useIsFocused]);
 
   function renderGroupFeed({ item, index }: { item: Content; index: number }) {
     return (
