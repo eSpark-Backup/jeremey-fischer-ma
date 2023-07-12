@@ -117,7 +117,12 @@ export default function Share() {
           const senderId = userData.uid;
           const receiverIds = selectedFriends.map(val => val.uid);
           try {
-            await shareContentWithFriend(senderId, receiverIds, obj);
+            await shareContentWithFriend(
+              senderId,
+              receiverIds,
+              obj,
+              userData?.userName ?? '',
+            );
 
             // Alert.alert('Alert', 'Post Share Successfully');
             store.screenLoading.set(false);
@@ -136,7 +141,12 @@ export default function Share() {
           const senderId = userData.uid;
           const groupId = selectedGroup?.id;
           try {
-            await shareContentToGroup(groupId ?? '', senderId, obj);
+            await shareContentToGroup(
+              groupId ?? '',
+              senderId,
+              obj,
+              userData?.userName ?? '',
+            );
             // Alert.alert('Alert', 'Post Share Successfully');
             store.screenLoading.set(false);
             navigation.navigate('Tab', { screen: 'Article' });
