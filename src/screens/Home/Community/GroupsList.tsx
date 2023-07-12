@@ -8,6 +8,7 @@ import { CommunityNavProps, Group } from '../../../types';
 import { useHookstate } from '@hookstate/core';
 import store from '../../../store/store';
 import { colors } from '../../../theme';
+import { getGroupContent } from '../../../utils';
 
 export default function GroupsList() {
   const navigation = useNavigation<CommunityNavProps['navigation']>();
@@ -36,11 +37,9 @@ export default function GroupsList() {
               details={`${item.Members.length} Members`}
               members={item?.Members!}
               image={item.groupCreator?.image!}
-              onPress={() =>
-                navigation.navigate('GroupDetails', {
-                  item: { title: item.groupName, contents: item.contents },
-                })
-              }
+              onPress={() => {
+                navigation.navigate('GroupDetails', { groupId: item.id });
+              }}
               contents={item.contents}
             />
           )}

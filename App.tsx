@@ -19,6 +19,7 @@ import { ScreenLoader } from './src/components';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { colors } from './src/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 function App(): JSX.Element {
   const { userData, screenLoading } = useHookstate(store);
@@ -28,6 +29,19 @@ function App(): JSX.Element {
     userData.set(storedData);
   };
 
+  messaging().onNotificationOpenedApp(async notification => {
+    console.log(
+      'notification',
+      notification.data,
+      `seaglass://community_nav/group_details?groudId=${notification.data?.groupId}`,
+    );
+    if (userData.get() && notification.data?.type == 'GROUP_NOTIFICATION') {
+      await Linking.openURL(
+        `seaglass://community_nav/group_details?groupId=${notification.data?.groupId}`,
+      );
+    }
+  });
+
   const getToken = async () => {
     try {
       const fcmToken = await AsyncStorage.getItem('fcmToken');
@@ -35,7 +49,7 @@ function App(): JSX.Element {
       if (!fcmToken) {
         store.screenLoading.set(true);
         const token = await getFCMToken();
-        console.log('fcmToken', Platform.OS, fcmToken);
+        console.log('fcmToken', Platform.OS, token);
         if (token) {
           // user has a device token
           store.fcmToken.set(token);

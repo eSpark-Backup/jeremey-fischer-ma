@@ -20,6 +20,12 @@ const linking: LinkingOptions<RootStackParamList> = {
   config: {
     screens: {
       Share: 'share', // Define the route name and corresponding URL path
+      CommunityNav: {
+        path: 'community_nav',
+        screens: {
+          GroupDetails: 'group_details',
+        },
+      },
     },
   },
 };

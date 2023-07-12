@@ -11,12 +11,14 @@ import {
  * Share Content to specific group
  * @param {groupId}  groupId - `groupId` for sending content to group
  * @param {senderId}  senderId - `senderId` to track which user send this post
+ * @param {senderName}  senderName - `senderName` Name of the sender
  * @returns {message} `message` return message wheter it succesfull or not .
  */
 export const shareContentToGroup = async (
   groupId: string,
   senderId: string,
   Content: Content,
+  senderName: string,
 ) => {
   try {
     const response = await db()
@@ -46,7 +48,10 @@ export const shareContentToGroup = async (
       receivers,
       Content.mediaType,
     );
-    sendNotification(fcmsTokens, Content.title, Content.description);
+    sendNotification(fcmsTokens, `${senderName}`, Content.title, {
+      type: 'GROUP_NOTIFICATION',
+      groupId: groupId,
+    });
     return { data: null, message: 'Post Shared Successfully' };
   } catch (error) {
     console.log('error shareContentToGroup', error);
@@ -58,12 +63,14 @@ export const shareContentToGroup = async (
  * Share Content with friend
  * @param {senderId}  senderId - `senderId` the User which send the contend
  * @param {receiverId}  receiverIds - `receiverIds` Array of User Ids which recieve this content
+ * @param {senderName}  senderName - `senderName` Name of the sender
  * @returns {message} `message` return message wheter it succesfull or not.
  */
 export const shareContentWithFriend = async (
   senderId: string,
   receiverIds: string[],
   Content: Content,
+  senderName: string,
 ) => {
   try {
     const response = await db()
@@ -95,7 +102,9 @@ export const shareContentWithFriend = async (
       receiverIds,
       Content.mediaType,
     );
-    sendNotification(fcmsTokens, Content.title, Content.description);
+    sendNotification(fcmsTokens, `${senderName}`, Content.title, {
+      type: 'NEWSFEED_NOTIFICATION',
+    });
     return { data: null, message: 'Post Shared Successfully' };
   } catch (error) {
     console.log('error shareContentWithFriend', error);
@@ -201,6 +210,7 @@ export const getNewsFeedContent = async (myUid: string) => {
       await Promise.all(promises);
       return {
         data: newsFeed.sort(
+          // @ts-ignore
           (b, a) => a.content.createdAt - b.content.createdAt,
         ),
         message: 'Your Newsfeed Contents',

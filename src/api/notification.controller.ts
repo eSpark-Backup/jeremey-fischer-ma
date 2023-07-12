@@ -65,15 +65,17 @@ export const getFcmsOfRequiredUser = async (
 
 /**
  * Filter and return fcmToken Which user is able to recieve notification
- * @param {fcmTokens} - array of fcmTokens
- * @param {title} - Title of Notification
- * @param {description} - Description of Notification
+ * @param {fcmTokens} fcmTokens - array of fcmTokens
+ * @param {title} title - Title of Notification
+ * @param {description} description - Description of Notification
+ * @param {data} data - Additional Notification Data about Notification
  * @returns {null} - nothing return
  */
 export const sendNotification = async (
   fcmTokens: string[],
   title: string,
   description: string,
+  data = {},
 ) => {
   var myHeaders = new Headers();
   myHeaders.append(
@@ -87,6 +89,7 @@ export const sendNotification = async (
       body: description,
       title: title,
     },
+    data: data ?? {},
   });
   var requestOptions = {
     method: 'POST',

@@ -31,6 +31,6 @@ export const groupCreation = async (
     console.log('create Group', JSON.stringify(res));
     store.screenLoading.set(false);
     getGroups();
-    navigation.navigate('GroupsList');
+    navigation.navigate('CommunityTab', { title: 'Groups' });
   });
 };
