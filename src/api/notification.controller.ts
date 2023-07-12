@@ -88,8 +88,8 @@ export const sendNotification = async (
     notification: {
       body: description,
       title: title,
-      data: data,
     },
+    data: data ?? {},
   });
   var requestOptions = {
     method: 'POST',

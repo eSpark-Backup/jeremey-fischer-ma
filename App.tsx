@@ -19,6 +19,7 @@ import { ScreenLoader } from './src/components';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { colors } from './src/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 function App(): JSX.Element {
   const { userData, screenLoading } = useHookstate(store);
@@ -27,6 +28,15 @@ function App(): JSX.Element {
     const storedData = await getUserData();
     userData.set(storedData);
   };
+
+  messaging().onNotificationOpenedApp(async notification => {
+    console.log('notification', notification.data);
+    if (userData.get() && notification.data?.type == 'GROUP_NOTIFICATION') {
+      await Linking.openURL(
+        `seaglass://community_nav/group_details?groudId=${notification.data?.groupId}`,
+      );
+    }
+  });
 
   const getToken = async () => {
     try {
