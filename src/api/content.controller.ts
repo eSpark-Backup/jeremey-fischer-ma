@@ -1,7 +1,9 @@
 import { db } from '.';
 import { Content, NewsFeed } from '../types';
 import { collections } from './constants';
-import firestore from '@react-native-firebase/firestore';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
 import {
   getFcmsOfRequiredUser,
   sendNotification,
@@ -51,6 +53,7 @@ export const shareContentToGroup = async (
     sendNotification(fcmsTokens, `${senderName}`, Content.title, {
       type: 'GROUP_NOTIFICATION',
       groupId: groupId,
+      contentId: response?.id,
     });
     return { data: null, message: 'Post Shared Successfully' };
   } catch (error) {
@@ -218,6 +221,75 @@ export const getNewsFeedContent = async (myUid: string) => {
     }
   } catch (error) {
     console.log('error getNewsFeedContent', error);
+    return { data: null, message: 'Something went wrong' };
+  }
+};
+
+/**
+ * Get Content Details by Content Id
+ * @param {string} contentId - `Content Id`
+ * @param {string} uid - User ID which fetches the content
+ * @return {Content} - `Content` return the content data
+ */
+export const getContentFromContentId = async (
+  contentId: string,
+  uid: string,
+) => {
+  try {
+    let content = undefined;
+    await db()
+      .collection(collections.contents)
+      .doc(contentId)
+      .get()
+      .then(async contentSnapshot => {
+        const innerPromises: any[] = [];
+        const contentData: any = contentSnapshot.data();
+        var sender: FirebaseFirestoreTypes.DocumentData | null = null;
+        const senderPromise = db()
+          .collection(collections.users)
+          .where('uid', '==', contentData?.senderId ?? '')
+          .get()
+          .then(senderSnap => {
+            senderSnap.forEach(res => (sender = res.data()));
+            contentData.sender = sender;
+          });
+
+        const postViewFetch = db()
+          .collection(collections.postViews)
+          .where('contentId', '==', contentSnapshot?.id)
+          .where('userId', '==', uid)
+          .get()
+          .then(PvSnap => {
+            if (!PvSnap.empty) {
+              contentData.isViewed = true;
+            } else {
+              contentData.isViewed = false;
+            }
+          });
+
+        const archiveFetch = db()
+          .collection(collections.archives)
+          .where('contentId', '==', contentSnapshot?.id)
+          .where('userId', '==', uid)
+          .get()
+          .then(ArchiveSnap => {
+            if (!ArchiveSnap.empty) {
+              contentData.isArchived = true;
+            } else {
+              contentData.isArchived = false;
+            }
+          });
+        innerPromises.push(senderPromise, postViewFetch, archiveFetch);
+        await Promise.all([senderPromise, postViewFetch, archiveFetch]);
+        content = contentData;
+        await Promise.all(innerPromises);
+      });
+    return {
+      data: content,
+      message: 'Your Desired Contents',
+    };
+  } catch (error) {
+    console.log('error getContentFromContentId', error);
     return { data: null, message: 'Something went wrong' };
   }
 };
