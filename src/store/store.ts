@@ -9,6 +9,7 @@ const store = hookstate<GlobalState>({
   loadGroups: false,
   userGroups: [],
   groups: [],
+  groupContent: [],
   loadRequests: false,
   friendRequests: [],
   newsFeed: [],
