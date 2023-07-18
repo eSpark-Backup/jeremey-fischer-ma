@@ -118,6 +118,7 @@ export default function Search() {
           value={search}
           placeholder="Seach content"
           onChangeText={searchContent}
+          clearInput={() => searchContent('')}
         />
       ) : null}
 
