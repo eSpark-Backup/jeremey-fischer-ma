@@ -236,7 +236,7 @@ export const getContentFromContentId = async (
   uid: string,
 ) => {
   try {
-    let content = undefined;
+    let content: Content = undefined!;
     await db()
       .collection(collections.contents)
       .doc(contentId)
