@@ -10,6 +10,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  NSUserDefaults *defaults = [[NSUserDefaults alloc] initWithSuiteName:@"group.com.seaglass.seaglass"];
+  [defaults setInteger:1 forKey:@"count"];
+  [defaults synchronize];
+  [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
   [FIRApp configure];
   self.moduleName = @"seaglass";
   // You can add your custom initial props in the dictionary below.
