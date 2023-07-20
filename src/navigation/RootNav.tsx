@@ -56,7 +56,10 @@ export default function RootNav() {
               <MyHeader
                 route={route}
                 leftIcon={true}
-                onPressLeftIcon={() => navigation.goBack()}
+                onPressLeftIcon={() => {
+                  navigation.goBack();
+                  store.contentDetails.set(null);
+                }}
               />
             ),
           }}

@@ -270,7 +270,8 @@ export default function Share() {
             handleToggle={() => setDropDownToggle(!dropDownToggle)}
           />
         </View>
-        {loadFriends.get() || loadGroups.get() ? (
+        {(ddSelection == 'f' && loadFriends.get()) ||
+        (ddSelection != 'f' && loadGroups.get()) ? (
           <ActivityIndicator
             size={'large'}
             color={colors.primary}
