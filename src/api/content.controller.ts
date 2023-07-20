@@ -107,6 +107,7 @@ export const shareContentWithFriend = async (
     );
     sendNotification(fcmsTokens, `${senderName}`, Content.title, {
       type: 'NEWSFEED_NOTIFICATION',
+      contentId: response?.id,
     });
     return { data: null, message: 'Post Shared Successfully' };
   } catch (error) {
