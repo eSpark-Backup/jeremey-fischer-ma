@@ -14,7 +14,7 @@ import { useHookstate } from '@hookstate/core';
 import ShareMenu from 'react-native-share-menu';
 import { RootNav } from './src/navigation';
 import store from './src/store/store';
-import { getFCMToken, getUserData } from './src/utils';
+import { getContentDetails, getFCMToken, getUserData } from './src/utils';
 import { ScreenLoader } from './src/components';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { colors } from './src/theme';
@@ -35,10 +35,9 @@ function App(): JSX.Element {
       notification.data,
       `seaglass://community_nav/group_details?groudId=${notification.data?.groupId}`,
     );
-    if (userData.get() && notification.data?.type == 'GROUP_NOTIFICATION') {
-      await Linking.openURL(
-        `seaglass://community_nav/group_details?groupId=${notification.data?.groupId}`,
-      );
+    if (userData.get()) {
+      await getContentDetails(notification.data?.contentId!);
+      await Linking.openURL(`seaglass://details`);
     }
   });
 
