@@ -5,8 +5,16 @@
  * @format
  */
 
-import React, { useCallback, useEffect } from 'react';
-import { SafeAreaView, Linking, Platform, Alert } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  SafeAreaView,
+  Linking,
+  Platform,
+  Alert,
+  View,
+  Image,
+  StyleSheet,
+} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useHookstate } from '@hookstate/core';
 
@@ -20,9 +28,13 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { colors } from './src/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
+import AppIntroSlider from 'react-native-app-intro-slider';
+import { Slides } from './src/types';
+import { Icon } from '@rneui/themed';
 
 function App(): JSX.Element {
   const { userData, screenLoading } = useHookstate(store);
+  const [appIntro, setAppIntro] = useState(false);
 
   const setUserData = async () => {
     const storedData = await getUserData();
@@ -108,14 +120,103 @@ function App(): JSX.Element {
     // You can receive extra data from your custom Share View
   }, []);
 
+  const slides = [
+    {
+      key: 1,
+      image: require('./src/assets/image.jpg'),
+    },
+    {
+      key: 2,
+      image: require('./src/assets/image.jpg'),
+    },
+    {
+      key: 3,
+      image: require('./src/assets/image.jpg'),
+    },
+  ];
+
+  const _renderItem = ({ item }: { item: Slides }) => {
+    return (
+      <View style={{ flex: 1, alignItems: 'center' }}>
+        <Image source={item.image} style={{ width: '100%', height: '100%' }} />
+      </View>
+    );
+  };
+
+  const _renderNextButton = () => {
+    return (
+      <View style={styles.sliderNextButton}>
+        <Icon
+          type="ionicon"
+          name="md-arrow-forward"
+          color="rgba(255, 255, 255, .9)"
+          size={24}
+        />
+      </View>
+    );
+  };
+  const _renderPrevButton = () => {
+    return (
+      <View style={styles.sliderNextButton}>
+        <Icon
+          type="ionicon"
+          name="md-arrow-back"
+          color="rgba(255, 255, 255, .9)"
+          size={24}
+        />
+      </View>
+    );
+  };
+  const _renderDoneButton = () => {
+    return (
+      <View style={styles.sliderNextButton}>
+        <Icon
+          type="ionicon"
+          name="md-checkmark"
+          color="rgba(255, 255, 255, .9)"
+          size={24}
+        />
+      </View>
+    );
+  };
+
+  const _onDone = () => {
+    setAppIntro(true);
+  };
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-        <ScreenLoader show={screenLoading.get()} />
-        <RootNav />
+        {userData.get() || appIntro ? (
+          <>
+            <ScreenLoader show={screenLoading.get()} />
+            <RootNav />
+          </>
+        ) : (
+          <AppIntroSlider
+            data={slides}
+            showPrevButton
+            renderItem={_renderItem}
+            renderDoneButton={_renderDoneButton}
+            renderPrevButton={_renderPrevButton}
+            renderNextButton={_renderNextButton}
+            onDone={_onDone}
+          />
+        )}
       </SafeAreaView>
     </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  sliderNextButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#444',
+  },
+});
 
 export default App;

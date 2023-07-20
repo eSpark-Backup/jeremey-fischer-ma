@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, ActivityIndicator, FlatList } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { ImmutableObject, useHookstate } from '@hookstate/core';
 import { FAB } from '@rneui/themed';
 
@@ -15,6 +15,7 @@ import { NavProps, NewsFeed } from '../../../types';
 import store from '../../../store/store';
 import loaders from '../../../store/loaders';
 import { extractFeeds } from '../../../utils/globalFunctions';
+import { handleInfinityScroll } from '../utils/function';
 
 export default function VideoScreen() {
   const [articles, setArticles] = useState<NewsFeed[]>([]);
@@ -23,6 +24,7 @@ export default function VideoScreen() {
   const video = videosStore.get();
   const loader = useHookstate(loaders?.newsFeed).get();
   const navigation = useNavigation<NavProps['navigation']>();
+  const flatListRef: any = useRef();
 
   useEffect(() => {
     if (!loader) {
@@ -30,6 +32,19 @@ export default function VideoScreen() {
       setArticles(video);
     }
   }, [loader]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (articles.length > 1) {
+        flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
+      }
+      if (articles.length == 4) {
+        store.hideSearchFAB.set(true);
+      } else {
+        store.hideSearchFAB.set(false);
+      }
+    }, [articles]),
+  );
 
   function renderFeed({ item, index }: { item: NewsFeed; index: number }) {
     return (
@@ -51,10 +66,18 @@ export default function VideoScreen() {
         />
       ) : (
         <FlatList
+          ref={flatListRef}
           data={articles}
           renderItem={renderFeed}
           ItemSeparatorComponent={() => <GapView />}
           ListEmptyComponent={<EmptyFeedLabel label="No Videos Found" />}
+          onScroll={({ nativeEvent }) => {
+            if (handleInfinityScroll(nativeEvent) && articles.length > 0) {
+              store.hideSearchFAB.set(true);
+            } else {
+              store.hideSearchFAB.set(false);
+            }
+          }}
         />
       )}
     </MyCanvas>
