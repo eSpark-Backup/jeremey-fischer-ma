@@ -107,6 +107,7 @@ export const shareContentWithFriend = async (
     );
     sendNotification(fcmsTokens, `${senderName}`, Content.title, {
       type: 'NEWSFEED_NOTIFICATION',
+      contentId: response?.id,
     });
     return { data: null, message: 'Post Shared Successfully' };
   } catch (error) {
@@ -236,7 +237,7 @@ export const getContentFromContentId = async (
   uid: string,
 ) => {
   try {
-    let content = undefined;
+    let content: Content = undefined!;
     await db()
       .collection(collections.contents)
       .doc(contentId)

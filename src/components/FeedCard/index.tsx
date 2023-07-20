@@ -11,6 +11,7 @@ import { ArrowForward } from '../../assets';
 import GapView from '../GapView';
 import { transformTime } from '../../utils/globalFunctions';
 import store from '../../store/store';
+import { getContentDetails } from '../../utils';
 
 export default function FeedCard({
   contentData,
@@ -86,11 +87,12 @@ export default function FeedCard({
         <View style={{ alignSelf: 'flex-end' }}>
           <GapView length={5} />
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
               navigation.navigate('Details', {
                 item: { contentData, senderData },
-              })
-            }>
+              });
+              getContentDetails(contentData?.id!);
+            }}>
             <ArrowForward />
           </TouchableOpacity>
         </View>
