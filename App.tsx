@@ -14,6 +14,7 @@ import {
   View,
   Image,
   StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useHookstate } from '@hookstate/core';
@@ -23,18 +24,18 @@ import ShareMenu from 'react-native-share-menu';
 import { RootNav } from './src/navigation';
 import store from './src/store/store';
 import { getContentDetails, getFCMToken, getUserData } from './src/utils';
-import { ScreenLoader } from './src/components';
+import { MyText, ScreenLoader } from './src/components';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { colors } from './src/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import { Slides } from './src/types';
-import { Icon } from '@rneui/themed';
 
 function App(): JSX.Element {
   const { userData, screenLoading } = useHookstate(store);
   const [appIntro, setAppIntro] = useState(false);
+  let slider: AppIntroSlider | undefined;
 
   const setUserData = async () => {
     const storedData = await getUserData();
@@ -88,7 +89,6 @@ function App(): JSX.Element {
 
   useEffect(() => {
     const listener = ShareMenu.addNewShareListener(handleShare);
-
     return () => {
       listener.remove();
     };
@@ -99,7 +99,6 @@ function App(): JSX.Element {
       console.log('Data not found on share', item);
       return;
     }
-    console.log('item=====>>>>>>>', item);
     const url =
       Platform.OS == 'android'
         ? item?.data
@@ -116,22 +115,28 @@ function App(): JSX.Element {
     } else {
       Alert.alert('Please Login to share content with friends!');
     }
-    // Linking.openURL('seaglass://share');
-    // You can receive extra data from your custom Share View
   }, []);
 
   const slides = [
     {
       key: 1,
-      image: require('./src/assets/image.jpg'),
+      image: require('./src/assets/scn1.png'),
     },
     {
       key: 2,
-      image: require('./src/assets/image.jpg'),
+      image: require('./src/assets/scn2.png'),
     },
     {
       key: 3,
-      image: require('./src/assets/image.jpg'),
+      image: require('./src/assets/scn3.png'),
+    },
+    {
+      key: 4,
+      image: require('./src/assets/scn4.png'),
+    },
+    {
+      key: 5,
+      image: require('./src/assets/scn5.png'),
     },
   ];
 
@@ -143,39 +148,40 @@ function App(): JSX.Element {
     );
   };
 
-  const _renderNextButton = () => {
+  const _renderPagination = (activeIndex: number) => {
     return (
-      <View style={styles.sliderNextButton}>
-        <Icon
-          type="ionicon"
-          name="md-arrow-forward"
-          color="rgba(255, 255, 255, .9)"
-          size={24}
-        />
-      </View>
-    );
-  };
-  const _renderPrevButton = () => {
-    return (
-      <View style={styles.sliderNextButton}>
-        <Icon
-          type="ionicon"
-          name="md-arrow-back"
-          color="rgba(255, 255, 255, .9)"
-          size={24}
-        />
-      </View>
-    );
-  };
-  const _renderDoneButton = () => {
-    return (
-      <View style={styles.sliderNextButton}>
-        <Icon
-          type="ionicon"
-          name="md-checkmark"
-          color="rgba(255, 255, 255, .9)"
-          size={24}
-        />
+      <View style={styles.paginationContainer}>
+        <View style={styles.paginationInnerContainer}>
+          <View style={styles.paginationDots}>
+            {slides.length > 1 &&
+              slides.map((_, i) => (
+                <TouchableOpacity
+                  key={i}
+                  style={{
+                    ...styles.dot,
+                    backgroundColor:
+                      i === activeIndex ? colors.primary : 'white',
+                  }}
+                  onPress={() => slider?.goToSlide(i, true)}
+                />
+              ))}
+          </View>
+          <View>
+            {activeIndex < slides.length - 1 ? (
+              <TouchableOpacity
+                style={styles.sliderNextButton}
+                onPress={() => slider?.goToSlide(activeIndex + 1, true)}>
+                <MyText children={'Next'} textStyle={styles.button} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.sliderNextButton}
+                onPress={_onDone}>
+                <MyText children={'Done'} textStyle={styles.button} />
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
       </View>
     );
   };
@@ -195,12 +201,9 @@ function App(): JSX.Element {
         ) : (
           <AppIntroSlider
             data={slides}
-            showPrevButton
             renderItem={_renderItem}
-            renderDoneButton={_renderDoneButton}
-            renderPrevButton={_renderPrevButton}
-            renderNextButton={_renderNextButton}
-            onDone={_onDone}
+            renderPagination={_renderPagination}
+            ref={ref => (slider = ref!)}
           />
         )}
       </SafeAreaView>
@@ -210,13 +213,34 @@ function App(): JSX.Element {
 
 const styles = StyleSheet.create({
   sliderNextButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 80,
+    paddingVertical: 5,
+    borderRadius: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#444',
+    backgroundColor: '#808080',
   },
+  paginationContainer: { position: 'absolute', bottom: 10, right: 0, left: 0 },
+  paginationInnerContainer: {
+    width: '95%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    alignSelf: 'center',
+  },
+  paginationDots: {
+    height: 16,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginHorizontal: 4,
+  },
+  button: { fontSize: 18, color: 'white' },
 });
 
 export default App;

@@ -15,7 +15,7 @@ export default function MyText({
 
   return (
     <Text
-      style={{ ...styles.text, ...textStyle, color: colors.text }}
+      style={{ ...styles.text, color: colors.text, ...textStyle }}
       numberOfLines={lines}>
       {children}
     </Text>
