@@ -1,5 +1,6 @@
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ImageSourcePropType } from 'react-native';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -54,6 +55,12 @@ export type CommunityNavProps = NativeStackScreenProps<CommunityStackParamList>;
 export type ProfileProps = NativeStackScreenProps<
   ProfileStackParamList & RootStackParamList
 >;
+
+// Welcome Screen Slides type
+export type Slides = {
+  key: number;
+  image: ImageSourcePropType;
+};
 
 // User type
 export type User = {
@@ -156,6 +163,8 @@ export type GlobalState = {
   podcasts: NewsFeed[];
   videos: NewsFeed[];
   fcmToken: string | null;
+  contentDetails: Content | null;
+  hideSearchFAB: boolean;
 };
 
 // Notification Settings

@@ -21,6 +21,8 @@ const store = hookstate<GlobalState>({
   podcasts: [],
   fcmToken: null,
   videos: [],
+  contentDetails: null,
+  hideSearchFAB: false,
 });
 
 export default store;

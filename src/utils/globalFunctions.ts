@@ -72,7 +72,11 @@ const transformTime = (time: number) => {
   const suffix =
     splited.length < 2 ? splited[2].charAt(0) : splited[1].charAt(0);
   const prefix = splited[0] == 'a' || splited[0] == 'an' ? '1' : splited[0];
-  return prefix + suffix;
+  if (prefix + suffix == '1f') {
+    return '1s';
+  } else {
+    return prefix + suffix;
+  }
 };
 
 export {

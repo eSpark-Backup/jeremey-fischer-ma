@@ -8,6 +8,8 @@ import store from '../store/store';
 import { getGroupById, getMyGroups } from '../api/groups.controller';
 import { getSearchedFriend } from '../screens/Home/utils/function';
 import messaging from '@react-native-firebase/messaging';
+import { getContentFromContentId } from '../api/content.controller';
+import loaders from '../store/loaders';
 
 export const disableBackButton = () => {
   const backHandler = BackHandler.addEventListener(
@@ -91,6 +93,19 @@ export const getGroupContent = async (id: string) => {
     return res.data;
   } catch (error) {
     store.loadGroups.set(false);
+    console.error(error);
+  }
+};
+
+export const getContentDetails = async (id: string) => {
+  loaders.contentDetails.set(true);
+  try {
+    const res = await getContentFromContentId(id, store.userData.get()?.uid);
+    store.contentDetails.set(res.data);
+    loaders.contentDetails.set(false);
+    return res.data;
+  } catch (error) {
+    loaders.contentDetails.set(false);
     console.error(error);
   }
 };

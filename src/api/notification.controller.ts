@@ -88,6 +88,7 @@ export const sendNotification = async (
     notification: {
       body: description,
       title: title,
+      mutable_content: true,
     },
     data: data ?? {},
   });
