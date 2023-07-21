@@ -34,10 +34,14 @@ import { Slides } from './src/types';
 
 function App(): JSX.Element {
   const { userData, screenLoading } = useHookstate(store);
-  const [appIntro, setAppIntro] = useState(false);
+  const [appIntro, setAppIntro] = useState(true);
   let slider: AppIntroSlider | undefined;
 
   const setUserData = async () => {
+    const app_Intro = await AsyncStorage.getItem('@appIntro');
+    if (app_Intro != null) {
+      setAppIntro(false);
+    }
     const storedData = await getUserData();
     userData.set(storedData);
   };
@@ -89,6 +93,8 @@ function App(): JSX.Element {
 
   useEffect(() => {
     const listener = ShareMenu.addNewShareListener(handleShare);
+    console.log('D on share');
+
     return () => {
       listener.remove();
     };
@@ -186,14 +192,15 @@ function App(): JSX.Element {
     );
   };
 
-  const _onDone = () => {
-    setAppIntro(true);
+  const _onDone = async () => {
+    await AsyncStorage.setItem('@appIntro', 'true');
+    setAppIntro(false);
   };
 
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
-        {userData.get() || appIntro ? (
+        {!appIntro ? (
           <>
             <ScreenLoader show={screenLoading.get()} />
             <RootNav />

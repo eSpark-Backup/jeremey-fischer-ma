@@ -128,8 +128,8 @@ export default function TabNav() {
       <FAB
         style={{
           ...styles.FAB,
-          right: hideSearch.get() ? undefined : 20,
-          left: hideSearch.get() ? 20 : undefined,
+          right: 20,
+          // left: hideSearch.get() ? 20 : undefined,
         }}
         visible={true}
         icon={{ name: 'search', color: 'white' }}

@@ -12,8 +12,6 @@ import { colors } from '../../../theme';
 import { NewsFeed } from '../../../types';
 import store from '../../../store/store';
 import loaders from '../../../store/loaders';
-import { handleInfinityScroll } from '../utils/function';
-import { useFocusEffect } from '@react-navigation/native';
 
 export default function AudioScreen() {
   const [audios, setAudios] = useState<NewsFeed[]>([]);
@@ -27,19 +25,6 @@ export default function AudioScreen() {
       setAudios(audio);
     }
   }, [loader]);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      if (audios.length > 1) {
-        flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
-      }
-      if (audios.length == 4) {
-        store.hideSearchFAB.set(true);
-      } else {
-        store.hideSearchFAB.set(false);
-      }
-    }, [audios]),
-  );
 
   function renderFeed({ item, index }: { item: NewsFeed; index: number }) {
     return (
@@ -66,13 +51,7 @@ export default function AudioScreen() {
           renderItem={renderFeed}
           ItemSeparatorComponent={() => <GapView />}
           ListEmptyComponent={<EmptyFeedLabel label="No Music Found" />}
-          onScroll={({ nativeEvent }) => {
-            if (handleInfinityScroll(nativeEvent) && audios.length > 0) {
-              store.hideSearchFAB.set(true);
-            } else {
-              store.hideSearchFAB.set(false);
-            }
-          }}
+          ListFooterComponent={<GapView length={80} />}
         />
       )}
     </MyCanvas>

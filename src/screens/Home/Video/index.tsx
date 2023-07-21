@@ -11,19 +11,15 @@ import {
   MyCanvas,
 } from '../../../components';
 import { colors } from '../../../theme';
-import { NavProps, NewsFeed } from '../../../types';
+import { NewsFeed } from '../../../types';
 import store from '../../../store/store';
 import loaders from '../../../store/loaders';
-import { extractFeeds } from '../../../utils/globalFunctions';
-import { handleInfinityScroll } from '../utils/function';
 
 export default function VideoScreen() {
   const [articles, setArticles] = useState<NewsFeed[]>([]);
-  const newsFeedData = useHookstate(store?.newsFeed).get();
   const videosStore: any = useHookstate(store?.videos);
   const video = videosStore.get();
   const loader = useHookstate(loaders?.newsFeed).get();
-  const navigation = useNavigation<NavProps['navigation']>();
   const flatListRef: any = useRef();
 
   useEffect(() => {
@@ -32,19 +28,6 @@ export default function VideoScreen() {
       setArticles(video);
     }
   }, [loader]);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      if (articles.length > 1) {
-        flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
-      }
-      if (articles.length == 4) {
-        store.hideSearchFAB.set(true);
-      } else {
-        store.hideSearchFAB.set(false);
-      }
-    }, [articles]),
-  );
 
   function renderFeed({ item, index }: { item: NewsFeed; index: number }) {
     return (
@@ -71,13 +54,7 @@ export default function VideoScreen() {
           renderItem={renderFeed}
           ItemSeparatorComponent={() => <GapView />}
           ListEmptyComponent={<EmptyFeedLabel label="No Videos Found" />}
-          onScroll={({ nativeEvent }) => {
-            if (handleInfinityScroll(nativeEvent) && articles.length > 0) {
-              store.hideSearchFAB.set(true);
-            } else {
-              store.hideSearchFAB.set(false);
-            }
-          }}
+          ListFooterComponent={<GapView length={80} />}
         />
       )}
     </MyCanvas>
