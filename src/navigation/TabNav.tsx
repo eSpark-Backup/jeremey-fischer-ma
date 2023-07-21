@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { LayoutAnimation, Platform, StyleSheet, UIManager } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { FAB, Icon } from '@rneui/themed';
 import { useHookstate } from '@hookstate/core';
@@ -15,20 +15,30 @@ import { getNewsFeedContent } from '../api/content.controller';
 import store from '../store/store';
 import loaders from '../store/loaders';
 import { colors } from '../theme';
-import { extractAllFeeds, extractFeeds } from '../utils/globalFunctions';
+import { extractAllFeeds } from '../utils/globalFunctions';
 
 export default function TabNav() {
   const isFocused = useIsFocused();
   const userData = useHookstate(store?.userData);
   const newsFeed = useHookstate(store?.newsFeed);
+  const hideSearch = useHookstate(store?.hideSearchFAB);
   const loadNewsFeed = useHookstate(loaders?.newsFeed);
   const Tab = createMaterialTopTabNavigator<TabNavParamList>();
   const navigation = useNavigation<NavProps['navigation']>();
-  console.log('userData', userData.get()?.['uid']);
+
+  if (Platform.OS === 'android') {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
 
   useEffect(() => {
     getNewsFeed();
   }, [isFocused]);
+
+  useEffect(() => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+  }, [hideSearch.get()]);
 
   async function getNewsFeed() {
     try {
@@ -116,7 +126,11 @@ export default function TabNav() {
         />
       </Tab.Navigator>
       <FAB
-        style={{ position: 'absolute', bottom: 20, right: 20, zIndex: 1 }}
+        style={{
+          ...styles.FAB,
+          right: 20,
+          // left: hideSearch.get() ? 20 : undefined,
+        }}
         visible={true}
         icon={{ name: 'search', color: 'white' }}
         color={colors.card}
@@ -126,4 +140,17 @@ export default function TabNav() {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  FAB: {
+    position: 'absolute',
+    bottom: 20,
+    zIndex: 1,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+});

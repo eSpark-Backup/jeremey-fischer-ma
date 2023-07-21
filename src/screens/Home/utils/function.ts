@@ -5,6 +5,7 @@ import { searchUser } from '../../../api/user.controller';
 import store from '../../../store/store';
 import { Group } from '../../../types';
 import { getGroups } from '../../../utils';
+import { NativeScrollEvent } from 'react-native';
 
 export const getSearchedFriend = async (searchVal: string) => {
   store.loadFriends.set(true);
@@ -33,4 +34,12 @@ export const groupCreation = async (
     getGroups();
     navigation.navigate('CommunityTab', { title: 'Groups' });
   });
+};
+
+export const handleInfinityScroll = (nativeEvent: NativeScrollEvent) => {
+  let mHeight = nativeEvent.layoutMeasurement.height;
+  let cSize = nativeEvent.contentSize.height;
+  let Y = nativeEvent.contentOffset.y;
+  if (Math.ceil(mHeight + Y) >= cSize) return true;
+  return false;
 };

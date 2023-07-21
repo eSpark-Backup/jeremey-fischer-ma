@@ -38,7 +38,7 @@ export default function FriendsList() {
   };
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <View>
         <SubHeader title="Friend Requests" />
         {loadRequests.get() ? (
@@ -68,7 +68,9 @@ export default function FriendsList() {
             }
           />
         )}
-        <SubHeader title="Friends" />
+      </View>
+      <SubHeader title="Friends" />
+      <View style={{ flex: 1 }}>
         {loadFriends.get() ? (
           <ActivityIndicator
             size={'large'}

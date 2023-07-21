@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Image, View, ActivityIndicator } from 'react-native';
-import {
-  useRoute,
-  useTheme,
-  RouteProp,
-  useNavigation,
-} from '@react-navigation/native';
+import { useTheme, RouteProp, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { Avatar } from '@rneui/themed';
 import { useHookstate } from '@hookstate/core';
@@ -27,7 +22,6 @@ export default function Details() {
   const contentDetailsStore: any = useHookstate(store?.contentDetails);
   const contentDetails: Content = contentDetailsStore.get();
   const loader = useHookstate(loaders?.contentDetails);
-  const { params } = useRoute<DetailsScreenRouteProps>();
   const { colors } = useTheme();
 
   useEffect(() => {
@@ -90,7 +84,7 @@ export default function Details() {
 
   return (
     <MyCanvas>
-      {loader.get() ? (
+      {loader.get() || contentDetails == null ? (
         <View style={{ flex: 1 }}>
           <ActivityIndicator
             size={'large'}

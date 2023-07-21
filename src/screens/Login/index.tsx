@@ -8,6 +8,7 @@ import store from '../../store/store';
 import { NormalBtn, GapView, MyCanvas, MyText } from '../../components';
 import { NavProps } from '../../types';
 import { _signIn } from './utils/funtions';
+import { Google } from '../../assets';
 
 const Login = () => {
   const navigation = useNavigation<NavProps['navigation']>();
@@ -20,7 +21,7 @@ const Login = () => {
         justifyContent: 'space-around',
       }}>
       <View>
-        <MyText textStyle={{ color: '#fff', fontSize: 20 }}>Seaglass</MyText>
+        <MyText textStyle={{ color: '#fff', fontSize: 20 }}>Catch All</MyText>
       </View>
       <GapView length={50} />
       <View>
@@ -33,7 +34,7 @@ const Login = () => {
         title="Login with Google"
         btnStyle={{ justifyContent: 'space-between' }}
         onPress={() => _signIn(navigation, screenLoading)}
-        icon={<Icon name="logo-google" type="ionicon" color={'#ffffff'} />}
+        icon={<Google width={30} height={30} />}
       />
     </MyCanvas>
   );

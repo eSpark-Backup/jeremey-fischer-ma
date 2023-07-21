@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, ActivityIndicator, FlatList } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { ImmutableObject, useHookstate } from '@hookstate/core';
-import { FAB } from '@rneui/themed';
+import { useHookstate } from '@hookstate/core';
 
 import { colors } from '../../../theme';
 import {
@@ -10,22 +8,19 @@ import {
   FeedCard,
   GapView,
   MyCanvas,
-  MyText,
 } from '../../../components';
-import { NavProps, NewsFeed } from '../../../types';
+import { NewsFeed } from '../../../types';
 import store from '../../../store/store';
 import loaders from '../../../store/loaders';
-import { extractFeeds } from '../../../utils/globalFunctions';
 
 export default function ArticleScreen() {
   const [articles, setArticles] = useState<NewsFeed[]>([]);
   const articlesStore: any = useHookstate(store?.articles);
   const article = articlesStore.get();
   const loader = useHookstate(loaders.newsFeed).get();
-  const navigation = useNavigation<NavProps['navigation']>();
+  const flatListRef: any = useRef();
   useEffect(() => {
     if (!loader) {
-      // setArticles(extractFeeds(newsFeedData, 'Article'));
       setArticles(article);
     }
   }, [loader]);
@@ -50,10 +45,12 @@ export default function ArticleScreen() {
         />
       ) : (
         <FlatList
+          ref={flatListRef}
           data={articles}
           renderItem={renderFeed}
           ItemSeparatorComponent={() => <GapView />}
           ListEmptyComponent={<EmptyFeedLabel label="No Articles Found" />}
+          ListFooterComponent={<GapView length={80} />}
         />
       )}
     </MyCanvas>

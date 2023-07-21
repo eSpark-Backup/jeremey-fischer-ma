@@ -22,6 +22,7 @@ const store = hookstate<GlobalState>({
   fcmToken: null,
   videos: [],
   contentDetails: null,
+  hideSearchFAB: false,
 });
 
 export default store;
