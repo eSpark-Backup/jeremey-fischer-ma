@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#808080',
   },
-  paginationContainer: { position: 'absolute', bottom: 10, right: 0, left: 0 },
+  paginationContainer: { position: 'absolute', bottom: 16, right: 0, left: 0 },
   paginationInnerContainer: {
     width: '95%',
     flexDirection: 'row',
