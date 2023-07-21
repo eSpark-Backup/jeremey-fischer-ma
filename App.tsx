@@ -52,9 +52,11 @@ function App(): JSX.Element {
       notification.data,
       `seaglass://community_nav/group_details?groudId=${notification.data?.groupId}`,
     );
-    if (userData.get()) {
+    if (userData.get() && notification.data?.contentId) {
       await getContentDetails(notification.data?.contentId!);
       await Linking.openURL(`seaglass://details`);
+    } else {
+      await Linking.openURL('seaglass://');
     }
   });
 
