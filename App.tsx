@@ -52,9 +52,11 @@ function App(): JSX.Element {
       notification.data,
       `seaglass://community_nav/group_details?groudId=${notification.data?.groupId}`,
     );
-    if (userData.get()) {
+    if (userData.get() && notification.data?.contentId) {
       await getContentDetails(notification.data?.contentId!);
       await Linking.openURL(`seaglass://details`);
+    } else {
+      await Linking.openURL(`seaglass://`);
     }
   });
 
@@ -81,14 +83,18 @@ function App(): JSX.Element {
     }
   };
 
+  const getUserDataAndShare = async () => {
+    await setUserData();
+    ShareMenu.getInitialShare(handleShare);
+  };
+
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
         '213956113520-4e23h6t7tc4279r64t5r0vdrmt5j80va.apps.googleusercontent.com',
     });
-    getToken();
-    setUserData();
-    ShareMenu.getInitialShare(handleShare);
+    // getToken();
+    getUserDataAndShare();
   }, []);
 
   useEffect(() => {
@@ -113,7 +119,6 @@ function App(): JSX.Element {
         : item?.data[0].data;
 
     console.log('linkOpen', url, userData.get());
-
     if (userData.get()) {
       const linkOpen = await Linking.openURL(
         `seaglass://share?url=${encodeURIComponent(url)}`,

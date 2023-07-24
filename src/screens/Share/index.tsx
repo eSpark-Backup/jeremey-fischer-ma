@@ -161,6 +161,7 @@ export default function Share() {
       }
     } catch (error) {
       store.screenLoading.set(false);
+      Alert.alert('Unsupported Content', 'Please share other content');
       console.log(`onShare error ${Platform.OS}`, error);
     }
   };
@@ -323,6 +324,14 @@ export default function Share() {
                 );
               }
             }}
+            ListEmptyComponent={
+              <MyText
+                textStyle={{ textAlign: 'center', marginTop: 10 }}
+                children={
+                  ddSelection == 'f' ? 'No Friends Yet!' : 'No Groups Yet!'
+                }
+              />
+            }
           />
         )}
       </View>
