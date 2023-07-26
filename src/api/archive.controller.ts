@@ -94,7 +94,10 @@ export const getAllArchive = async (userId: string) => {
       });
       await Promise.all(promises);
 
-      return { data: archives, message: 'User Archive Posts' };
+      return { data: archives.sort(
+        // @ts-ignore
+        (b, a) => a.createdAt - b.createdAt,
+      ), message: 'User Archive Posts' };
     }
   } catch (error) {
     console.log('getAllArchive error', error);
