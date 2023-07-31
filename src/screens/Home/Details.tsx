@@ -37,7 +37,6 @@ export default function Details() {
     const res = await PostView(contentDetails?.id!, userData?.get()?.['uid']!);
     getGroups();
     console.log('res mark as seen', res);
-    loader.set(false);
   }
 
   async function getAllArchives() {

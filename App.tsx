@@ -15,6 +15,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useHookstate } from '@hookstate/core';
@@ -93,7 +94,7 @@ function App(): JSX.Element {
       webClientId:
         '213956113520-4e23h6t7tc4279r64t5r0vdrmt5j80va.apps.googleusercontent.com',
     });
-    // getToken();
+    getToken();
     getUserDataAndShare();
   }, []);
 
@@ -204,6 +205,7 @@ function App(): JSX.Element {
 
   return (
     <SafeAreaProvider>
+      <StatusBar barStyle={'light-content'} />
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
         {!appIntro ? (
           <>

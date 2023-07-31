@@ -67,18 +67,20 @@ const CommunityTab = () => {
       />
       <Tab.Navigator
         tabBar={props => {
-          return (
-            <Tabs
-              {...props}
-              updateTab={val => {
-                setCurrTab(val == 0 ? 'Friends' : 'Groups');
-                setSearchVal('');
-                navigation.setParams({
-                  title: val == 0 ? 'Friends' : 'Groups',
-                });
-              }}
-            />
-          );
+          if (props.state.index == 0 && currTab != 'Friends') {
+            setCurrTab('Friends');
+            setSearchVal('');
+            navigation.setParams({
+              title: 'Friends',
+            });
+          } else if (props.state.index == 1 && currTab != 'Groups') {
+            setCurrTab('Groups');
+            setSearchVal('');
+            navigation.setParams({
+              title: 'Groups',
+            });
+          }
+          return <Tabs {...props} />;
         }}>
         <Tab.Screen name="FriendsTab" component={FriendsList} />
         <Tab.Screen name="GroupsTab" component={GroupsList} />

@@ -61,6 +61,15 @@ export default function App() {
         <MyText textStyle={{ fontWeight: 'bold', fontSize: 24, marginTop: 10 }}>
           {userData?.userName}
         </MyText>
+        <MyText
+          textStyle={{
+            fontWeight: 'bold',
+            marginTop: 10,
+            opacity: 0.5,
+            fontSize: 16,
+          }}>
+          {userData?.email}
+        </MyText>
         <MyText textStyle={{ fontWeight: 'bold', marginTop: 10, opacity: 0.5 }}>
           {`Member for ${moment
             .unix(userData?.createdAt?.seconds!)

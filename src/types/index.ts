@@ -32,7 +32,7 @@ export type ProfileStackParamList = {
 };
 
 export type CommunityStackParamList = {
-  CommunityTab: undefined;
+  CommunityTab: { title?: string | undefined };
   // FriendsList: undefined;
   // GroupsList: undefined;
   GroupDetails: { title?: string | undefined; groupId: string | undefined };
