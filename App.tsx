@@ -34,17 +34,19 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import { Slides } from './src/types';
 
 function App(): JSX.Element {
-  const { userData, screenLoading } = useHookstate(store);
+  const { userData, screenLoading, dataLoading } = useHookstate(store);
   const [appIntro, setAppIntro] = useState(true);
   let slider: AppIntroSlider | undefined;
 
   const setUserData = async () => {
+    store.dataLoading.set(true);
     const app_Intro = await AsyncStorage.getItem('@appIntro');
     if (app_Intro != null) {
       setAppIntro(false);
     }
     const storedData = await getUserData();
     userData.set(storedData);
+    store.dataLoading.set(false);
   };
 
   messaging().onNotificationOpenedApp(async notification => {
@@ -94,8 +96,7 @@ function App(): JSX.Element {
       webClientId:
         '213956113520-4e23h6t7tc4279r64t5r0vdrmt5j80va.apps.googleusercontent.com',
     });
-    getToken();
-    getUserDataAndShare();
+    getToken().then(() => getUserDataAndShare());
   }, []);
 
   useEffect(() => {
@@ -209,8 +210,14 @@ function App(): JSX.Element {
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
         {!appIntro ? (
           <>
-            <ScreenLoader show={screenLoading.get()} />
-            <RootNav />
+            {dataLoading.get() ? (
+              <ScreenLoader show={dataLoading.get()} />
+            ) : (
+              <>
+                <ScreenLoader show={screenLoading.get()} />
+                <RootNav />
+              </>
+            )}
           </>
         ) : (
           <AppIntroSlider

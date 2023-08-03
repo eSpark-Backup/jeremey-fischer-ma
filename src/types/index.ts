@@ -146,6 +146,7 @@ export type Archive = {
 export type GlobalState = {
   userData: User | FirebaseFirestoreTypes.DocumentData | null | undefined;
   screenLoading: boolean;
+  dataLoading: boolean;
   loadFriends: boolean;
   friends: User[] | null;
   loadGroups: boolean;
