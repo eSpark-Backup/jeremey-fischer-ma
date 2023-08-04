@@ -1,35 +1,47 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {
+  NavigationHelpers,
+  ParamListBase,
+  TabNavigationState,
+} from '@react-navigation/native';
 
 import { colors } from '../../theme';
 import MyText from '../MyText';
-import { CommunityNavProps } from '../../types';
+import { Group } from '../../types';
 import store from '../../store/store';
 import { getFriendRequests, getFriends, getGroups } from '../../utils';
+import { MaterialTopTabNavigationEventMap } from '@react-navigation/material-top-tabs/lib/typescript/src/types';
+import { useHookstate } from '@hookstate/core';
 
 export default function Tabs({
-  selectedTabId,
+  state,
+  navigation,
 }: {
-  selectedTabId: string | number;
+  state: TabNavigationState<ParamListBase>;
+  navigation: NavigationHelpers<
+    ParamListBase,
+    MaterialTopTabNavigationEventMap
+  >;
+  updateTab?: (index: number) => void;
 }) {
-  const navigation = useNavigation<CommunityNavProps['navigation']>();
-
-  const friendRequest = store.friendRequests.get();
-  const groups = store.groups.get();
+  const friendRequestStore: any = useHookstate(store.friendRequests);
+  const friendRequest = friendRequestStore.get();
+  const groupsStore: any = useHookstate(store.groups);
+  const groups = groupsStore.get();
 
   const navigateToGroups = () => {
     getGroups();
-    navigation.navigate('GroupsList');
+    navigation.navigate('GroupsTab');
   };
 
   const navigateToFriends = () => {
     getFriends();
     getFriendRequests();
-    navigation.navigate('FriendsList');
+    navigation.navigate('FriendsTab');
   };
 
-  const isAnyNewUpdate = groups?.some(value => {
+  const isAnyNewUpdate = groups?.some((value: Group) => {
     let isNewContent = false;
     if (value?.contents?.length) {
       for (
@@ -49,8 +61,6 @@ export default function Tabs({
     return isNewContent;
   });
 
-  // console.log("groups", JSON.stringify(groups));
-
   return (
     <View
       style={{
@@ -68,7 +78,7 @@ export default function Tabs({
         style={{
           width: '50%',
           height: '100%',
-          backgroundColor: selectedTabId == 1 ? colors.background : colors.card,
+          backgroundColor: state.index == 0 ? colors.background : colors.card,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
@@ -98,7 +108,7 @@ export default function Tabs({
         style={{
           width: '50%',
           height: '100%',
-          backgroundColor: selectedTabId == 2 ? colors.background : colors.card,
+          backgroundColor: state.index == 1 ? colors.background : colors.card,
           alignItems: 'center',
           justifyContent: 'center',
         }}>

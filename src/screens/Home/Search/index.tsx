@@ -113,11 +113,15 @@ export default function Search() {
 
   return (
     <MyCanvas>
-      <SearchBar
-        value={search}
-        placeholder="Seach content"
-        onChangeText={searchContent}
-      />
+      {selectedFriend.id != undefined ? (
+        <SearchBar
+          value={search}
+          placeholder="Seach content"
+          onChangeText={searchContent}
+          clearInput={() => searchContent('')}
+        />
+      ) : null}
+
       <View style={styles.btnContainer}>
         <Dropdown
           type="fri"

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Avatar } from '@rneui/themed';
 
@@ -29,8 +29,12 @@ const CustomTabBar = ({
   navigation: NavigationHelpers<ParamListBase>;
   onPress?: () => void;
 }) => {
-  const friendRequest = store.friendRequests.get();
-  const groups = store.groups.get();
+  const friendRequest = useHookstate(store.friendRequests).get();
+  const groups = useHookstate(store.groups).get();
+  const articles = useHookstate(store.articles).get();
+  const audios = useHookstate(store.audios).get();
+  const podcasts = useHookstate(store.podcasts).get();
+  const videos = useHookstate(store.videos).get();
 
   useEffect(() => {
     getGroups();
@@ -64,6 +68,47 @@ const CustomTabBar = ({
       }
       return isNewContent;
     });
+
+  const isAnyArticleUpdate = articles?.some(value => {
+    let isNewContent = false;
+    if (
+      !value?.content.isViewed &&
+      value?.content.senderId != store.userData.get()?.uid
+    ) {
+      isNewContent = true;
+    }
+    return isNewContent;
+  });
+  const isAnyAudioUpdate = audios?.some(value => {
+    let isNewContent = false;
+    if (
+      !value?.content.isViewed &&
+      value?.content.senderId != store.userData.get()?.uid
+    ) {
+      isNewContent = true;
+    }
+    return isNewContent;
+  });
+  const isAnyPodcastUpdate = podcasts?.some(value => {
+    let isNewContent = false;
+    if (
+      !value?.content.isViewed &&
+      value?.content.senderId != store.userData.get()?.uid
+    ) {
+      isNewContent = true;
+    }
+    return isNewContent;
+  });
+  const isAnyVideoUpdate = videos?.some(value => {
+    let isNewContent = false;
+    if (
+      !value?.content.isViewed &&
+      value?.content.senderId != store.userData.get()?.uid
+    ) {
+      isNewContent = true;
+    }
+    return isNewContent;
+  });
 
   return (
     <View
@@ -101,6 +146,20 @@ const CustomTabBar = ({
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
+          {isAnyArticleUpdate && (
+            <View
+              style={{
+                height: 10,
+                width: 10,
+                backgroundColor: colors.primary,
+                borderRadius: 100,
+                position: 'absolute',
+                right: -1,
+                top: 8,
+                zIndex: 1,
+              }}
+            />
+          )}
           <ArticleSvg color={'#fff'} width={35} height={35} />
         </TouchableOpacity>
         <TouchableOpacity
@@ -115,6 +174,20 @@ const CustomTabBar = ({
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
+          {isAnyAudioUpdate && (
+            <View
+              style={{
+                height: 10,
+                width: 10,
+                backgroundColor: colors.primary,
+                borderRadius: 100,
+                position: 'absolute',
+                right: 2,
+                top: 8,
+                zIndex: 1,
+              }}
+            />
+          )}
           <MusicNoteSvg color={'#fff'} width={35} height={35} />
         </TouchableOpacity>
         <TouchableOpacity
@@ -129,6 +202,20 @@ const CustomTabBar = ({
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
+          {isAnyPodcastUpdate && (
+            <View
+              style={{
+                height: 10,
+                width: 10,
+                backgroundColor: colors.primary,
+                borderRadius: 100,
+                position: 'absolute',
+                right: 2,
+                top: 8,
+                zIndex: 1,
+              }}
+            />
+          )}
           <MicNoneSvg color={'#fff'} width={35} height={35} />
         </TouchableOpacity>
         <TouchableOpacity
@@ -143,6 +230,20 @@ const CustomTabBar = ({
             paddingVertical: 8,
             marginHorizontal: 10,
           }}>
+          {isAnyVideoUpdate && (
+            <View
+              style={{
+                height: 10,
+                width: 10,
+                backgroundColor: colors.primary,
+                borderRadius: 100,
+                position: 'absolute',
+                right: -2,
+                top: 8,
+                zIndex: 1,
+              }}
+            />
+          )}
           <TvSvg color={'#fff'} width={35} height={35} />
         </TouchableOpacity>
       </View>

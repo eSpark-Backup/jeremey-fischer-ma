@@ -34,6 +34,10 @@ export default function App() {
     try {
       await GoogleSignin.signOut();
       storeUserData(null);
+      store.articles.set([]);
+      store.audios.set([]);
+      store.podcasts.set([]);
+      store.videos.set([]);
       store.currentUserNotificationSetting.set(null);
       navigation.navigate('Login');
     } catch (error) {
@@ -56,6 +60,15 @@ export default function App() {
         />
         <MyText textStyle={{ fontWeight: 'bold', fontSize: 24, marginTop: 10 }}>
           {userData?.userName}
+        </MyText>
+        <MyText
+          textStyle={{
+            fontWeight: 'bold',
+            marginTop: 10,
+            opacity: 0.5,
+            fontSize: 16,
+          }}>
+          {userData?.email}
         </MyText>
         <MyText textStyle={{ fontWeight: 'bold', marginTop: 10, opacity: 0.5 }}>
           {`Member for ${moment

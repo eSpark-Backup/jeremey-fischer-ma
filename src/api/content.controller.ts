@@ -1,7 +1,9 @@
 import { db } from '.';
 import { Content, NewsFeed } from '../types';
 import { collections } from './constants';
-import firestore from '@react-native-firebase/firestore';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
 import {
   getFcmsOfRequiredUser,
   sendNotification,
@@ -11,12 +13,14 @@ import {
  * Share Content to specific group
  * @param {groupId}  groupId - `groupId` for sending content to group
  * @param {senderId}  senderId - `senderId` to track which user send this post
+ * @param {senderName}  senderName - `senderName` Name of the sender
  * @returns {message} `message` return message wheter it succesfull or not .
  */
 export const shareContentToGroup = async (
   groupId: string,
   senderId: string,
   Content: Content,
+  senderName: string,
 ) => {
   try {
     const response = await db()
@@ -46,7 +50,11 @@ export const shareContentToGroup = async (
       receivers,
       Content.mediaType,
     );
-    sendNotification(fcmsTokens, Content.title, Content.description);
+    sendNotification(fcmsTokens, `${senderName}`, Content.title, {
+      type: 'GROUP_NOTIFICATION',
+      groupId: groupId,
+      contentId: response?.id,
+    });
     return { data: null, message: 'Post Shared Successfully' };
   } catch (error) {
     console.log('error shareContentToGroup', error);
@@ -58,12 +66,14 @@ export const shareContentToGroup = async (
  * Share Content with friend
  * @param {senderId}  senderId - `senderId` the User which send the contend
  * @param {receiverId}  receiverIds - `receiverIds` Array of User Ids which recieve this content
+ * @param {senderName}  senderName - `senderName` Name of the sender
  * @returns {message} `message` return message wheter it succesfull or not.
  */
 export const shareContentWithFriend = async (
   senderId: string,
   receiverIds: string[],
   Content: Content,
+  senderName: string,
 ) => {
   try {
     const response = await db()
@@ -95,7 +105,10 @@ export const shareContentWithFriend = async (
       receiverIds,
       Content.mediaType,
     );
-    sendNotification(fcmsTokens, Content.title, Content.description);
+    sendNotification(fcmsTokens, `${senderName}`, Content.title, {
+      type: 'NEWSFEED_NOTIFICATION',
+      contentId: response?.id,
+    });
     return { data: null, message: 'Post Shared Successfully' };
   } catch (error) {
     console.log('error shareContentWithFriend', error);
@@ -199,10 +212,85 @@ export const getNewsFeedContent = async (myUid: string) => {
         newsFeed.push(newsFeedData);
       });
       await Promise.all(promises);
-      return { data: newsFeed, message: 'Your Newsfeed Contents' };
+      return {
+        data: newsFeed.sort(
+          // @ts-ignore
+          (b, a) => a.content.createdAt - b.content.createdAt,
+        ),
+        message: 'Your Newsfeed Contents',
+      };
     }
   } catch (error) {
     console.log('error getNewsFeedContent', error);
+    return { data: null, message: 'Something went wrong' };
+  }
+};
+
+/**
+ * Get Content Details by Content Id
+ * @param {string} contentId - `Content Id`
+ * @param {string} uid - User ID which fetches the content
+ * @return {Content} - `Content` return the content data
+ */
+export const getContentFromContentId = async (
+  contentId: string,
+  uid: string,
+) => {
+  try {
+    let content: Content = undefined!;
+    await db()
+      .collection(collections.contents)
+      .doc(contentId)
+      .get()
+      .then(async contentSnapshot => {
+        const innerPromises: any[] = [];
+        const contentData: any = contentSnapshot.data();
+        var sender: FirebaseFirestoreTypes.DocumentData | null = null;
+        const senderPromise = db()
+          .collection(collections.users)
+          .where('uid', '==', contentData?.senderId ?? '')
+          .get()
+          .then(senderSnap => {
+            senderSnap.forEach(res => (sender = res.data()));
+            contentData.sender = sender;
+          });
+
+        const postViewFetch = db()
+          .collection(collections.postViews)
+          .where('contentId', '==', contentSnapshot?.id)
+          .where('userId', '==', uid)
+          .get()
+          .then(PvSnap => {
+            if (!PvSnap.empty) {
+              contentData.isViewed = true;
+            } else {
+              contentData.isViewed = false;
+            }
+          });
+
+        const archiveFetch = db()
+          .collection(collections.archives)
+          .where('contentId', '==', contentSnapshot?.id)
+          .where('userId', '==', uid)
+          .get()
+          .then(ArchiveSnap => {
+            if (!ArchiveSnap.empty) {
+              contentData.isArchived = true;
+            } else {
+              contentData.isArchived = false;
+            }
+          });
+        innerPromises.push(senderPromise, postViewFetch, archiveFetch);
+        await Promise.all([senderPromise, postViewFetch, archiveFetch]);
+        content = contentData;
+        await Promise.all(innerPromises);
+      });
+    return {
+      data: content,
+      message: 'Your Desired Contents',
+    };
+  } catch (error) {
+    console.log('error getContentFromContentId', error);
     return { data: null, message: 'Something went wrong' };
   }
 };

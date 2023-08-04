@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import { useHookstate } from '@hookstate/core';
 
@@ -12,16 +12,17 @@ import { colors } from '../../../theme';
 import { NewsFeed } from '../../../types';
 import store from '../../../store/store';
 import loaders from '../../../store/loaders';
-import { extractFeeds } from '../../../utils/globalFunctions';
 
 export default function AudioScreen() {
-  const newsFeedData = useHookstate(store?.newsFeed).get();
   const [audios, setAudios] = useState<NewsFeed[]>([]);
+  const audiosStore: any = useHookstate(store?.audios);
+  const audio = audiosStore.get();
   const loader = useHookstate(loaders.newsFeed).get();
-
+  const flatListRef: any = useRef();
   useEffect(() => {
     if (!loader) {
-      setAudios(extractFeeds(newsFeedData, 'Audio'));
+      // setAudios(extractFeeds(newsFeedData, 'Audio'));
+      setAudios(audio);
     }
   }, [loader]);
 
@@ -29,8 +30,8 @@ export default function AudioScreen() {
     return (
       <FeedCard
         key={index}
-        contentData={item.content}
-        senderData={item.sender}
+        contentData={item?.content}
+        senderData={item?.sender}
       />
     );
   }
@@ -45,10 +46,12 @@ export default function AudioScreen() {
         />
       ) : (
         <FlatList
+          ref={flatListRef}
           data={audios}
           renderItem={renderFeed}
           ItemSeparatorComponent={() => <GapView />}
-          ListEmptyComponent={<EmptyFeedLabel label="No Audios Found" />}
+          ListEmptyComponent={<EmptyFeedLabel label="No Music Found" />}
+          ListFooterComponent={<GapView length={80} />}
         />
       )}
     </MyCanvas>

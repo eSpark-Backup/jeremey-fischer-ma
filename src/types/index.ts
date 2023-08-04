@@ -1,5 +1,6 @@
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ImageSourcePropType } from 'react-native';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -31,9 +32,10 @@ export type ProfileStackParamList = {
 };
 
 export type CommunityStackParamList = {
-  FriendsList: undefined;
-  GroupsList: undefined;
-  GroupDetails: { item: { title: string; contents?: Content[] } };
+  CommunityTab: { title?: string | undefined };
+  // FriendsList: undefined;
+  // GroupsList: undefined;
+  GroupDetails: { title?: string | undefined; groupId: string | undefined };
   AddNewGroup: undefined;
 };
 
@@ -53,6 +55,12 @@ export type CommunityNavProps = NativeStackScreenProps<CommunityStackParamList>;
 export type ProfileProps = NativeStackScreenProps<
   ProfileStackParamList & RootStackParamList
 >;
+
+// Welcome Screen Slides type
+export type Slides = {
+  key: number;
+  image: ImageSourcePropType;
+};
 
 // User type
 export type User = {
@@ -138,17 +146,26 @@ export type Archive = {
 export type GlobalState = {
   userData: User | FirebaseFirestoreTypes.DocumentData | null | undefined;
   screenLoading: boolean;
+  dataLoading: boolean;
   loadFriends: boolean;
   friends: User[] | null;
   loadGroups: boolean;
   userGroups: Group[] | null;
   groups: Group[] | null;
+  groupContent: Content[] | null;
   loadRequests: boolean;
   friendRequests: FriendRequest[] | null;
   newsFeed: NewsFeed[];
   archives: Archive[];
   archiveIds: string[];
   currentUserNotificationSetting: NotificationSetting | null;
+  articles: NewsFeed[];
+  audios: NewsFeed[];
+  podcasts: NewsFeed[];
+  videos: NewsFeed[];
+  fcmToken: string | null;
+  contentDetails: Content | null;
+  hideSearchFAB: boolean;
 };
 
 // Notification Settings

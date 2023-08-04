@@ -20,6 +20,13 @@ const linking: LinkingOptions<RootStackParamList> = {
   config: {
     screens: {
       Share: 'share', // Define the route name and corresponding URL path
+      Details: 'details', // Define the route name and corresponding URL path
+      CommunityNav: {
+        path: 'community_nav',
+        screens: {
+          GroupDetails: 'group_details',
+        },
+      },
     },
   },
 };
@@ -50,7 +57,10 @@ export default function RootNav() {
               <MyHeader
                 route={route}
                 leftIcon={true}
-                onPressLeftIcon={() => navigation.goBack()}
+                onPressLeftIcon={() => {
+                  navigation.goBack();
+                  store.contentDetails.set(null);
+                }}
               />
             ),
           }}

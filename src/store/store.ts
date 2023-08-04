@@ -4,17 +4,26 @@ import { GlobalState } from '../types';
 const store = hookstate<GlobalState>({
   userData: null,
   screenLoading: false,
+  dataLoading: false,
   loadFriends: false,
   friends: [],
   loadGroups: false,
   userGroups: [],
   groups: [],
+  groupContent: [],
   loadRequests: false,
   friendRequests: [],
   newsFeed: [],
   archives: [],
   archiveIds: [],
   currentUserNotificationSetting: null,
+  articles: [],
+  audios: [],
+  podcasts: [],
+  fcmToken: null,
+  videos: [],
+  contentDetails: null,
+  hideSearchFAB: false,
 });
 
 export default store;
