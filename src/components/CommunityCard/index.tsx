@@ -62,6 +62,7 @@ export default function CommunityCard({
             top: -4,
             // zIndex: 1,X
             alignItems: 'center',
+            justifyContent: 'center',
           }}>
           <MyText
             children={unreadContents?.length?.toString()}

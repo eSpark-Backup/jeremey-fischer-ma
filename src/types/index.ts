@@ -32,7 +32,7 @@ export type ProfileStackParamList = {
 };
 
 export type CommunityStackParamList = {
-  CommunityTab: undefined;
+  CommunityTab: { title?: string | undefined };
   // FriendsList: undefined;
   // GroupsList: undefined;
   GroupDetails: { title?: string | undefined; groupId: string | undefined };
@@ -146,6 +146,7 @@ export type Archive = {
 export type GlobalState = {
   userData: User | FirebaseFirestoreTypes.DocumentData | null | undefined;
   screenLoading: boolean;
+  dataLoading: boolean;
   loadFriends: boolean;
   friends: User[] | null;
   loadGroups: boolean;

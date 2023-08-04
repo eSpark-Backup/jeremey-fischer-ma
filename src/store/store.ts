@@ -4,6 +4,7 @@ import { GlobalState } from '../types';
 const store = hookstate<GlobalState>({
   userData: null,
   screenLoading: false,
+  dataLoading: false,
   loadFriends: false,
   friends: [],
   loadGroups: false,

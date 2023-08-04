@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, SectionList, FlatList } from 'react-native';
-import { useTheme } from '@react-navigation/native';
+import {
+  StyleSheet,
+  View,
+  SectionList,
+  FlatList,
+  BackHandler,
+} from 'react-native';
+import { useNavigation, useTheme } from '@react-navigation/native';
 import { CheckBox } from '@rneui/themed';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 import { MyCanvas, MyText } from '../../components';
 import { TouchableOpacity } from 'react-native';
 import store from '../../store/store';
-import { getUserData } from '../../utils';
+import { getUserData, storeUserData } from '../../utils';
+import { UpdateUserNotificationSetting } from '../../api/notification.controller';
+import { ProfileProps } from '../../types';
 
 interface ListProps {
   title: string;
@@ -45,6 +53,28 @@ const List: ListProps[] = [
 ];
 
 export default function Settings() {
+  const navigation = useNavigation<ProfileProps['navigation']>();
+
+  const backAction = () => {
+    const data = {
+      ...store.userData.get(),
+      NotificationSetting: store.currentUserNotificationSetting.get(),
+    };
+    if (store.currentUserNotificationSetting.get() != null) {
+      storeUserData(data);
+      UpdateUserNotificationSetting(
+        store.userData.get()?.uid,
+        store.currentUserNotificationSetting.get()!,
+      );
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    const backHandler = navigation.addListener('beforeRemove', backAction);
+    return backHandler;
+  }, []);
+
   return (
     <MyCanvas>
       <SettingList data={List} />
