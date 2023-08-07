@@ -8,3 +8,4 @@ export { default as GroupSvg } from './svgs/group.svg';
 export { default as NYTimesSvg } from './svgs/nytimes.svg';
 export { default as ArrowForward } from './svgs/arrow-forward.svg';
 export { default as Google } from './svgs/google.svg';
+export { default as Apple } from './svgs/apple.svg';

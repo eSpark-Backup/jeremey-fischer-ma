@@ -6,15 +6,18 @@ export default function MyText({
   children,
   textStyle,
   lines = 3,
+  selectable,
 }: {
   children?: string | string[];
   textStyle?: TextStyle;
   lines?: number;
+  selectable?: boolean;
 }) {
   const { colors } = useTheme();
 
   return (
     <Text
+      selectable={selectable}
       style={{ ...styles.text, color: colors.text, ...textStyle }}
       numberOfLines={lines}>
       {children}

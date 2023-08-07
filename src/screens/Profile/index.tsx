@@ -62,6 +62,7 @@ export default function App() {
           {userData?.userName}
         </MyText>
         <MyText
+          selectable
           textStyle={{
             fontWeight: 'bold',
             marginTop: 10,

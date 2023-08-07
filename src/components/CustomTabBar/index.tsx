@@ -128,7 +128,8 @@ const CustomTabBar = ({
         }}
         source={{
           uri:
-            store.userData.get()?.userName == ''
+            store.userData.get()?.image == '' ||
+            store.userData.get()?.image == null
               ? 'https://randomuser.me/api/portraits/men/36.jpg'
               : store.userData.get()?.image,
         }}

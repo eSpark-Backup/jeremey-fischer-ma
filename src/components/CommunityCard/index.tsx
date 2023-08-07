@@ -70,13 +70,13 @@ export default function CommunityCard({
           />
         </View>
       )}
-      <View style={{ ...styles.row, flex: 1 }}>
+      <View style={{ ...styles.row, flex: 1, alignItems: 'center' }}>
         <Avatar
           rounded
           size={'medium'}
           source={{
             uri:
-              image == ''
+              image == '' || image == null
                 ? 'https://randomuser.me/api/portraits/men/22.jpg'
                 : image,
           }}
