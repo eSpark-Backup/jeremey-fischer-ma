@@ -131,7 +131,21 @@ export default function Details() {
             <Avatar
               rounded
               size={40}
-              source={{ uri: contentDetails?.sender?.image }}
+              containerStyle={{
+                backgroundColor: contentDetails?.sender?.image
+                  ? undefined
+                  : colors.primary,
+              }}
+              source={{
+                uri: contentDetails?.sender?.image
+                  ? contentDetails?.sender?.image
+                  : undefined,
+              }}
+              title={
+                contentDetails?.sender?.image
+                  ? undefined
+                  : contentDetails?.sender?.userName.charAt(0).toUpperCase()
+              }
             />
             <GapView mode="horizontal" />
             <MyText

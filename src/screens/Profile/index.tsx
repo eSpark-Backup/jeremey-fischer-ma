@@ -50,12 +50,19 @@ export default function App() {
       <View style={{ alignItems: 'center' }}>
         <Avatar
           rounded
-          containerStyle={{ borderWidth: 0.6, borderColor: 'grey' }}
-          source={{
-            uri: userData?.image
-              ? userData?.image
-              : 'https://randomuser.me/api/portraits/men/36.jpg',
+          containerStyle={{
+            borderWidth: 0.6,
+            borderColor: 'grey',
+            backgroundColor: userData?.image ? undefined : colors.primary,
           }}
+          source={{
+            uri: userData?.image ? userData?.image : undefined,
+          }}
+          title={
+            userData?.image
+              ? undefined
+              : userData?.userName.charAt(0).toUpperCase()
+          }
           size={120}
         />
         <MyText textStyle={{ fontWeight: 'bold', fontSize: 24, marginTop: 10 }}>

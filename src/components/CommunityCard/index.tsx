@@ -74,12 +74,11 @@ export default function CommunityCard({
         <Avatar
           rounded
           size={'medium'}
+          containerStyle={{ backgroundColor: colors.primary }}
           source={{
-            uri:
-              image == '' || image == null
-                ? 'https://randomuser.me/api/portraits/men/22.jpg'
-                : image,
+            uri: image ? image : undefined,
           }}
+          title={image ? undefined : name.charAt(0).toUpperCase()}
         />
         <View style={styles.contentContainer}>
           <MyText lines={1} children={name} textStyle={{ fontSize: 16 }} />
