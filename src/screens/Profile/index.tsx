@@ -95,13 +95,22 @@ export default function App() {
           <MyText textStyle={{ fontWeight: 'bold', opacity: 0.5 }}>
             Signed in with
           </MyText>
-          <GapView mode="horizontal" />
-          <Icon
-            name={'logo-google'}
-            type="ionicon"
-            style={{ opacity: 0.2 }}
-            color={colors.text}
-          />
+          <GapView length={5} mode="horizontal" />
+          {userData?.signWith == 'Google' ? (
+            <Icon
+              name={'logo-google'}
+              type="ionicon"
+              style={{ opacity: 0.2 }}
+              color={colors.text}
+            />
+          ) : (
+            <Icon
+              name={'logo-apple'}
+              type="ionicon"
+              style={{ opacity: 0.2 }}
+              color={colors.text}
+            />
+          )}
         </View>
       </View>
       <View style={{ alignItems: 'center' }}>

@@ -38,10 +38,10 @@ export const _signIn = async (
         });
         loginUser(data)
           .then(({ data }) => {
-            storeUserData(data);
+            storeUserData({ ...data, signWith: 'Google' });
             screenLoading.set(false);
             navigation.navigate('Tab');
-            store.userData.set(data);
+            store.userData.set({ ...data, signWith: 'Google' });
           })
           .catch(err => {
             console.log('user', err);
@@ -89,9 +89,9 @@ export const _signInWithApp = async (
     user_sign
       .then(({ user }) => {
         console.log('user sign', user);
-        console.log('user provider', user.providerData);
+        console.log('user provider', user.providerData[0].email);
         const data = <User>{
-          email: user.email,
+          email: user.providerData[0].email,
           userName: displayName,
           image: user.photoURL,
           uid: user.uid,
@@ -102,10 +102,10 @@ export const _signInWithApp = async (
         });
         loginUser(data)
           .then(({ data }) => {
-            storeUserData(data);
+            storeUserData({ ...data, signWith: 'Apple' });
             screenLoading.set(false);
             navigation.navigate('Tab');
-            store.userData.set(data);
+            store.userData.set({ ...data, signWith: 'Apple' });
           })
           .catch(err => {
             console.log('user', err);
