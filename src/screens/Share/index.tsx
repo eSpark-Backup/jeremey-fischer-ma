@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -33,7 +33,6 @@ import {
   getGroups,
 } from '../../utils';
 import { Content, Group, NavProps, User } from '../../types';
-import { defaultImage } from '../../constants';
 import { getLinkPreview } from 'link-preview-js';
 import {
   shareContentToGroup,
@@ -301,7 +300,7 @@ export default function Share() {
                     details={`${
                       item.Friends?.length?.toString() ?? '0'
                     } Friends`}
-                    image={Boolean(item.image) ? item.image : defaultImage}
+                    image={item.image}
                     checkbox
                     checked={Boolean(
                       selectedFriends.filter(val => item.uid == val.uid).length,
