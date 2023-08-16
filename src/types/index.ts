@@ -76,6 +76,7 @@ export type User = {
   Notification?: string[]; // Array of notification IDs
   isRequested?: boolean; // only for search friend with current userId
   NotificationSetting?: NotificationSetting;
+  signWith?: 'Google' | 'Apple';
 };
 
 // FriendRequest type

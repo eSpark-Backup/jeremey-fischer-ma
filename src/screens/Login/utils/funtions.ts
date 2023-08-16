@@ -2,6 +2,7 @@ import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import { State } from '@hookstate/core';
+import { appleAuth } from '@invertase/react-native-apple-authentication';
 
 import { User } from '../../../types';
 import { loginUser } from '../../../api/user.controller';
@@ -24,6 +25,7 @@ export const _signIn = async (
     const user_sign = auth().signInWithCredential(googleCredential);
     user_sign
       .then(({ user }) => {
+        console.log('user sign', user);
         const data = <User>{
           email: user.email,
           userName: user.displayName,
@@ -36,10 +38,74 @@ export const _signIn = async (
         });
         loginUser(data)
           .then(({ data }) => {
-            storeUserData(data);
+            storeUserData({ ...data, signWith: 'Google' });
             screenLoading.set(false);
             navigation.navigate('Tab');
-            store.userData.set(data);
+            store.userData.set({ ...data, signWith: 'Google' });
+          })
+          .catch(err => {
+            console.log('user', err);
+            screenLoading.set(false);
+          });
+      })
+      .catch(err => {
+        console.log('user', err);
+        screenLoading.set(false);
+      });
+  } catch (error: any) {
+    console.error(error);
+    screenLoading.set(false);
+  }
+};
+export const _signInWithApp = async (
+  navigation: NavigationProp<ParamListBase>,
+  screenLoading: State<boolean, {}>,
+) => {
+  try {
+    screenLoading.set(true);
+    // Start the sign-in request
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+    });
+
+    // Ensure Apple returned a user identityToken
+    if (!appleAuthRequestResponse.identityToken) {
+      throw new Error('Apple Sign-In failed - no identify token returned');
+    }
+
+    // Create a Firebase credential from the response
+    const { identityToken, nonce } = appleAuthRequestResponse;
+    const appleCredential = auth.AppleAuthProvider.credential(
+      identityToken,
+      nonce,
+    );
+
+    const displayName = appleAuthRequestResponse.fullName?.givenName;
+
+    // Sign the user in with the credential
+    const user_sign = auth().signInWithCredential(appleCredential);
+    user_sign
+      .then(({ user }) => {
+        console.log('user sign', user);
+        console.log('user provider', user.providerData[0].email);
+        const data = <User>{
+          email: user.providerData[0].email,
+          userName: displayName,
+          image: user.photoURL,
+          uid: user.uid,
+          fcmToken: fcmToken ?? '',
+        };
+        getFCMToken().then(res => {
+          console.log('fcmToken', fcmToken, 'res', res);
+        });
+        loginUser(data)
+          .then(({ data }) => {
+            storeUserData({ ...data, signWith: 'Apple' });
+            screenLoading.set(false);
+            navigation.navigate('Tab');
+            store.userData.set({ ...data, signWith: 'Apple' });
           })
           .catch(err => {
             console.log('user', err);

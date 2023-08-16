@@ -12,6 +12,7 @@ import GapView from '../GapView';
 import { transformTime } from '../../utils/globalFunctions';
 import store from '../../store/store';
 import { getContentDetails } from '../../utils';
+import { colors } from '../../theme';
 
 export default function FeedCard({
   contentData,
@@ -63,7 +64,22 @@ export default function FeedCard({
                 justifyContent: 'space-between',
               }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Avatar rounded source={{ uri: senderData?.image }} />
+                <Avatar
+                  containerStyle={{
+                    backgroundColor: senderData?.image
+                      ? undefined
+                      : colors.primary,
+                  }}
+                  rounded
+                  source={{
+                    uri: senderData?.image ? senderData?.image : undefined,
+                  }}
+                  title={
+                    senderData?.image
+                      ? undefined
+                      : senderData?.userName.charAt(0).toUpperCase()
+                  }
+                />
                 <GapView mode="horizontal" length={5} />
                 <MyText
                   children={senderData?.userName}
