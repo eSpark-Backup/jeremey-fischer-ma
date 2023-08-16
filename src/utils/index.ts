@@ -203,22 +203,23 @@ export async function requestUserPermission() {
     if (enabled) {
       console.log('Authorization status:', authStatus);
     }
-
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-      {
-        title: 'Seaglass Notification Permission',
-        message:
-          'Seaglass needs access to your notifications ' +
-          'so you can recieve notifications',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK',
-      },
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log('You can use the notifications');
-    } else {
-      console.log('notifications permission denied');
+    if (Platform.OS == 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+        {
+          title: 'Seaglass Notification Permission',
+          message:
+            'Seaglass needs access to your notifications ' +
+            'so you can recieve notifications',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the notifications');
+      } else {
+        console.log('notifications permission denied');
+      }
     }
   } catch (err) {
     console.warn(err);

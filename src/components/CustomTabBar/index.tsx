@@ -125,13 +125,20 @@ const CustomTabBar = ({
           marginHorizontal: 5,
           width: 35,
           height: 35,
+          backgroundColor: store.userData.get()?.image
+            ? undefined
+            : colors.primary,
         }}
         source={{
-          uri:
-            store.userData.get()?.userName == ''
-              ? 'https://randomuser.me/api/portraits/men/36.jpg'
-              : store.userData.get()?.image,
+          uri: store.userData.get()?.image
+            ? store.userData.get()?.image
+            : undefined,
         }}
+        title={
+          store.userData.get()?.image
+            ? undefined
+            : store.userData.get()?.userName.charAt(0).toUpperCase()
+        }
       />
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <TouchableOpacity
