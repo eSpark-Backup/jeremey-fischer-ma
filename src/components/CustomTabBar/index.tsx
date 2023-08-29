@@ -137,7 +137,7 @@ const CustomTabBar = ({
         title={
           store.userData.get()?.image
             ? undefined
-            : store.userData.get()?.userName.charAt(0).toUpperCase()
+            : store.userData.get()?.userName?.charAt(0)?.toUpperCase()
         }
       />
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>

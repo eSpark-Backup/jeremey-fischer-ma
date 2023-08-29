@@ -82,6 +82,8 @@ export const _signInWithApp = async (
       nonce,
     );
 
+    console.log('Apple res', appleAuthRequestResponse);
+
     const displayName = appleAuthRequestResponse.fullName?.givenName;
 
     // Sign the user in with the credential
@@ -89,7 +91,7 @@ export const _signInWithApp = async (
     user_sign
       .then(({ user }) => {
         console.log('user sign', user);
-        console.log('user provider', user.providerData[0].email);
+        console.log('user provider', user.providerData[0]);
         const data = <User>{
           email: user.providerData[0].email,
           userName: displayName,
