@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert, Platform } from 'react-native';
 import { Avatar } from '@rneui/base';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import { Divider, Icon } from '@rneui/themed';
@@ -9,11 +9,12 @@ import { useHookstate } from '@hookstate/core';
 import { GapView, MyCanvas, MyText, NormalBtn } from '../../components';
 import { SCREEN_WIDTH } from '../../constants';
 import { ProfileProps } from '../../types';
-import { storeUserData } from '../../utils';
+import { getRefreshToken, storeRefreshToken, storeUserData } from '../../utils';
 import { ArchiveOutlineSvg } from '../../assets';
 import store from '../../store/store';
 import moment from 'moment';
 import { deleteUser } from '../../api/user.controller';
+import { revokeUserToken } from '../Login/utils/funtions';
 
 export default function App() {
   const userData = useHookstate(store?.userData)?.get();
@@ -43,10 +44,19 @@ export default function App() {
     ]);
   };
 
+  const deletefromSignInApps = async () => {
+    if (userData?.signWith == 'Apple') {
+      const refreshToken = await getRefreshToken();
+      await revokeUserToken(refreshToken as string);
+      storeRefreshToken(null);
+    }
+  };
+
   const userDeletion = async () => {
     try {
       screenLoading.set(true);
       await deleteUser(userData?.uid);
+      await deletefromSignInApps();
       signOut();
       screenLoading.set(false);
     } catch (error) {

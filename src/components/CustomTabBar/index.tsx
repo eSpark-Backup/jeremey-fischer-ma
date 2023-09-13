@@ -29,6 +29,7 @@ const CustomTabBar = ({
   navigation: NavigationHelpers<ParamListBase>;
   onPress?: () => void;
 }) => {
+  const userData = useHookstate(store?.userData)?.get();
   const friendRequest = useHookstate(store.friendRequests).get();
   const groups = useHookstate(store.groups).get();
   const articles = useHookstate(store.articles).get();
@@ -59,7 +60,7 @@ const CustomTabBar = ({
         ) {
           if (
             !value?.contents[index].isViewed &&
-            value?.contents[index].senderId != store.userData.get()?.uid
+            value?.contents[index].senderId != userData?.uid
           ) {
             isNewContent = true;
             break;
@@ -71,40 +72,28 @@ const CustomTabBar = ({
 
   const isAnyArticleUpdate = articles?.some(value => {
     let isNewContent = false;
-    if (
-      !value?.content.isViewed &&
-      value?.content.senderId != store.userData.get()?.uid
-    ) {
+    if (!value?.content.isViewed && value?.content.senderId != userData?.uid) {
       isNewContent = true;
     }
     return isNewContent;
   });
   const isAnyAudioUpdate = audios?.some(value => {
     let isNewContent = false;
-    if (
-      !value?.content.isViewed &&
-      value?.content.senderId != store.userData.get()?.uid
-    ) {
+    if (!value?.content.isViewed && value?.content.senderId != userData?.uid) {
       isNewContent = true;
     }
     return isNewContent;
   });
   const isAnyPodcastUpdate = podcasts?.some(value => {
     let isNewContent = false;
-    if (
-      !value?.content.isViewed &&
-      value?.content.senderId != store.userData.get()?.uid
-    ) {
+    if (!value?.content.isViewed && value?.content.senderId != userData?.uid) {
       isNewContent = true;
     }
     return isNewContent;
   });
   const isAnyVideoUpdate = videos?.some(value => {
     let isNewContent = false;
-    if (
-      !value?.content.isViewed &&
-      value?.content.senderId != store.userData.get()?.uid
-    ) {
+    if (!value?.content.isViewed && value?.content.senderId != userData?.uid) {
       isNewContent = true;
     }
     return isNewContent;
@@ -125,19 +114,15 @@ const CustomTabBar = ({
           marginHorizontal: 5,
           width: 35,
           height: 35,
-          backgroundColor: store.userData.get()?.image
-            ? undefined
-            : colors.primary,
+          backgroundColor: userData?.image ? undefined : colors.primary,
         }}
         source={{
-          uri: store.userData.get()?.image
-            ? store.userData.get()?.image
-            : undefined,
+          uri: userData?.image ? userData?.image : undefined,
         }}
         title={
-          store.userData.get()?.image
+          userData?.image
             ? undefined
-            : store.userData.get()?.userName?.charAt(0)?.toUpperCase()
+            : userData?.userName?.charAt(0)?.toUpperCase()
         }
       />
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
