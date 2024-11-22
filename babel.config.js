@@ -5,14 +5,14 @@ module.exports = function (api) {
     process.env.BABEL_ENV === 'production'
   ) {
     return {
-      presets: ['module:metro-react-native-babel-preset'],
+      presets: ['module:@react-native/babel-preset'],
       plugins: [
         ['transform-remove-console', { exclude: ['error', 'warn', 'info'] }],
       ],
     };
   } else {
     return {
-      presets: ['module:metro-react-native-babel-preset'],
+      presets: ['module:@react-native/babel-preset'],
     };
   }
 };
