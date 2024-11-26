@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Image, View, ActivityIndicator } from 'react-native';
+import {
+  StyleSheet,
+  Image,
+  View,
+  ActivityIndicator,
+  Linking,
+} from 'react-native';
 import { useTheme, RouteProp, useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import { Avatar } from '@rneui/themed';
@@ -165,6 +171,12 @@ export default function Details() {
             style={{
               alignSelf: 'center',
             }}>
+            <OutlineBtn
+              title="View"
+              onPress={async () => {
+                Linking.openURL(contentDetails.url!);
+              }}
+            />
             <GapView />
             {isArchived ? (
               <MyText textStyle={{ opacity: 0.5 }} children={'Archived'} />
