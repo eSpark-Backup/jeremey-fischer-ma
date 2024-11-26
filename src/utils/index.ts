@@ -24,6 +24,10 @@ export const getUserData = async () => {
   console.log('jsonValue', jsonValue);
   return jsonValue != null ? JSON.parse(jsonValue) : null;
 };
+export const getRefreshToken = async () => {
+  const value = await AsyncStorage.getItem('@userToken');
+  return value;
+};
 
 export const storeUserData = async (
   value: FirebaseFirestoreTypes.DocumentData | null | undefined,
@@ -31,6 +35,19 @@ export const storeUserData = async (
   try {
     const jsonValue = JSON.stringify(value);
     await AsyncStorage.setItem('@userData', jsonValue);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const storeRefreshToken = async (value: string | null) => {
+  try {
+    if (value == null) {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('@userToken', jsonValue);
+    } else {
+      await AsyncStorage.setItem('@userToken', value);
+    }
   } catch (e) {
     console.error(e);
   }
@@ -203,22 +220,23 @@ export async function requestUserPermission() {
     if (enabled) {
       console.log('Authorization status:', authStatus);
     }
-
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-      {
-        title: 'Seaglass Notification Permission',
-        message:
-          'Seaglass needs access to your notifications ' +
-          'so you can recieve notifications',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK',
-      },
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      console.log('You can use the notifications');
-    } else {
-      console.log('notifications permission denied');
+    if (Platform.OS == 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+        {
+          title: 'Seaglass Notification Permission',
+          message:
+            'Seaglass needs access to your notifications ' +
+            'so you can recieve notifications',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the notifications');
+      } else {
+        console.log('notifications permission denied');
+      }
     }
   } catch (err) {
     console.warn(err);

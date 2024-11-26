@@ -15,6 +15,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useHookstate } from '@hookstate/core';
@@ -33,17 +34,19 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import { Slides } from './src/types';
 
 function App(): JSX.Element {
-  const { userData, screenLoading } = useHookstate(store);
+  const { userData, screenLoading, dataLoading } = useHookstate(store);
   const [appIntro, setAppIntro] = useState(true);
   let slider: AppIntroSlider | undefined;
 
   const setUserData = async () => {
+    store.dataLoading.set(true);
     const app_Intro = await AsyncStorage.getItem('@appIntro');
     if (app_Intro != null) {
       setAppIntro(false);
     }
     const storedData = await getUserData();
     userData.set(storedData);
+    store.dataLoading.set(false);
   };
 
   messaging().onNotificationOpenedApp(async notification => {
@@ -53,10 +56,10 @@ function App(): JSX.Element {
       `seaglass://community_nav/group_details?groudId=${notification.data?.groupId}`,
     );
     if (userData.get() && notification.data?.contentId) {
-      await getContentDetails(notification.data?.contentId!);
+      await getContentDetails(notification.data?.contentId! as string);
       await Linking.openURL(`seaglass://details`);
     } else {
-      await Linking.openURL('seaglass://');
+      await Linking.openURL(`seaglass://`);
     }
   });
 
@@ -83,14 +86,17 @@ function App(): JSX.Element {
     }
   };
 
+  const getUserDataAndShare = async () => {
+    await setUserData();
+    ShareMenu.getInitialShare(handleShare);
+  };
+
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
         '213956113520-4e23h6t7tc4279r64t5r0vdrmt5j80va.apps.googleusercontent.com',
     });
-    getToken();
-    setUserData();
-    ShareMenu.getInitialShare(handleShare);
+    getToken().then(() => getUserDataAndShare());
   }, []);
 
   useEffect(() => {
@@ -115,7 +121,6 @@ function App(): JSX.Element {
         : item?.data[0].data;
 
     console.log('linkOpen', url, userData.get());
-
     if (userData.get()) {
       const linkOpen = await Linking.openURL(
         `seaglass://share?url=${encodeURIComponent(url)}`,
@@ -201,11 +206,18 @@ function App(): JSX.Element {
 
   return (
     <SafeAreaProvider>
+      <StatusBar barStyle={'light-content'} />
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
         {!appIntro ? (
           <>
-            <ScreenLoader show={screenLoading.get()} />
-            <RootNav />
+            {dataLoading.get() ? (
+              <ScreenLoader show={dataLoading.get()} />
+            ) : (
+              <>
+                <ScreenLoader show={screenLoading.get()} />
+                <RootNav />
+              </>
+            )}
           </>
         ) : (
           <AppIntroSlider

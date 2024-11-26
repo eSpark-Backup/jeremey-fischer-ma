@@ -9,9 +9,11 @@ import { MyHeader } from '../components';
 import { UpdateUserNotificationSetting } from '../api/notification.controller';
 import store from '../store/store';
 import { storeUserData } from '../utils';
+import { useHookstate } from '@hookstate/core';
 
 export default function ProfileNav() {
   const Stack = createNativeStackNavigator<ProfileStackParamList>();
+  const userData = useHookstate(store?.userData)?.get();
   const { colors } = useTheme();
 
   return (
@@ -44,14 +46,14 @@ export default function ProfileNav() {
               onPressLeftIcon={() => {
                 navigation.goBack();
                 const data = {
-                  ...store.userData.get(),
+                  ...userData,
                   NotificationSetting:
                     store.currentUserNotificationSetting.get(),
                 };
                 if (store.currentUserNotificationSetting.get() != null) {
                   storeUserData(data);
                   UpdateUserNotificationSetting(
-                    store.userData.get()?.uid,
+                    userData?.uid,
                     store.currentUserNotificationSetting.get()!,
                   );
                 }

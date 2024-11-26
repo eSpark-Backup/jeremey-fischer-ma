@@ -9,6 +9,7 @@ import {
 
 import { colors } from '../../theme';
 import MyText from '../MyText';
+import { Google } from '../../assets';
 
 interface BtnProps {
   btnStyle?: ViewStyle;
@@ -35,7 +36,7 @@ const Button = ({
         styles.btnContainer,
         btnStyle,
         disabled && { opacity: 0.6 },
-        icon != null && { flexDirection: 'row', paddingHorizontal: 20 },
+        Boolean(icon) && { flexDirection: 'row', paddingHorizontal: 20 },
       ]}>
       <View>
         <MyText textStyle={{ ...titleStyle }}>{title}</MyText>

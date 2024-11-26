@@ -7,6 +7,7 @@ import MyText from '../MyText';
 import { OutlineBtn } from '../Button';
 import { Content, User } from '../../types';
 import moment from 'moment';
+import { colors } from '../../theme';
 
 export default function ArchiveCard({
   contentData,
@@ -31,10 +32,20 @@ export default function ArchiveCard({
               bottom: -10,
               left: 5,
               position: 'absolute',
+              backgroundColor: contentData.sender?.image
+                ? undefined
+                : colors.primary,
             }}
             source={{
-              uri: contentData.sender?.image,
+              uri: contentData.sender?.image
+                ? contentData.sender?.image
+                : undefined,
             }}
+            title={
+              contentData.sender?.image
+                ? undefined
+                : contentData.sender?.userName?.charAt(0)?.toUpperCase()
+            }
           />
           {/* <Avatar
                 rounded

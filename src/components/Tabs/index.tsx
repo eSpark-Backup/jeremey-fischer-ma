@@ -8,40 +8,40 @@ import {
 
 import { colors } from '../../theme';
 import MyText from '../MyText';
-import { CommunityNavProps } from '../../types';
+import { Group } from '../../types';
 import store from '../../store/store';
 import { getFriendRequests, getFriends, getGroups } from '../../utils';
 import { MaterialTopTabNavigationEventMap } from '@react-navigation/material-top-tabs/lib/typescript/src/types';
+import { useHookstate } from '@hookstate/core';
 
 export default function Tabs({
   state,
   navigation,
-  updateTab,
 }: {
   state: TabNavigationState<ParamListBase>;
   navigation: NavigationHelpers<
     ParamListBase,
     MaterialTopTabNavigationEventMap
   >;
-  updateTab: (index: number) => void;
+  updateTab?: (index: number) => void;
 }) {
-  const friendRequest = store.friendRequests.get();
-  const groups = store.groups.get();
+  const friendRequestStore: any = useHookstate(store.friendRequests);
+  const friendRequest = friendRequestStore.get();
+  const groupsStore: any = useHookstate(store.groups);
+  const groups = groupsStore.get();
 
   const navigateToGroups = () => {
     getGroups();
     navigation.navigate('GroupsTab');
-    updateTab(1);
   };
 
   const navigateToFriends = () => {
     getFriends();
     getFriendRequests();
     navigation.navigate('FriendsTab');
-    updateTab(0);
   };
 
-  const isAnyNewUpdate = groups?.some(value => {
+  const isAnyNewUpdate = groups?.some((value: Group) => {
     let isNewContent = false;
     if (value?.contents?.length) {
       for (

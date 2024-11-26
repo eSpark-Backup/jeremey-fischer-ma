@@ -1,6 +1,7 @@
 import { db } from '.';
 import { User } from '../types';
 import { collections } from './constants';
+import auth from '@react-native-firebase/auth';
 
 /**
  * Fetch All Users
@@ -175,6 +176,36 @@ export const getAllFreinds = async (myUid: string) => {
     }
   } catch (error) {
     console.log('getAllFreinds error', error);
+    return { data: null, message: 'Something went wrong' };
+  }
+};
+
+/**
+ * Delete User
+ * @param {myUid}  myUid - `myUid` For deleting of this `UID`
+ * @returns {User} `User` Return User if not found so undefined
+ */
+export const deleteUser = async (myUid: string) => {
+  try {
+    const isUserExist = await db()
+      .collection(collections.users)
+      .where('uid', '==', myUid)
+      .get();
+    let userDocId = '';
+    isUserExist.forEach(res => {
+      const data: any = res.data();
+      userDocId = res.id;
+    });
+    if (Boolean(userDocId)) {
+      await auth().currentUser?.delete();
+      await db().collection(collections.users).doc(userDocId).delete();
+    }
+    return {
+      data: null,
+      message: 'User Deleted Successfully',
+    };
+  } catch (error) {
+    console.log('err', error);
     return { data: null, message: 'Something went wrong' };
   }
 };

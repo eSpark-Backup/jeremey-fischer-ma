@@ -3,7 +3,7 @@
     "project_number": "213956113520",
     "firebase_url": "https://seaglass-app-default-rtdb.firebaseio.com",
     "project_id": "seaglass-app",
-    "storage_bucket": "seaglass-app.appspot.com"
+    "storage_bucket": "seaglass-app.firebasestorage.app"
   },
   "client": [
     {
@@ -14,6 +14,22 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "213956113520-6t8q7t7gp6g01hs7jifnh7402iusdmc8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seaglass",
+            "certificate_hash": "ac656ed711454de3a76da749ce2fe18f452877cf"
+          }
+        },
+        {
+          "client_id": "213956113520-7836tsqviq63na8ljmedjbhn4je1dsen.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seaglass",
+            "certificate_hash": "f2f2bf0617ef40acf4745034a369fe55d85e01dd"
+          }
+        },
         {
           "client_id": "213956113520-e656fue1ibpmhb2lh3deqg1nlol7pqoh.apps.googleusercontent.com",
           "client_type": 1,
@@ -40,10 +56,10 @@
               "client_type": 3
             },
             {
-              "client_id": "213956113520-i2nsdltmir2vm86ab75ahmu0idgnj1f7.apps.googleusercontent.com",
+              "client_id": "213956113520-hj63741f0i18frdogf2acevb83s85sb9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.seaglass"
+                "bundle_id": "com.seaglass.seaglass"
               }
             }
           ]

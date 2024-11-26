@@ -15,16 +15,17 @@ export default function CommunityNav() {
       <Stack.Screen
         name="CommunityTab"
         component={CommunityTab}
-        options={{
-          header: ({ route, navigation }) => (
+        options={({ route }) => ({
+          title: route.params?.title,
+          header: ({ route, navigation, options }) => (
             <MyHeader
               route={route}
-              title={route.params?.title ?? 'Friends'}
+              title={options.title ?? 'Friends'}
               leftIcon={true}
               onPressLeftIcon={() => navigation.goBack()}
             />
           ),
-        }}
+        })}
       />
       {/* <Stack.Screen
         name="FriendsList"

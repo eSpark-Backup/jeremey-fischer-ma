@@ -62,6 +62,7 @@ export default function CommunityCard({
             top: -4,
             // zIndex: 1,X
             alignItems: 'center',
+            justifyContent: 'center',
           }}>
           <MyText
             children={unreadContents?.length?.toString()}
@@ -69,16 +70,15 @@ export default function CommunityCard({
           />
         </View>
       )}
-      <View style={{ ...styles.row, flex: 1 }}>
+      <View style={{ ...styles.row, flex: 1, alignItems: 'center' }}>
         <Avatar
           rounded
           size={'medium'}
+          containerStyle={{ backgroundColor: colors.primary }}
           source={{
-            uri:
-              image == ''
-                ? 'https://randomuser.me/api/portraits/men/22.jpg'
-                : image,
+            uri: image ? image : undefined,
           }}
+          title={image ? undefined : name?.charAt(0)?.toUpperCase()}
         />
         <View style={styles.contentContainer}>
           <MyText lines={1} children={name} textStyle={{ fontSize: 16 }} />

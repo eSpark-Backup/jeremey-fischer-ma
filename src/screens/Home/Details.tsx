@@ -37,7 +37,6 @@ export default function Details() {
     const res = await PostView(contentDetails?.id!, userData?.get()?.['uid']!);
     getGroups();
     console.log('res mark as seen', res);
-    loader.set(false);
   }
 
   async function getAllArchives() {
@@ -132,7 +131,21 @@ export default function Details() {
             <Avatar
               rounded
               size={40}
-              source={{ uri: contentDetails?.sender?.image }}
+              containerStyle={{
+                backgroundColor: contentDetails?.sender?.image
+                  ? undefined
+                  : colors.primary,
+              }}
+              source={{
+                uri: contentDetails?.sender?.image
+                  ? contentDetails?.sender?.image
+                  : undefined,
+              }}
+              title={
+                contentDetails?.sender?.image
+                  ? undefined
+                  : contentDetails?.sender?.userName?.charAt(0)?.toUpperCase()
+              }
             />
             <GapView mode="horizontal" />
             <MyText
@@ -142,8 +155,10 @@ export default function Details() {
                 width: '80%',
                 textAlignVertical: 'center',
               }}>
-              {contentDetails?.sender?.userName!}:{' '}
-              {contentDetails?.message != '' ? contentDetails?.message! : ''}
+              {contentDetails?.sender != null
+                ? contentDetails?.sender?.userName!
+                : 'Deleted User'}
+              : {contentDetails?.message != '' ? contentDetails?.message! : ''}
             </MyText>
           </View>
           <View

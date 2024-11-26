@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -33,7 +33,6 @@ import {
   getGroups,
 } from '../../utils';
 import { Content, Group, NavProps, User } from '../../types';
-import { defaultImage } from '../../constants';
 import { getLinkPreview } from 'link-preview-js';
 import {
   shareContentToGroup,
@@ -161,6 +160,7 @@ export default function Share() {
       }
     } catch (error) {
       store.screenLoading.set(false);
+      Alert.alert('Unsupported Content', 'Please share other content');
       console.log(`onShare error ${Platform.OS}`, error);
     }
   };
@@ -300,7 +300,7 @@ export default function Share() {
                     details={`${
                       item.Friends?.length?.toString() ?? '0'
                     } Friends`}
-                    image={Boolean(item.image) ? item.image : defaultImage}
+                    image={item.image}
                     checkbox
                     checked={Boolean(
                       selectedFriends.filter(val => item.uid == val.uid).length,
@@ -323,6 +323,14 @@ export default function Share() {
                 );
               }
             }}
+            ListEmptyComponent={
+              <MyText
+                textStyle={{ textAlign: 'center', marginTop: 10 }}
+                children={
+                  ddSelection == 'f' ? 'No Friends Yet!' : 'No Groups Yet!'
+                }
+              />
+            }
           />
         )}
       </View>
