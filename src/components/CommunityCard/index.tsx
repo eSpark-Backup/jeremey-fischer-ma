@@ -78,7 +78,7 @@ export default function CommunityCard({
           source={{
             uri: image ? image : undefined,
           }}
-          title={image ? undefined : name.charAt(0).toUpperCase()}
+          title={image ? undefined : name?.charAt(0)?.toUpperCase()}
         />
         <View style={styles.contentContainer}>
           <MyText lines={1} children={name} textStyle={{ fontSize: 16 }} />

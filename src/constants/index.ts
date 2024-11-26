@@ -1,4 +1,5 @@
 import { Dimensions, Platform } from 'react-native';
+import deletedAvatar from '../assets/denied.png';
 
 const { width, height } = Dimensions.get('screen');
 export { width as SCREEN_WIDTH, height as SCREEN_HEIGHT };
@@ -37,3 +38,6 @@ export type FakeFeedType = {
 
 export const defaultImage: string =
   'https://randomuser.me/api/portraits/men/22.jpg';
+export const deletedUser: string =
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiFMIfsKTSzFnbXvpdeVFnU9PbMMp1DgkYAg&usqp=CAU';
+export const deletedUserImage: string = deletedAvatar;

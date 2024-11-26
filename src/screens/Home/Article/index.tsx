@@ -35,6 +35,8 @@ export default function ArticleScreen() {
     );
   }
 
+  console.log('articles user', articles[10]);
+
   return (
     <MyCanvas>
       {loader ? (

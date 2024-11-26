@@ -56,7 +56,7 @@ function App(): JSX.Element {
       `seaglass://community_nav/group_details?groudId=${notification.data?.groupId}`,
     );
     if (userData.get() && notification.data?.contentId) {
-      await getContentDetails(notification.data?.contentId!);
+      await getContentDetails(notification.data?.contentId! as string);
       await Linking.openURL(`seaglass://details`);
     } else {
       await Linking.openURL(`seaglass://`);

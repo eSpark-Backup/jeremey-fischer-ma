@@ -44,7 +44,7 @@ export default function ArchiveCard({
             title={
               contentData.sender?.image
                 ? undefined
-                : contentData.sender?.userName.charAt(0).toUpperCase()
+                : contentData.sender?.userName?.charAt(0)?.toUpperCase()
             }
           />
           {/* <Avatar

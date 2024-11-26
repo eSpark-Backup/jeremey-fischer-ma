@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert, Platform } from 'react-native';
 import { Avatar } from '@rneui/base';
 import { useNavigation, useTheme } from '@react-navigation/native';
 import { Divider, Icon } from '@rneui/themed';
@@ -9,13 +9,16 @@ import { useHookstate } from '@hookstate/core';
 import { GapView, MyCanvas, MyText, NormalBtn } from '../../components';
 import { SCREEN_WIDTH } from '../../constants';
 import { ProfileProps } from '../../types';
-import { storeUserData } from '../../utils';
+import { getRefreshToken, storeRefreshToken, storeUserData } from '../../utils';
 import { ArchiveOutlineSvg } from '../../assets';
 import store from '../../store/store';
 import moment from 'moment';
+import { deleteUser } from '../../api/user.controller';
+import { revokeUserToken } from '../Login/utils/funtions';
 
 export default function App() {
   const userData = useHookstate(store?.userData)?.get();
+  const { screenLoading } = useHookstate(store);
   const navigation = useNavigation<ProfileProps['navigation']>();
   const { colors } = useTheme();
 
@@ -28,6 +31,38 @@ export default function App() {
       },
       { text: 'YES', onPress: signOut },
     ]);
+  };
+
+  const onDelete = () => {
+    Alert.alert('Hold on!', 'Are you sure you want to delete your account?', [
+      {
+        text: 'Cancel',
+        onPress: () => null,
+        style: 'cancel',
+      },
+      { text: 'YES', onPress: userDeletion },
+    ]);
+  };
+
+  const deletefromSignInApps = async () => {
+    if (userData?.signWith == 'Apple') {
+      const refreshToken = await getRefreshToken();
+      await revokeUserToken(refreshToken as string);
+      storeRefreshToken(null);
+    }
+  };
+
+  const userDeletion = async () => {
+    try {
+      screenLoading.set(true);
+      await deleteUser(userData?.uid);
+      await deletefromSignInApps();
+      signOut();
+      screenLoading.set(false);
+    } catch (error) {
+      screenLoading.set(false);
+      console.error(error);
+    }
   };
 
   const signOut = async () => {
@@ -61,7 +96,7 @@ export default function App() {
           title={
             userData?.image
               ? undefined
-              : userData?.userName.charAt(0).toUpperCase()
+              : userData?.userName?.charAt(0)?.toUpperCase()
           }
           size={120}
         />
@@ -135,6 +170,16 @@ export default function App() {
           btnStyle={{ justifyContent: 'space-between', marginVertical: 5 }}
           onPress={onLogout}
           icon={<Icon name="log-out" type="feather" color={'#ffffff'} />}
+        />
+        <NormalBtn
+          title="Delete Account"
+          btnStyle={{
+            justifyContent: 'space-between',
+            marginVertical: 5,
+            backgroundColor: '#f32013',
+          }}
+          onPress={onDelete}
+          icon={<Icon name="trash" type="feather" color={'#ffffff'} />}
         />
       </View>
     </MyCanvas>

@@ -29,6 +29,7 @@ export default function SearchBar({
         returnKeyType="search"
         underlineColorAndroid="transparent"
         onSubmitEditing={onSubmitEditing}
+        keyboardType="email-address"
       />
       {value && (
         <TouchableOpacity onPress={clearInput}>

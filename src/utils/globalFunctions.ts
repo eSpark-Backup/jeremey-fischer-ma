@@ -70,7 +70,7 @@ function toggleViewed(
 const transformTime = (time: number) => {
   const splited = moment.unix(time).utc(false).fromNow(true).split(' ');
   const suffix =
-    splited.length < 2 ? splited[2].charAt(0) : splited[1].charAt(0);
+    splited.length < 2 ? splited[2]?.charAt(0) : splited[1]?.charAt(0);
   const prefix = splited[0] == 'a' || splited[0] == 'an' ? '1' : splited[0];
   if (prefix + suffix == '1f') {
     return '1s';

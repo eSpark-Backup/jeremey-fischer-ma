@@ -144,7 +144,7 @@ export default function Details() {
               title={
                 contentDetails?.sender?.image
                   ? undefined
-                  : contentDetails?.sender?.userName.charAt(0).toUpperCase()
+                  : contentDetails?.sender?.userName?.charAt(0)?.toUpperCase()
               }
             />
             <GapView mode="horizontal" />
@@ -155,8 +155,10 @@ export default function Details() {
                 width: '80%',
                 textAlignVertical: 'center',
               }}>
-              {contentDetails?.sender?.userName!}:{' '}
-              {contentDetails?.message != '' ? contentDetails?.message! : ''}
+              {contentDetails?.sender != null
+                ? contentDetails?.sender?.userName!
+                : 'Deleted User'}
+              : {contentDetails?.message != '' ? contentDetails?.message! : ''}
             </MyText>
           </View>
           <View

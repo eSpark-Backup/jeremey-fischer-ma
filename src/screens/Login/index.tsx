@@ -3,10 +3,7 @@ import { Platform, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
 import { useHookstate } from '@hookstate/core';
-import {
-  appleAuth,
-  AppleButton,
-} from '@invertase/react-native-apple-authentication';
+import { appleAuth } from '@invertase/react-native-apple-authentication';
 
 import store from '../../store/store';
 import { NormalBtn, GapView, MyCanvas, MyText } from '../../components';
