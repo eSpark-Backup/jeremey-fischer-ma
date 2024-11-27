@@ -66,7 +66,7 @@ export default function CommunityCard({
           }}>
           <MyText
             children={unreadContents?.length?.toString()}
-            textStyle={{ fontSize: 12, fontWeight: 'bold' }}
+            textStyle={{ fontSize: 10, fontWeight: 'bold' }}
           />
         </View>
       )}
@@ -74,10 +74,23 @@ export default function CommunityCard({
         <Avatar
           rounded
           size={'medium'}
-          containerStyle={{ backgroundColor: colors.primary }}
+          containerStyle={{
+            backgroundColor: colors.primary,
+          }}
           source={{
             uri: image ? image : undefined,
           }}
+          // avatarStyle={{ backgroundColor: 'pink' }}
+          titleStyle={
+            image
+              ? {}
+              : {
+                  // backgroundColor: 'teal',
+                  height: '100%',
+                  borderRadius: 100,
+                  textAlignVertical: 'center',
+                }
+          }
           title={image ? undefined : name?.charAt(0)?.toUpperCase()}
         />
         <View style={styles.contentContainer}>

@@ -28,7 +28,13 @@ export default function FeedCard({
     <MyCard>
       <TouchableOpacity
         style={{ padding: 10 }}
-        onPress={() => Linking.openURL(contentData?.url!)}>
+        // onPress={() => Linking.openURL(contentData?.url!)}
+        onPress={() => {
+          navigation.navigate('Details', {
+            item: { contentData, senderData },
+          });
+          getContentDetails(contentData?.id!);
+        }}>
         {!contentData?.isViewed &&
           contentData?.senderId != store.userData.get()?.uid && (
             <View style={{ position: 'absolute', top: 12, left: 10 }}>
@@ -116,6 +122,7 @@ export default function FeedCard({
         <View style={{ alignSelf: 'flex-end' }}>
           <GapView length={5} />
           <TouchableOpacity
+            disabled
             onPress={() => {
               navigation.navigate('Details', {
                 item: { contentData, senderData },
