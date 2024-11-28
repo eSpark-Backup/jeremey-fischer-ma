@@ -11,6 +11,7 @@ export type RootStackParamList = {
   Details: { item: { senderData?: User; contentData: Content } };
   Search: undefined;
   ProfileNav: undefined;
+  Inbox: undefined;
   CommunityNav: undefined;
   Share: undefined;
 };

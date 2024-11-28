@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Avatar } from '@rneui/themed';
+import { Avatar, Icon } from '@rneui/themed';
 
 import {
   NavigationHelpers,
@@ -19,6 +19,7 @@ import { colors } from '../../theme';
 import { useHookstate } from '@hookstate/core';
 import store from '../../store/store';
 import { getFriendRequests, getFriends, getGroups } from '../../utils';
+import MyText from '../MyText';
 
 const CustomTabBar = ({
   state,
@@ -100,32 +101,89 @@ const CustomTabBar = ({
   });
 
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 10,
-      }}>
-      <Avatar
-        onPress={() => navigation.navigate('ProfileNav')}
-        rounded
-        containerStyle={{
-          marginHorizontal: 5,
-          width: 35,
-          height: 35,
-          backgroundColor: userData?.image ? undefined : colors.primary,
-        }}
-        source={{
-          uri: userData?.image ? userData?.image : undefined,
-        }}
-        title={
-          userData?.image
-            ? undefined
-            : userData?.userName?.charAt(0)?.toUpperCase()
-        }
-      />
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <View style={{ padding: 10 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, justifyContent: 'space-between' }}>
+        <Avatar
+          onPress={() => navigation.navigate('ProfileNav')}
+          rounded
+          containerStyle={{
+            marginHorizontal: 5,
+            width: 35,
+            height: 35,
+            backgroundColor: userData?.image ? undefined : colors.primary,
+          }}
+          source={{
+            uri: userData?.image ? userData?.image : undefined,
+          }}
+          title={
+            userData?.image
+              ? undefined
+              : userData?.userName?.charAt(0)?.toUpperCase()
+          }
+        />
+        <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+          <MyText
+            textStyle={{ fontSize: 30, marginLeft:12 }}
+            children={"Contents"}
+          />
+        </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Inbox')}
+            style={{
+              paddingVertical: 8,
+              marginHorizontal: 5,
+              alignSelf: 'center',
+              position: 'relative',
+            }}>
+            {true && (
+              <View
+                style={{
+                  height: 10,
+                  width: 10,
+                  backgroundColor: colors.primary,
+                  borderRadius: 100,
+                  position: 'absolute',
+                  right: -10,
+                  top: 5,
+                  zIndex: 1,
+                }}
+              />
+            )}
+
+            <Icon
+              name="paper-plane"
+              type="font-awesome"
+              color="#fff"
+              size={20}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={getNavigate}
+            style={{
+              paddingVertical: 8,
+              marginHorizontal: 5,
+              alignSelf: 'center',
+            }}>
+            {isAnyNewUpdate && (
+              <View
+                style={{
+                  height: 10,
+                  width: 10,
+                  backgroundColor: colors.primary,
+                  borderRadius: 100,
+                  position: 'absolute',
+                  right: 2,
+                  top: 8,
+                  zIndex: 1,
+                }}
+              />
+            )}
+            <GroupSvg color={'#fff'} width={35} height={35} />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <TouchableOpacity
           onPress={() => {
             onPress?.();
@@ -154,6 +212,7 @@ const CustomTabBar = ({
           )}
           <ArticleSvg color={'#fff'} width={35} height={35} />
         </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => {
             onPress?.();
@@ -182,6 +241,8 @@ const CustomTabBar = ({
           )}
           <MusicNoteSvg color={'#fff'} width={35} height={35} />
         </TouchableOpacity>
+
+        {/* Podcast Tab */}
         <TouchableOpacity
           onPress={() => {
             onPress?.();
@@ -210,6 +271,8 @@ const CustomTabBar = ({
           )}
           <MicNoneSvg color={'#fff'} width={35} height={35} />
         </TouchableOpacity>
+
+        {/* Video Tab */}
         <TouchableOpacity
           onPress={() => {
             onPress?.();
@@ -239,28 +302,6 @@ const CustomTabBar = ({
           <TvSvg color={'#fff'} width={35} height={35} />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        onPress={getNavigate}
-        style={{
-          paddingVertical: 8,
-          marginHorizontal: 5,
-        }}>
-        {isAnyNewUpdate && (
-          <View
-            style={{
-              height: 10,
-              width: 10,
-              backgroundColor: colors.primary,
-              borderRadius: 100,
-              position: 'absolute',
-              right: 2,
-              top: 8,
-              zIndex: 1,
-            }}
-          />
-        )}
-        <GroupSvg color={'#fff'} width={35} height={35} />
-      </TouchableOpacity>
     </View>
   );
 };

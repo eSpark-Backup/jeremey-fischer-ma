@@ -18,9 +18,11 @@ import { deletedUser } from '../../constants';
 export default function FeedCard({
   contentData,
   senderData,
+  unreadComments,
 }: {
   contentData: Content;
   senderData?: User;
+  unreadComments?: number; 
 }) {
   const navigation = useNavigation<NavProps['navigation']>();
 
@@ -28,7 +30,6 @@ export default function FeedCard({
     <MyCard>
       <TouchableOpacity
         style={{ padding: 10 }}
-        // onPress={() => Linking.openURL(contentData?.url!)}
         onPress={() => {
           navigation.navigate('Details', {
             item: { contentData, senderData },
@@ -41,6 +42,35 @@ export default function FeedCard({
               <Dot show={true} />
             </View>
           )}
+        {unreadComments !== undefined && unreadComments > 0 && (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+            }}>
+            {/* <MyText textStyle={{ fontWeight: 'bold' }}>Unread Comments </MyText>
+            <GapView length={5} /> */}
+            <View
+              style={{
+                backgroundColor: colors.primary,
+                borderRadius: 20,
+                width: 20,
+                height: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <MyText
+                textStyle={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: 12,
+                }}>
+                {unreadComments.toString()}
+              </MyText>
+            </View>
+          </View>
+        )}
         <View
           style={{
             flexDirection: 'row',
@@ -119,6 +149,7 @@ export default function FeedCard({
             />
           </View>
         </View>
+
         <View style={{ alignSelf: 'flex-end' }}>
           <GapView length={5} />
           <TouchableOpacity
