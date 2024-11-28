@@ -4,8 +4,8 @@ import { useHookstate } from '@hookstate/core';
 import { useTheme } from '@react-navigation/native';
 
 import {
-  ArchiveCard,
   EmptyFeedLabel,
+  ArchiveCard,
   GapView,
   MyCanvas,
 } from '../../components';
@@ -77,7 +77,7 @@ export default function App() {
         />
       ) : (
         <FlatList
-          data={archives}
+          data={archives as Archive[]}
           renderItem={renderArchive}
           ItemSeparatorComponent={() => <GapView />}
           ListEmptyComponent={<EmptyFeedLabel label="No Archives Found" />}
