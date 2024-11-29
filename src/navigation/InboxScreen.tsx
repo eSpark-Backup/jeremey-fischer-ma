@@ -3,12 +3,7 @@ import { StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import { useHookstate } from '@hookstate/core';
 
 import { colors } from '../theme';
-import {
-  EmptyFeedLabel,
-  FeedCard,
-  GapView,
-  MyCanvas,
-} from '../components';
+import { EmptyFeedLabel, FeedCard, GapView, MyCanvas } from '../components';
 import { NewsFeed } from '../types';
 import store from '../store/store';
 import loaders from '../store/loaders';
@@ -19,9 +14,13 @@ export default function InboxScreen() {
   const article = articlesStore.get();
   const loader = useHookstate(loaders.newsFeed).get();
   const flatListRef: any = useRef();
+
   useEffect(() => {
     if (!loader) {
-      setArticles(article);
+      const filteredArticles = article.filter(
+        (item: NewsFeed) => !item?.content?.isCommentViewed,
+      );
+      setArticles(filteredArticles);
     }
   }, [loader]);
 
@@ -31,12 +30,14 @@ export default function InboxScreen() {
         key={index}
         contentData={item?.content}
         senderData={item?.sender}
-        unreadComments={3}
+        unreadComments={item?.content.isCommentViewed}
       />
     );
   }
 
-  console.log('articles user', articles[10]);
+  const hasUnreadComments = articles.some(
+    item => !item?.content?.isCommentViewed,
+  );
 
   return (
     <MyCanvas>
@@ -46,15 +47,16 @@ export default function InboxScreen() {
           color={colors.primary}
           style={{ marginTop: 10 }}
         />
-      ) : (
+      ) : articles.length > 0 && hasUnreadComments ? (
         <FlatList
           ref={flatListRef}
           data={articles}
           renderItem={renderFeed}
           ItemSeparatorComponent={() => <GapView />}
-          ListEmptyComponent={<EmptyFeedLabel label="No Articles Found" />}
           ListFooterComponent={<GapView length={80} />}
         />
+      ) : (
+        <EmptyFeedLabel label="No Inbox Data Found" />
       )}
     </MyCanvas>
   );

@@ -8,7 +8,7 @@ export type RootStackParamList = {
     screen: 'Article' | 'Audio' | 'Podcast' | 'Video';
     params?: undefined;
   };
-  Details: { item: { senderData?: User; contentData: Content } };
+  Details: { item: { senderData?: User; contentData: Content, groupId?:string } };
   Search: undefined;
   ProfileNav: undefined;
   Inbox: undefined;
@@ -18,7 +18,7 @@ export type RootStackParamList = {
 
 export type HomeStackParamList = {
   Home: undefined;
-  Details: { item: { senderData: User; contentData: Content } };
+  Details: { item: { senderData: User; contentData: Content, groupId?:string } };
   FriendsList: undefined;
   GroupsList: undefined;
   GroupDetails: { title: string };
@@ -80,13 +80,32 @@ export type User = {
   signWith?: 'Google' | 'Apple';
 };
 
-// FriendRequest type
 export type FriendRequest = {
   senderId: string;
   receiverId: string;
   sender?: User;
   status?: 'pending' | 'accept' | 'reject';
   id?: string; // DocId
+};
+
+export type Comment = {
+  id: string |null;
+  contentID?: string |null;
+  senderID: string;
+  receiverGroupId?: string | null;
+  receiverId?: string | null;
+  userName: string;
+  message: string;
+  createdAt?: Date |  { seconds: number; nanoseconds: number };
+  replies?: Reply[] | null;
+};
+export type Reply = {
+  id: string;
+  commentID:string;
+  senderID:string
+  userName: string;
+  message: string;
+  createdAt?: Date|  { seconds: number; nanoseconds: number };
 };
 
 // Content type
@@ -102,6 +121,7 @@ export type Content = {
   message: string;
   sender?: User;
   url?: string;
+  isCommentViewed?: boolean;
   isViewed?: boolean;
   isArchived?: boolean;
 };
@@ -157,6 +177,7 @@ export type GlobalState = {
   groupContent: Content[] | null;
   loadRequests: boolean;
   friendRequests: FriendRequest[] | null;
+  comments: Comment[];
   newsFeed: NewsFeed[];
   archives: Archive[];
   archiveIds: string[];

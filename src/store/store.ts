@@ -13,6 +13,7 @@ const store = hookstate<GlobalState>({
   groupContent: [],
   loadRequests: false,
   friendRequests: [],
+  comments: [],
   newsFeed: [],
   archives: [],
   archiveIds: [],

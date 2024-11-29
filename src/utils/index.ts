@@ -1,7 +1,7 @@
 import { BackHandler, PermissionsAndroid, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
-import { FriendRequest, User } from '../types';
+import { Comment, FriendRequest, Reply, User } from '../types';
 import { getAllFreinds } from '../api/user.controller';
 import { getAllRequest, sendRequest } from '../api/friendRequest.controller';
 import store from '../store/store';
@@ -10,6 +10,10 @@ import { getSearchedFriend } from '../screens/Home/utils/function';
 import messaging from '@react-native-firebase/messaging';
 import { getContentFromContentId } from '../api/content.controller';
 import loaders from '../store/loaders';
+import { __state } from '@hookstate/core';
+import { addComments, getAllComments } from '../api/comments.controller';
+import { addReply, getAllReplies } from '../api/reply.controller';
+import { CommentView, deleteCommentView } from '../api/commentView.controller';
 
 export const disableBackButton = () => {
   const backHandler = BackHandler.addEventListener(
@@ -63,6 +67,63 @@ export const AddFriend = async (id: string, email: string) => {
   sendRequest(data, store.userData.get()?.userName).then(res => {
     console.log('request sent', JSON.stringify(res));
     getSearchedFriend(email);
+  });
+};
+
+export const AddComments = async (comment: Comment) => {
+  const data = {
+    contentID: comment.contentID,
+    createdAt: comment.createdAt,
+    message: comment.message,
+    receiverGroupId: comment.receiverGroupId,
+    receiverId: comment.receiverId,
+    replies: comment.replies,
+    senderID: comment.senderID,
+  };
+  addComments(data).then(res => {
+    console.log('request sent', JSON.stringify(res));
+    deleteCommentView(comment.contentID ?? '');
+    getAllContentComments(comment?.contentID ?? '');
+  });
+};
+
+export const getAllContentComments = async (contentID: string) => {
+  try {
+    const res = await getAllComments(contentID);
+
+    const commentsWithReplies = await Promise.all(
+      res.data?.map(async (comment: Comment) => {
+        const replies = await getAllCommentReplies(comment.id ?? '');
+        return { ...comment, replies: replies.data || [] };
+      }) || [],
+    );
+    store.comments.set(commentsWithReplies);
+  } catch (error) {
+    console.error('Error fetching comments or replies:', error);
+  }
+};
+
+export const getAllCommentReplies = async (commentID: string) => {
+  try {
+    const res = await getAllReplies(commentID);
+    return res;
+  } catch (error) {
+    console.error('Error fetching replies:', error);
+    return { data: [] };
+  }
+};
+
+export const AddReply = async (reply: Reply, contentID: string) => {
+  const data = {
+    commentID: reply.commentID,
+    createdAt: reply.createdAt,
+    message: reply.message,
+    senderID: reply.senderID,
+  };
+  addReply(data).then(res => {
+    console.log('request sent', JSON.stringify(res));
+    deleteCommentView(contentID);
+    getAllCommentReplies(reply?.commentID ?? '');
   });
 };
 
