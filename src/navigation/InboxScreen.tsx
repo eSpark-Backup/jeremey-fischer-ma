@@ -18,7 +18,8 @@ export default function InboxScreen() {
   useEffect(() => {
     if (!loader) {
       const filteredArticles = article.filter(
-        (item: NewsFeed) => !item?.content?.isCommentViewed,
+        (item: NewsFeed) =>
+          !item?.content?.isCommentViewed && !item?.content?.isArchived,
       );
       setArticles(filteredArticles);
     }
