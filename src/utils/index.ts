@@ -11,9 +11,12 @@ import messaging from '@react-native-firebase/messaging';
 import { getContentFromContentId } from '../api/content.controller';
 import loaders from '../store/loaders';
 import { __state } from '@hookstate/core';
-import { addComments, getAllComments } from '../api/comments.controller';
+import {
+  addComments,
+  getAllCommentByContentID,
+} from '../api/comments.controller';
 import { addReply, getAllReplies } from '../api/reply.controller';
-import { CommentView, deleteCommentView } from '../api/commentView.controller';
+import { deleteCommentView } from '../api/commentView.controller';
 
 export const disableBackButton = () => {
   const backHandler = BackHandler.addEventListener(
@@ -89,8 +92,8 @@ export const AddComments = async (comment: Comment) => {
 
 export const getAllContentComments = async (contentID: string) => {
   try {
-    const res = await getAllComments(contentID);
-
+    const res = await getAllCommentByContentID(contentID);
+    console.log('agaya bhai ' + res);
     const commentsWithReplies = await Promise.all(
       res.data?.map(async (comment: Comment) => {
         const replies = await getAllCommentReplies(comment.id ?? '');

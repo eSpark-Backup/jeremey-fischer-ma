@@ -30,7 +30,6 @@ export default function App() {
       loader.set(true);
       const res = await getAllArchive(userData?.get()?.['uid'] ?? '');
       if (res?.data != null) {
-        console.log('res?.data getAllArchive', res?.data);
         archiveData.set(res?.data);
         loader.set(false);
       } else {

@@ -8,7 +8,9 @@ export type RootStackParamList = {
     screen: 'Article' | 'Audio' | 'Podcast' | 'Video';
     params?: undefined;
   };
-  Details: { item: { senderData?: User; contentData: Content, groupId?:string } };
+  Details: {
+    item: { senderData?: User; contentData: Content; groupId?: string };
+  };
   Search: undefined;
   ProfileNav: undefined;
   Inbox: undefined;
@@ -18,7 +20,9 @@ export type RootStackParamList = {
 
 export type HomeStackParamList = {
   Home: undefined;
-  Details: { item: { senderData: User; contentData: Content, groupId?:string } };
+  Details: {
+    item: { senderData: User; contentData: Content; groupId?: string };
+  };
   FriendsList: undefined;
   GroupsList: undefined;
   GroupDetails: { title: string };
@@ -89,23 +93,23 @@ export type FriendRequest = {
 };
 
 export type Comment = {
-  id: string |null;
-  contentID?: string |null;
+  id: string | null;
+  contentID?: string | null;
   senderID: string;
   receiverGroupId?: string | null;
   receiverId?: string | null;
   userName: string;
   message: string;
-  createdAt?: Date |  { seconds: number; nanoseconds: number };
+  createdAt?: Date;
   replies?: Reply[] | null;
 };
 export type Reply = {
   id: string;
-  commentID:string;
-  senderID:string
+  commentID: string;
+  senderID: string;
   userName: string;
   message: string;
-  createdAt?: Date|  { seconds: number; nanoseconds: number };
+  createdAt?: Date;
 };
 
 // Content type

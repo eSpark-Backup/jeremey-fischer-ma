@@ -16,6 +16,7 @@ import store from '../store/store';
 import loaders from '../store/loaders';
 import { colors } from '../theme';
 import { extractAllFeeds } from '../utils/globalFunctions';
+import { getAllGroupInboxData } from '../api/comments.controller';
 
 export default function TabNav() {
   const isFocused = useIsFocused();
@@ -34,6 +35,7 @@ export default function TabNav() {
 
   useEffect(() => {
     getNewsFeed();
+    getInboxGroupData();
   }, [isFocused]);
 
   useEffect(() => {
@@ -56,6 +58,26 @@ export default function TabNav() {
     } catch (e) {
       console.log('err at newsfeed fetch', e);
       loadNewsFeed.set(false);
+    }
+  }
+
+  async function getInboxGroupData() {
+    store.loadGroups.set(true);
+    try {
+      const res = await getAllGroupInboxData(store.userData.get()?.uid);
+      const ids = store.archiveIds.get();
+      const reduceArchived: any = res.data?.filter(
+        item => item?.isArchived == false && !ids.includes(item?.id!),
+      );
+
+      console.log('Idhar agaya   ' + JSON.stringify(reduceArchived));
+      ids.map(item => item);
+      store.groupContent.set(reduceArchived);
+      store.loadGroups.set(false);
+      return res.data;
+    } catch (error) {
+      store.loadGroups.set(false);
+      console.error(error);
     }
   }
 

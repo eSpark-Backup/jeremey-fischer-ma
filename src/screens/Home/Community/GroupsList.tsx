@@ -8,7 +8,6 @@ import { CommunityNavProps, Group } from '../../../types';
 import { useHookstate } from '@hookstate/core';
 import store from '../../../store/store';
 import { colors } from '../../../theme';
-import { getGroupContent } from '../../../utils';
 
 export default function GroupsList() {
   const navigation = useNavigation<CommunityNavProps['navigation']>();

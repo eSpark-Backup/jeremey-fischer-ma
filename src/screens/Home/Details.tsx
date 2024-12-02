@@ -8,9 +8,11 @@ import {
   TextInput,
   Linking,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
 import {
   RouteProp,
+  useIsFocused,
   useNavigation,
   useRoute,
   useTheme,
@@ -34,6 +36,7 @@ import { Comment, Reply, RootStackParamList } from '../../types';
 import { CommentView } from '../../api/commentView.controller';
 import { getNewsFeedContent } from '../../api/content.controller';
 import { extractAllFeeds } from '../../utils/globalFunctions';
+import { getAllGroupInboxData } from '../../api/comments.controller';
 
 type DetailsScreenRouteProps = RouteProp<RootStackParamList, 'Details'>;
 
@@ -61,6 +64,7 @@ export default function Details() {
   const [hasFetched, setHasFetched] = useState(false);
   const { colors } = useTheme();
   const { item } = params;
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     if (!contentDetails?.isViewed) {
@@ -70,7 +74,7 @@ export default function Details() {
       commentMarkAsSeen();
     }
     getAllArchives();
-  }, [contentDetails?.isViewed, contentDetails?.isCommentViewed]);
+  }, [isFocused]);
 
   useEffect(() => {
     if (contentDetails && !hasFetched) {
@@ -126,7 +130,7 @@ export default function Details() {
     };
     setComments([newCommentObject, ...comments]);
     setNewComment('');
-    addComments(newCommentObject);
+    if (newComment) addComments(newCommentObject);
   };
 
   const addComments = (addedComment: Comment) => {
@@ -143,6 +147,7 @@ export default function Details() {
 
   async function commentMarkAsSeen() {
     loader.set(true);
+    console.log('contentDetails' + JSON.stringify(contentDetails));
     await CommentView(contentDetails?.id!, userData?.get()?.uid!);
     getNewsFeed();
   }
@@ -195,7 +200,7 @@ export default function Details() {
     );
     setReplyingTo(null);
     setNewReply('');
-    AddReply(reply, contentDetails?.id!);
+    if (newReply) AddReply(reply, contentDetails?.id!);
   };
 
   return (
@@ -336,7 +341,7 @@ export default function Details() {
                 />
                 <View style={styles.sendButtonContainer}>
                   <TouchableOpacity
-                    onPress={handleSendComment}
+                    onPress={() => handleSendComment()}
                     style={styles.sendButton}>
                     <Icon
                       name="paper-plane-sharp"
@@ -347,7 +352,7 @@ export default function Details() {
                 </View>
               </View>
 
-              {comments.map((comment, index) => (
+              {comments?.map((comment, index) => (
                 <View key={index} style={styles.commentContainer}>
                   <Avatar
                     rounded
@@ -372,7 +377,8 @@ export default function Details() {
                         children={
                           comment?.createdAt
                             ? moment(
-                                'seconds' in comment.createdAt
+                                typeof comment.createdAt === 'object' &&
+                                  'seconds' in comment.createdAt
                                   ? comment.createdAt.seconds * 1000
                                   : comment.createdAt,
                               ).fromNow()
@@ -401,7 +407,7 @@ export default function Details() {
                       />
                     </TouchableOpacity>
 
-                    {comment.replies && comment.replies?.length > 0 && (
+                    {comment?.replies && comment?.replies?.length > 0 && (
                       <View style={{ flexDirection: 'row', marginTop: 10 }}>
                         <View
                           style={{
@@ -413,7 +419,7 @@ export default function Details() {
                           }}
                         />
                         <View style={{ flex: 1 }}>
-                          {comment.replies.map((reply, replyIndex) => (
+                          {comment?.replies.map((reply, replyIndex) => (
                             <View
                               key={replyIndex}
                               style={styles.replyContainer}>
@@ -448,7 +454,9 @@ export default function Details() {
                                       children={
                                         reply?.createdAt
                                           ? moment(
-                                              'seconds' in reply.createdAt
+                                              typeof reply.createdAt ===
+                                                'object' &&
+                                                'seconds' in reply.createdAt
                                                 ? reply.createdAt.seconds * 1000
                                                 : reply.createdAt,
                                             ).fromNow()

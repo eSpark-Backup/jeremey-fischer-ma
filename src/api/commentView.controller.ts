@@ -3,22 +3,36 @@ import { collections } from './constants';
 
 export const CommentView = async (contentId: string, userId: string) => {
   try {
+    console.log('Starting CommentView function...');
+    console.log('Received contentId:', contentId);
+    console.log('Received userId:', userId);
+
     const response = await db()
       .collection(collections.commentViews)
       .add({
         contentId: contentId ?? '',
         userId: userId ?? '',
       });
-    await db().collection(collections.commentViews).doc(response.id).update({
-      id: response.id,
+
+
+    const docId = response.id;
+    console.log('Document ID before update:', contentId);
+
+    await db().collection(collections.commentViews).doc(docId).update({
+      id: docId,
     });
+
+    console.log('Document updated successfully with ID:', docId);
+
     return {
       data: null,
       message: 'Comment Viewed',
     };
-  } catch (error) {}
+  } catch (error) {
+    console.error('Error in CommentView function:', error);
+    throw new Error('Failed to mark comment as viewed');
+  }
 };
-
 
 export const deleteCommentView = async (contentId: string) => {
   try {
@@ -35,7 +49,7 @@ export const deleteCommentView = async (contentId: string) => {
     }
 
     const batch = db().batch();
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach(doc => {
       batch.delete(doc.ref);
     });
 

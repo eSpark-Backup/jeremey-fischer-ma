@@ -52,6 +52,7 @@ export default function FriendsList() {
             data={friendRequests}
             renderItem={({ item }) => (
               <CommunityCard
+                key={item.id}
                 name={item.sender?.userName as string}
                 details={item.sender?.email as string}
                 image={item.sender?.image as string}
@@ -82,6 +83,7 @@ export default function FriendsList() {
             data={friends}
             renderItem={({ item }) => (
               <CommunityCard
+                key={item.uid}
                 name={item.userName}
                 details={item.email}
                 image={item.image}
