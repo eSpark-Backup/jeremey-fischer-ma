@@ -102,7 +102,13 @@ const CustomTabBar = ({
 
   return (
     <View style={{ padding: 10 }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, justifyContent: 'space-between' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginBottom: 10,
+          justifyContent: 'space-between',
+        }}>
         <Avatar
           onPress={() => navigation.navigate('ProfileNav')}
           rounded
@@ -123,8 +129,8 @@ const CustomTabBar = ({
         />
         <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
           <MyText
-            textStyle={{ fontSize: 30, marginLeft:12 }}
-            children={"Contents"}
+            textStyle={{ fontSize: 30, marginLeft: 12 }}
+            children={'Contents'}
           />
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -136,7 +142,9 @@ const CustomTabBar = ({
               alignSelf: 'center',
               position: 'relative',
             }}>
-            {true && (
+            {articles.some(
+              item => item?.content?.isCommentViewed === false,
+            ) && (
               <View
                 style={{
                   height: 10,

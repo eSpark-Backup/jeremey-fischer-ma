@@ -61,6 +61,7 @@ export default function RootNav() {
                 onPressLeftIcon={() => {
                   navigation.goBack();
                   store.contentDetails.set(null);
+                  store.comments.set([]);
                 }}
               />
             ),
@@ -90,7 +91,7 @@ export default function RootNav() {
                 route={route}
                 leftIcon={true}
                 onPressLeftIcon={() => {
-                  navigation.goBack()
+                  navigation.goBack();
                 }}
               />
             ),

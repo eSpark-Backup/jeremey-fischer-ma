@@ -18,11 +18,13 @@ import { deletedUser } from '../../constants';
 export default function FeedCard({
   contentData,
   senderData,
+  groupId,
   unreadComments,
 }: {
   contentData: Content;
+  groupId?: string;
   senderData?: User;
-  unreadComments?: number; 
+  unreadComments?: boolean;
 }) {
   const navigation = useNavigation<NavProps['navigation']>();
 
@@ -32,8 +34,9 @@ export default function FeedCard({
         style={{ padding: 10 }}
         onPress={() => {
           navigation.navigate('Details', {
-            item: { contentData, senderData },
+            item: { contentData, senderData, groupId },
           });
+
           getContentDetails(contentData?.id!);
         }}>
         {!contentData?.isViewed &&
@@ -42,21 +45,15 @@ export default function FeedCard({
               <Dot show={true} />
             </View>
           )}
-        {unreadComments !== undefined && unreadComments > 0 && (
+        {unreadComments !== undefined && unreadComments == false && (
           <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'flex-end',
             }}>
-            {/* <MyText textStyle={{ fontWeight: 'bold' }}>Unread Comments </MyText>
-            <GapView length={5} /> */}
             <View
               style={{
-                backgroundColor: colors.primary,
-                borderRadius: 20,
-                width: 20,
-                height: 20,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
@@ -66,7 +63,7 @@ export default function FeedCard({
                   fontWeight: 'bold',
                   fontSize: 12,
                 }}>
-                {unreadComments.toString()}
+                Unread comments
               </MyText>
             </View>
           </View>
