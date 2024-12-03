@@ -92,11 +92,13 @@ export const AddComments = async (comment: Comment) => {
 export const getAllContentComments = async (contentID: string) => {
   try {
     const res = await getAllCommentByContentID(contentID);
+    const comments = Array.isArray(res?.data) ? res.data : [];
     const commentsWithReplies = await Promise.all(
-      res.data?.map(async (comment: Comment) => {
-        const replies = await getAllCommentReplies(comment.id ?? '');
-        return { ...comment, replies: replies.data || [] };
-      }) || [],
+      comments.map(async (comment: Comment) => {
+        const repliesRes = await getAllCommentReplies(comment.id ?? '');
+        const replies = Array.isArray(repliesRes?.data) ? repliesRes.data : [];
+        return { ...comment, replies };
+      }),
     );
     store.comments.set(commentsWithReplies);
   } catch (error) {

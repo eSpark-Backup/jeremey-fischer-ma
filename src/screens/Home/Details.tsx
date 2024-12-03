@@ -62,6 +62,7 @@ export default function Details() {
   const contentComments = contentCommentStore.get();
   const loader = useHookstate(loaders.contentDetails);
   const [hasFetched, setHasFetched] = useState(false);
+  const [hasCommentFetched, setCommentFetched] = useState(false);
   const { colors } = useTheme();
   const { item } = params;
   const isFocused = useIsFocused();
@@ -85,7 +86,7 @@ export default function Details() {
 
   useEffect(() => {
     if (contentComments) {
-      const mutableComments = contentComments.map(comment => ({
+      const mutableComments = contentComments?.map(comment => ({
         ...comment,
         userName: userData?.get()?.userName,
         replies: comment.replies
@@ -159,7 +160,9 @@ export default function Details() {
       console.log('getInboxGroupData');
       const res = await getAllGroupInboxData(store.userData.get()?.uid);
       loader.set(false);
-      console.log('store.groupContent' + JSON.stringify(store.groupContent.get()));
+      console.log(
+        'store.groupContent' + JSON.stringify(store.groupContent.get()),
+      );
       store.groupContent.set(res.data);
       return res.data;
     } catch (error) {
@@ -208,7 +211,7 @@ export default function Details() {
       createdAt: new Date(),
     };
     setComments(prevComments =>
-      prevComments.map(comment =>
+      prevComments?.map(comment =>
         comment.id === commentID
           ? { ...comment, replies: [...(comment.replies || []), reply] }
           : comment,
@@ -435,7 +438,7 @@ export default function Details() {
                           }}
                         />
                         <View style={{ flex: 1 }}>
-                          {comment?.replies.map((reply, replyIndex) => (
+                          {comment?.replies?.map((reply, replyIndex) => (
                             <View
                               key={replyIndex}
                               style={styles.replyContainer}>

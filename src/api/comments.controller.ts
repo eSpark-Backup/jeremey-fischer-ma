@@ -80,7 +80,6 @@ export const getAllGroupInboxData = async (
       }
 
       const groupContent = await getGroupById(receiverGroupId, userId);
-      console.log('groupContent:', groupContent);
 
       if (groupContent && groupContent.data?.contents) {
         if (groupContent.data.contents.length > 0) {

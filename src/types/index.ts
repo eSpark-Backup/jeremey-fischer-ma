@@ -100,7 +100,7 @@ export type Comment = {
   receiverId?: string | null;
   userName: string;
   message: string;
-  createdAt?: Date;
+  createdAt?: Date | { seconds: number; nanoseconds: number };
   replies?: Reply[] | null;
 };
 export type Reply = {
@@ -109,7 +109,7 @@ export type Reply = {
   senderID: string;
   userName: string;
   message: string;
-  createdAt?: Date;
+  createdAt?: Date | { seconds: number; nanoseconds: number };
 };
 
 // Content type
