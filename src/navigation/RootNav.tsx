@@ -10,6 +10,7 @@ import { RootStackParamList } from '../types';
 import { MyHeader } from '../components';
 import store from '../store/store';
 import ProfileNav from './ProfileNav';
+import InboxScreen from './InboxScreen';
 import CommunityNav from './CommunityNav';
 import Details from '../screens/Home/Details';
 import Search from '../screens/Home/Search';
@@ -60,6 +61,7 @@ export default function RootNav() {
                 onPressLeftIcon={() => {
                   navigation.goBack();
                   store.contentDetails.set(null);
+                  store.comments.set([]);
                 }}
               />
             ),
@@ -75,6 +77,21 @@ export default function RootNav() {
                 leftIcon={true}
                 onPressLeftIcon={() => {
                   navigation.goBack(), searchModal?.set(false);
+                }}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="Inbox"
+          component={InboxScreen}
+          options={{
+            header: ({ route, navigation }) => (
+              <MyHeader
+                route={route}
+                leftIcon={true}
+                onPressLeftIcon={() => {
+                  navigation.goBack();
                 }}
               />
             ),

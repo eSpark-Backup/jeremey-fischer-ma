@@ -145,6 +145,7 @@ export const getNewsFeedContent = async (myUid: string) => {
           .then(async contentData => {
             content = contentData.data();
             let isViewed = false;
+            let isCommentViewed = false;
             let isArchived = false;
             const postViewFetch = db()
               .collection(collections.postViews)
@@ -157,6 +158,17 @@ export const getNewsFeedContent = async (myUid: string) => {
                 }
               });
 
+            const commentViewFetch = db()
+              .collection(collections.commentViews)
+              .where('contentId', '==', content?.id)
+              .where('userId', '==', myUid)
+              .get()
+              .then(cVSnap => {
+                if (!cVSnap.empty) {
+                  isCommentViewed = true;
+                }
+              });
+              
             const archiveFetch = db()
               .collection(collections.archives)
               .where('contentId', '==', content?.id)
@@ -167,11 +179,11 @@ export const getNewsFeedContent = async (myUid: string) => {
                   isArchived = true;
                 }
               });
-
-            innerPromises.push(postViewFetch, archiveFetch);
-            await Promise.all([postViewFetch, archiveFetch]);
+            innerPromises.push(postViewFetch, archiveFetch, commentViewFetch);
+            await Promise.all([postViewFetch, archiveFetch, commentViewFetch]);
             content.isViewed = isViewed;
             content.isArchived = isArchived;
+            content.isCommentViewed = isCommentViewed;
           });
 
         const fetchSender = db()

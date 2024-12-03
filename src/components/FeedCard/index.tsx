@@ -18,9 +18,13 @@ import { deletedUser } from '../../constants';
 export default function FeedCard({
   contentData,
   senderData,
+  groupId,
+  unreadComments,
 }: {
   contentData: Content;
+  groupId?: string;
   senderData?: User;
+  unreadComments?: boolean;
 }) {
   const navigation = useNavigation<NavProps['navigation']>();
 
@@ -28,11 +32,11 @@ export default function FeedCard({
     <MyCard>
       <TouchableOpacity
         style={{ padding: 10 }}
-        // onPress={() => Linking.openURL(contentData?.url!)}
         onPress={() => {
           navigation.navigate('Details', {
-            item: { contentData, senderData },
+            item: { contentData, senderData, groupId },
           });
+
           getContentDetails(contentData?.id!);
         }}>
         {!contentData?.isViewed &&
@@ -41,6 +45,29 @@ export default function FeedCard({
               <Dot show={true} />
             </View>
           )}
+        {unreadComments !== undefined && unreadComments == false && (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+            }}>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <MyText
+                textStyle={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: 12,
+                }}>
+                Unread comments
+              </MyText>
+            </View>
+          </View>
+        )}
         <View
           style={{
             flexDirection: 'row',
@@ -119,6 +146,7 @@ export default function FeedCard({
             />
           </View>
         </View>
+
         <View style={{ alignSelf: 'flex-end' }}>
           <GapView length={5} />
           <TouchableOpacity

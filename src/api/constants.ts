@@ -4,6 +4,9 @@ export const collections = {
   groups: 'groups',
   contents: 'contents',
   postViews: 'postViews',
+  commentViews: 'commentViews',
   newsFeed: 'newsFeed',
   archives: 'archives',
+  comments: 'comments',
+  replies: 'replies',
 };

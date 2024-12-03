@@ -199,6 +199,7 @@ export default function Search() {
                 data={friends}
                 renderItem={({ item }) => (
                   <CommunityCard
+                    key={item.uid}
                     name={item.userName}
                     details={item.email}
                     image={item.image}

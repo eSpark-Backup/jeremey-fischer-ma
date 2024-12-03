@@ -71,6 +71,7 @@ export default function App() {
       storeUserData(null);
       store.articles.set([]);
       store.audios.set([]);
+      store.comments.set([]);
       store.podcasts.set([]);
       store.videos.set([]);
       store.currentUserNotificationSetting.set(null);
