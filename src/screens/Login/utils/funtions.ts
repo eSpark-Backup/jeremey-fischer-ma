@@ -7,12 +7,12 @@ import {
   appleAuth,
 } from '@invertase/react-native-apple-authentication';
 import { Buffer } from 'buffer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { User } from '../../../types';
 import { loginUser } from '../../../api/user.controller';
 import { getFCMToken, storeRefreshToken, storeUserData } from '../../../utils';
 import store from '../../../store/store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const revokeUserToken = async (token: string) => {
   try {
