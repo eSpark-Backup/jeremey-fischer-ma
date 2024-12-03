@@ -165,6 +165,7 @@ export default function CommunityCard({
               index < 3 &&
               typeof item !== 'string' && (
                 <Avatar
+                  key={index}
                   rounded
                   containerStyle={{
                     left: 10 - 5 * index,
