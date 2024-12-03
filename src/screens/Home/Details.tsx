@@ -67,11 +67,8 @@ export default function Details() {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (!contentDetails?.isViewed) {
+    if (!contentDetails?.isViewed && isFocused) {
       markAsSeen();
-    }
-    if (!contentDetails?.isCommentViewed) {
-      commentMarkAsSeen();
     }
     getAllArchives();
   }, [isFocused]);
@@ -80,6 +77,9 @@ export default function Details() {
     if (contentDetails && !hasFetched) {
       setHasFetched(true);
       getAllContentComments(contentDetails?.id ?? '');
+      if (!contentDetails?.isCommentViewed) {
+        commentMarkAsSeen();
+      }
     }
   }, [contentDetails]);
 
@@ -102,6 +102,7 @@ export default function Details() {
 
   async function getNewsFeed() {
     try {
+      console.log('getNewsFeedCalling');
       const data = await getNewsFeedContent(userData?.get()?.['uid'] ?? '');
       if (data?.data != null) {
         newsFeed.set(data?.data);
@@ -150,6 +151,21 @@ export default function Details() {
     console.log('contentDetails' + JSON.stringify(contentDetails));
     await CommentView(contentDetails?.id!, userData?.get()?.uid!);
     getNewsFeed();
+    getInboxGroupData();
+  }
+
+  async function getInboxGroupData() {
+    try {
+      console.log('getInboxGroupData');
+      const res = await getAllGroupInboxData(store.userData.get()?.uid);
+      loader.set(false);
+      console.log('store.groupContent' + JSON.stringify(store.groupContent.get()));
+      store.groupContent.set(res.data);
+      return res.data;
+    } catch (error) {
+      loader.set(false);
+      console.error(error);
+    }
   }
 
   async function getAllArchives() {

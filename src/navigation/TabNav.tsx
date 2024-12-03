@@ -70,7 +70,6 @@ export default function TabNav() {
         item => item?.isArchived == false && !ids.includes(item?.id!),
       );
 
-      console.log('Idhar agaya   ' + JSON.stringify(reduceArchived));
       ids.map(item => item);
       store.groupContent.set(reduceArchived);
       store.loadGroups.set(false);

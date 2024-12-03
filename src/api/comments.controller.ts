@@ -68,25 +68,40 @@ export const getAllGroupInboxData = async (
       return { data: null, message: 'No comments found' };
     }
 
+    const processedGroupIds = new Set<string>();
+    let unviewedContents: Content[] = [];
+
     for (const doc of response.docs) {
       const contentData: any = doc.data();
-      const groupContent = await getGroupById(
-        contentData.receiverGroupId,
-        userId,
-      );
+      const receiverGroupId = contentData.receiverGroupId;
+
+      if (processedGroupIds.has(receiverGroupId)) {
+        continue;
+      }
+
+      const groupContent = await getGroupById(receiverGroupId, userId);
+      console.log('groupContent:', groupContent);
+
       if (groupContent && groupContent.data?.contents) {
-        const unviewedContents = groupContent.data.contents.filter(
-          (content: Content) => content.isCommentViewed === false,
-        );
-        if (unviewedContents.length > 0) {
-          return {
-            data: unviewedContents,
-            message: 'Group content fetched successfully',
-          };
+        if (groupContent.data.contents.length > 0) {
+          unviewedContents = [
+            ...unviewedContents,
+            ...groupContent.data.contents,
+          ];
         }
       }
+
+      processedGroupIds.add(receiverGroupId);
     }
 
+    if (unviewedContents.length > 0) {
+      return {
+        data: unviewedContents,
+        message: 'Group content fetched successfully',
+      };
+    }
+
+    console.log('No group content matches the criteria');
     return { data: null, message: 'No group content matches the criteria' };
   } catch (error) {
     console.error('getAllGroupInboxData error', error);

@@ -84,7 +84,6 @@ export const AddComments = async (comment: Comment) => {
     senderID: comment.senderID,
   };
   addComments(data).then(res => {
-    console.log('request sent', JSON.stringify(res));
     deleteCommentView(comment.contentID ?? '');
     getAllContentComments(comment?.contentID ?? '');
   });
@@ -93,7 +92,6 @@ export const AddComments = async (comment: Comment) => {
 export const getAllContentComments = async (contentID: string) => {
   try {
     const res = await getAllCommentByContentID(contentID);
-    console.log('agaya bhai ' + res);
     const commentsWithReplies = await Promise.all(
       res.data?.map(async (comment: Comment) => {
         const replies = await getAllCommentReplies(comment.id ?? '');
@@ -124,7 +122,6 @@ export const AddReply = async (reply: Reply, contentID: string) => {
     senderID: reply.senderID,
   };
   addReply(data).then(res => {
-    console.log('request sent', JSON.stringify(res));
     deleteCommentView(contentID);
     getAllCommentReplies(reply?.commentID ?? '');
   });

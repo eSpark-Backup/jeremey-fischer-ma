@@ -127,7 +127,6 @@ export const getMyGroups = async (myUid: string) => {
                       contentData.isArchived = false;
                     }
                   });
-                let isCommentViewed = false;
                 const commentView = db()
                   .collection(collections.commentViews)
                   .where('contentId', '==', content?.id)
@@ -135,10 +134,11 @@ export const getMyGroups = async (myUid: string) => {
                   .get()
                   .then(cvSnap => {
                     if (!cvSnap.empty) {
-                      isCommentViewed = true;
+                      contentData.isCommentViewed = true;
+                    } else {
+                      contentData.isCommentViewed = false;
                     }
                   });
-                contentData.isCommentViewed = isCommentViewed;
                 innerPromises.push(
                   senderPromise,
                   postViewFetch,
@@ -209,7 +209,6 @@ export const getGroupById = async (groupId: string, myUid?: string) => {
     if (response.empty) {
       return { data: null, message: 'You have not add in any group' };
     } else {
-      console.log('AYA HAI IDHAR');
 
       const promises: Promise<void>[] = [];
       const groups: Group[] = [];
@@ -283,16 +282,13 @@ export const getGroupById = async (groupId: string, myUid?: string) => {
                   .where('contentId', '==', content?.id)
                   .where('userId', '==', myUid)
                   .get()
-                  .then(cvSnap => {
-                    if (!cvSnap.empty) {
+                  .then(CvSnap => {
+                    if (!CvSnap.empty) {
                       contentData.isCommentViewed = true;
                     } else {
                       contentData.isCommentViewed = false;
                     }
                   });
-                console.log('content?.id' + content?.id);
-                console.log('myUid' + myUid);
-                console.log('isCommentViewed' + JSON.stringify(contentData));
                 innerPromises.push(
                   senderPromise,
                   postViewFetch,

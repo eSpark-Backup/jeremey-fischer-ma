@@ -7,7 +7,7 @@ import { EmptyFeedLabel, FeedCard, GapView, MyCanvas } from '../components';
 import { NewsFeed, Content } from '../types';
 import store from '../store/store';
 import loaders from '../store/loaders';
-import { useIsFocused } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { getAllGroupInboxData } from '../api/comments.controller';
 
 export default function InboxScreen() {
@@ -25,24 +25,26 @@ export default function InboxScreen() {
 
   const loader = useHookstate(loaders.newsFeed).get();
 
-  useEffect(() => {
-    if (!loader) {
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('Idhar arha hai');
+      loaders.newsFeed.set(false);
       const filteredArticles = articles.filter(
         (item: NewsFeed) =>
           !item?.content?.isCommentViewed && !item?.content?.isArchived,
       );
       setFilteredContent(filteredArticles);
-
       const filteredGroups = groupContent?.filter(
         (item: Content) => !item?.isCommentViewed && !item?.isArchived,
       );
       setFilteredGroupContent(filteredGroups);
-    }
-  }, [loader]);
-
-  useEffect(() => {
-    getAllGroupInboxData(store.userData.get()?.uid);
-  }, [isFocused]);
+      return () => {
+        loaders.newsFeed.set(true);
+        setFilteredContent([]);
+        setFilteredGroupContent([]);
+      };
+    }, []),
+  );
 
   function isNewsFeed(item: NewsFeed | Content): item is NewsFeed {
     return (item as NewsFeed).content !== undefined;

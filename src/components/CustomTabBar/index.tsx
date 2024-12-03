@@ -42,7 +42,6 @@ const CustomTabBar = ({
   useEffect(() => {
     getGroups();
     getFriendRequests();
-    console.log('groupsContentA ' + groupsContent);
   }, []);
 
   const getNavigate = () => {
@@ -90,10 +89,8 @@ const CustomTabBar = ({
 
   const isAnyGroupUpdate = groupsContent?.some(group => {
     let isNewContent = false;
-    console.log('Group Length' + groupsContent.length);
     if (groupsContent) {
       for (let index = 0; index < groupsContent.length; index++) {
-        console.log('contentGroup' + JSON.stringify(groupsContent));
         if (groupsContent[index]?.isCommentViewed === false) {
           isNewContent = true;
           break;
