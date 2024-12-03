@@ -127,8 +127,30 @@ export const getMyGroups = async (myUid: string) => {
                       contentData.isArchived = false;
                     }
                   });
-                innerPromises.push(senderPromise, postViewFetch, archiveFetch);
-                await Promise.all([senderPromise, postViewFetch, archiveFetch]);
+                const commentView = db()
+                  .collection(collections.commentViews)
+                  .where('contentId', '==', content?.id)
+                  .where('userId', '==', myUid)
+                  .get()
+                  .then(cvSnap => {
+                    if (!cvSnap.empty) {
+                      contentData.isCommentViewed = true;
+                    } else {
+                      contentData.isCommentViewed = false;
+                    }
+                  });
+                innerPromises.push(
+                  senderPromise,
+                  postViewFetch,
+                  archiveFetch,
+                  commentView,
+                );
+                await Promise.all([
+                  senderPromise,
+                  postViewFetch,
+                  archiveFetch,
+                  commentView,
+                ]);
                 contents.push(contentData);
               });
               await Promise.all(innerPromises);
@@ -187,6 +209,7 @@ export const getGroupById = async (groupId: string, myUid?: string) => {
     if (response.empty) {
       return { data: null, message: 'You have not add in any group' };
     } else {
+
       const promises: Promise<void>[] = [];
       const groups: Group[] = [];
       response.forEach(async res => {
@@ -253,8 +276,31 @@ export const getGroupById = async (groupId: string, myUid?: string) => {
                       contentData.isArchived = false;
                     }
                   });
-                innerPromises.push(senderPromise, postViewFetch, archiveFetch);
-                await Promise.all([senderPromise, postViewFetch, archiveFetch]);
+
+                const commentView = db()
+                  .collection(collections.commentViews)
+                  .where('contentId', '==', content?.id)
+                  .where('userId', '==', myUid)
+                  .get()
+                  .then(CvSnap => {
+                    if (!CvSnap.empty) {
+                      contentData.isCommentViewed = true;
+                    } else {
+                      contentData.isCommentViewed = false;
+                    }
+                  });
+                innerPromises.push(
+                  senderPromise,
+                  postViewFetch,
+                  archiveFetch,
+                  commentView,
+                );
+                await Promise.all([
+                  senderPromise,
+                  postViewFetch,
+                  archiveFetch,
+                  commentView,
+                ]);
                 contents.push(contentData);
               });
               await Promise.all(innerPromises);
@@ -278,7 +324,6 @@ export const getGroupById = async (groupId: string, myUid?: string) => {
           groupCreatorPromise,
           contentPromise,
         ]);
-
         data.Members = Members;
         data.groupCreator = groupCreator;
         data.contents = contents;

@@ -9,16 +9,23 @@ export const CommentView = async (contentId: string, userId: string) => {
         contentId: contentId ?? '',
         userId: userId ?? '',
       });
-    await db().collection(collections.commentViews).doc(response.id).update({
-      id: response.id,
+
+
+    const docId = response.id;
+
+    await db().collection(collections.commentViews).doc(docId).update({
+      id: docId,
     });
+
     return {
       data: null,
       message: 'Comment Viewed',
     };
-  } catch (error) {}
+  } catch (error) {
+    console.error('Error in CommentView function:', error);
+    throw new Error('Failed to mark comment as viewed');
+  }
 };
-
 
 export const deleteCommentView = async (contentId: string) => {
   try {
@@ -35,7 +42,7 @@ export const deleteCommentView = async (contentId: string) => {
     }
 
     const batch = db().batch();
-    querySnapshot.forEach((doc) => {
+    querySnapshot.forEach(doc => {
       batch.delete(doc.ref);
     });
 

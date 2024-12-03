@@ -111,6 +111,7 @@ export default function AddNewGroup() {
           renderItem={({ item }) =>
             item.isFriend || item.isFriend == undefined ? (
               <CommunityCard
+                key={item.uid}
                 name={item.userName}
                 details={item.email}
                 image={item.image}

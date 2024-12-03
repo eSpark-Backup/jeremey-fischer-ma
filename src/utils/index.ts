@@ -11,9 +11,12 @@ import messaging from '@react-native-firebase/messaging';
 import { getContentFromContentId } from '../api/content.controller';
 import loaders from '../store/loaders';
 import { __state } from '@hookstate/core';
-import { addComments, getAllComments } from '../api/comments.controller';
+import {
+  addComments,
+  getAllCommentByContentID,
+} from '../api/comments.controller';
 import { addReply, getAllReplies } from '../api/reply.controller';
-import { CommentView, deleteCommentView } from '../api/commentView.controller';
+import { deleteCommentView } from '../api/commentView.controller';
 
 export const disableBackButton = () => {
   const backHandler = BackHandler.addEventListener(
@@ -81,7 +84,6 @@ export const AddComments = async (comment: Comment) => {
     senderID: comment.senderID,
   };
   addComments(data).then(res => {
-    console.log('request sent', JSON.stringify(res));
     deleteCommentView(comment.contentID ?? '');
     getAllContentComments(comment?.contentID ?? '');
   });
@@ -89,13 +91,14 @@ export const AddComments = async (comment: Comment) => {
 
 export const getAllContentComments = async (contentID: string) => {
   try {
-    const res = await getAllComments(contentID);
-
+    const res = await getAllCommentByContentID(contentID);
+    const comments = Array.isArray(res?.data) ? res.data : [];
     const commentsWithReplies = await Promise.all(
-      res.data?.map(async (comment: Comment) => {
-        const replies = await getAllCommentReplies(comment.id ?? '');
-        return { ...comment, replies: replies.data || [] };
-      }) || [],
+      comments.map(async (comment: Comment) => {
+        const repliesRes = await getAllCommentReplies(comment.id ?? '');
+        const replies = Array.isArray(repliesRes?.data) ? repliesRes.data : [];
+        return { ...comment, replies };
+      }),
     );
     store.comments.set(commentsWithReplies);
   } catch (error) {
@@ -121,7 +124,6 @@ export const AddReply = async (reply: Reply, contentID: string) => {
     senderID: reply.senderID,
   };
   addReply(data).then(res => {
-    console.log('request sent', JSON.stringify(res));
     deleteCommentView(contentID);
     getAllCommentReplies(reply?.commentID ?? '');
   });

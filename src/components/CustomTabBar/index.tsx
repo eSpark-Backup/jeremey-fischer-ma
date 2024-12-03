@@ -33,6 +33,7 @@ const CustomTabBar = ({
   const userData = useHookstate(store?.userData)?.get();
   const friendRequest = useHookstate(store.friendRequests).get();
   const groups = useHookstate(store.groups).get();
+  const groupsContent = useHookstate(store.groupContent).get();
   const articles = useHookstate(store.articles).get();
   const audios = useHookstate(store.audios).get();
   const podcasts = useHookstate(store.podcasts).get();
@@ -85,6 +86,20 @@ const CustomTabBar = ({
     }
     return isNewContent;
   });
+
+  const isAnyGroupUpdate = groupsContent?.some(group => {
+    let isNewContent = false;
+    if (groupsContent) {
+      for (let index = 0; index < groupsContent.length; index++) {
+        if (groupsContent[index]?.isCommentViewed === false) {
+          isNewContent = true;
+          break;
+        }
+      }
+    }
+    return isNewContent;
+  });
+
   const isAnyPodcastUpdate = podcasts?.some(value => {
     let isNewContent = false;
     if (!value?.content.isViewed && value?.content.senderId != userData?.uid) {
@@ -142,9 +157,8 @@ const CustomTabBar = ({
               alignSelf: 'center',
               position: 'relative',
             }}>
-            {articles.some(
-              item => item?.content?.isCommentViewed === false,
-            ) && (
+            {(articles.some(item => item?.content?.isCommentViewed === false) ||
+              isAnyGroupUpdate) && (
               <View
                 style={{
                   height: 10,

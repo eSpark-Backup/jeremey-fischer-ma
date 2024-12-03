@@ -8,9 +8,11 @@ import {
   TextInput,
   Linking,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
 import {
   RouteProp,
+  useIsFocused,
   useNavigation,
   useRoute,
   useTheme,
@@ -34,6 +36,7 @@ import { Comment, Reply, RootStackParamList } from '../../types';
 import { CommentView } from '../../api/commentView.controller';
 import { getNewsFeedContent } from '../../api/content.controller';
 import { extractAllFeeds } from '../../utils/globalFunctions';
+import { getAllGroupInboxData } from '../../api/comments.controller';
 
 type DetailsScreenRouteProps = RouteProp<RootStackParamList, 'Details'>;
 
@@ -59,29 +62,31 @@ export default function Details() {
   const contentComments = contentCommentStore.get();
   const loader = useHookstate(loaders.contentDetails);
   const [hasFetched, setHasFetched] = useState(false);
+  const [hasCommentFetched, setCommentFetched] = useState(false);
   const { colors } = useTheme();
   const { item } = params;
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    if (!contentDetails?.isViewed) {
+    if (!contentDetails?.isViewed && isFocused) {
       markAsSeen();
     }
-    if (!contentDetails?.isCommentViewed) {
-      commentMarkAsSeen();
-    }
     getAllArchives();
-  }, [contentDetails?.isViewed, contentDetails?.isCommentViewed]);
+  }, [isFocused]);
 
   useEffect(() => {
     if (contentDetails && !hasFetched) {
       setHasFetched(true);
       getAllContentComments(contentDetails?.id ?? '');
+      if (!contentDetails?.isCommentViewed) {
+        commentMarkAsSeen();
+      }
     }
   }, [contentDetails]);
 
   useEffect(() => {
     if (contentComments) {
-      const mutableComments = contentComments.map(comment => ({
+      const mutableComments = contentComments?.map(comment => ({
         ...comment,
         userName: userData?.get()?.userName,
         replies: comment.replies
@@ -98,6 +103,7 @@ export default function Details() {
 
   async function getNewsFeed() {
     try {
+      console.log('getNewsFeedCalling');
       const data = await getNewsFeedContent(userData?.get()?.['uid'] ?? '');
       if (data?.data != null) {
         newsFeed.set(data?.data);
@@ -126,7 +132,7 @@ export default function Details() {
     };
     setComments([newCommentObject, ...comments]);
     setNewComment('');
-    addComments(newCommentObject);
+    if (newComment) addComments(newCommentObject);
   };
 
   const addComments = (addedComment: Comment) => {
@@ -143,8 +149,26 @@ export default function Details() {
 
   async function commentMarkAsSeen() {
     loader.set(true);
+    console.log('contentDetails' + JSON.stringify(contentDetails));
     await CommentView(contentDetails?.id!, userData?.get()?.uid!);
     getNewsFeed();
+    getInboxGroupData();
+  }
+
+  async function getInboxGroupData() {
+    try {
+      console.log('getInboxGroupData');
+      const res = await getAllGroupInboxData(store.userData.get()?.uid);
+      loader.set(false);
+      console.log(
+        'store.groupContent' + JSON.stringify(store.groupContent.get()),
+      );
+      store.groupContent.set(res.data);
+      return res.data;
+    } catch (error) {
+      loader.set(false);
+      console.error(error);
+    }
   }
 
   async function getAllArchives() {
@@ -187,7 +211,7 @@ export default function Details() {
       createdAt: new Date(),
     };
     setComments(prevComments =>
-      prevComments.map(comment =>
+      prevComments?.map(comment =>
         comment.id === commentID
           ? { ...comment, replies: [...(comment.replies || []), reply] }
           : comment,
@@ -195,7 +219,7 @@ export default function Details() {
     );
     setReplyingTo(null);
     setNewReply('');
-    AddReply(reply, contentDetails?.id!);
+    if (newReply) AddReply(reply, contentDetails?.id!);
   };
 
   return (
@@ -336,7 +360,7 @@ export default function Details() {
                 />
                 <View style={styles.sendButtonContainer}>
                   <TouchableOpacity
-                    onPress={handleSendComment}
+                    onPress={() => handleSendComment()}
                     style={styles.sendButton}>
                     <Icon
                       name="paper-plane-sharp"
@@ -347,7 +371,7 @@ export default function Details() {
                 </View>
               </View>
 
-              {comments.map((comment, index) => (
+              {comments?.map((comment, index) => (
                 <View key={index} style={styles.commentContainer}>
                   <Avatar
                     rounded
@@ -372,7 +396,8 @@ export default function Details() {
                         children={
                           comment?.createdAt
                             ? moment(
-                                'seconds' in comment.createdAt
+                                typeof comment.createdAt === 'object' &&
+                                  'seconds' in comment.createdAt
                                   ? comment.createdAt.seconds * 1000
                                   : comment.createdAt,
                               ).fromNow()
@@ -401,7 +426,7 @@ export default function Details() {
                       />
                     </TouchableOpacity>
 
-                    {comment.replies && comment.replies?.length > 0 && (
+                    {comment?.replies && comment?.replies?.length > 0 && (
                       <View style={{ flexDirection: 'row', marginTop: 10 }}>
                         <View
                           style={{
@@ -413,7 +438,7 @@ export default function Details() {
                           }}
                         />
                         <View style={{ flex: 1 }}>
-                          {comment.replies.map((reply, replyIndex) => (
+                          {comment?.replies?.map((reply, replyIndex) => (
                             <View
                               key={replyIndex}
                               style={styles.replyContainer}>
@@ -448,7 +473,9 @@ export default function Details() {
                                       children={
                                         reply?.createdAt
                                           ? moment(
-                                              'seconds' in reply.createdAt
+                                              typeof reply.createdAt ===
+                                                'object' &&
+                                                'seconds' in reply.createdAt
                                                 ? reply.createdAt.seconds * 1000
                                                 : reply.createdAt,
                                             ).fromNow()

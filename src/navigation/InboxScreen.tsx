@@ -1,44 +1,83 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import { useHookstate } from '@hookstate/core';
 
 import { colors } from '../theme';
 import { EmptyFeedLabel, FeedCard, GapView, MyCanvas } from '../components';
-import { NewsFeed } from '../types';
+import { NewsFeed, Content } from '../types';
 import store from '../store/store';
 import loaders from '../store/loaders';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { getAllGroupInboxData } from '../api/comments.controller';
 
 export default function InboxScreen() {
-  const [articles, setArticles] = useState<NewsFeed[]>([]);
-  const articlesStore: any = useHookstate(store?.articles);
-  const article = articlesStore.get();
-  const loader = useHookstate(loaders.newsFeed).get();
-  const flatListRef: any = useRef();
+  const [filteredContent, setFilteredContent] = useState<NewsFeed[]>([]);
+  const [filteredGroupContent, setFilteredGroupContent] = useState<Content[]>(
+    [],
+  );
 
-  useEffect(() => {
-    if (!loader) {
-      const filteredArticles = article.filter(
+  const articlesStore: any = useHookstate(store?.articles);
+  const groupContentStore: any = useHookstate(store?.groupContent);
+
+  const articles = articlesStore.get();
+  const groupContent = groupContentStore.get();
+  const isFocused = useIsFocused();
+
+  const loader = useHookstate(loaders.newsFeed).get();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('Idhar arha hai');
+      loaders.newsFeed.set(false);
+      const filteredArticles = articles.filter(
         (item: NewsFeed) =>
           !item?.content?.isCommentViewed && !item?.content?.isArchived,
       );
-      setArticles(filteredArticles);
-    }
-  }, [loader]);
+      setFilteredContent(filteredArticles);
+      const filteredGroups = groupContent?.filter(
+        (item: Content) => !item?.isCommentViewed && !item?.isArchived,
+      );
+      setFilteredGroupContent(filteredGroups);
+      return () => {
+        loaders.newsFeed.set(true);
+        setFilteredContent([]);
+        setFilteredGroupContent([]);
+      };
+    }, []),
+  );
 
-  function renderFeed({ item, index }: { item: NewsFeed; index: number }) {
+  function isNewsFeed(item: NewsFeed | Content): item is NewsFeed {
+    return (item as NewsFeed).content !== undefined;
+  }
+
+  function renderFeed({
+    item,
+    index,
+  }: {
+    item: NewsFeed | Content;
+    index: number;
+  }) {
+    const isNews = isNewsFeed(item);
     return (
       <FeedCard
         key={index}
-        contentData={item?.content}
-        senderData={item?.sender}
-        unreadComments={item?.content.isCommentViewed}
+        contentData={isNews ? item.content : item}
+        senderData={(item as NewsFeed)?.sender || null}
+        unreadComments={
+          isNews ? item.content.isCommentViewed : item.isCommentViewed
+        }
       />
     );
   }
 
-  const hasUnreadComments = articles.some(
-    item => !item?.content?.isCommentViewed,
-  );
+  const hasUnreadContent =
+    filteredContent?.some(item => !item?.content?.isCommentViewed) ||
+    filteredGroupContent?.some(item => !item?.isCommentViewed);
+
+  const combinedData = [
+    ...(filteredContent || []),
+    ...(filteredGroupContent || []),
+  ];
 
   return (
     <MyCanvas>
@@ -48,10 +87,9 @@ export default function InboxScreen() {
           color={colors.primary}
           style={{ marginTop: 10 }}
         />
-      ) : articles.length > 0 && hasUnreadComments ? (
+      ) : combinedData.length > 0 && hasUnreadContent ? (
         <FlatList
-          ref={flatListRef}
-          data={articles}
+          data={combinedData}
           renderItem={renderFeed}
           ItemSeparatorComponent={() => <GapView />}
           ListFooterComponent={<GapView length={80} />}
