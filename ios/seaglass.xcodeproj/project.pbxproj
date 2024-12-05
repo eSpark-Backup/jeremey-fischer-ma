@@ -8,18 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* seaglassTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* seaglassTests.m */; };
+		10D6D5B545E67BAEA64BD7D5 /* Pods_seaglass_seaglassTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D47B2E7EEFEAA241673CFF3 /* Pods_seaglass_seaglassTests.framework */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		1B1882AD0B6040D282DA141C /* DMSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1BD84C9500FF4E5B88504C41 /* DMSans-Italic.ttf */; };
+		28C5BDEFF85C96EA4AE90C07 /* Pods_ShareExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E6D9B2BDA96DBE09B5F0830 /* Pods_ShareExtension.framework */; };
 		2C016F05A2354C7599C12FC5 /* DMSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8791670C52D64013ACCA8E7C /* DMSans-Bold.ttf */; };
+		405031D1D6E03441697E24F5 /* Pods_seaglass.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3886D5931F66B059402BDC21 /* Pods_seaglass.framework */; };
 		52C571AFBDA349858ED9D713 /* DMSans-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1ACEB26B88E94A67921B6907 /* DMSans-MediumItalic.ttf */; };
 		62ED08C1C8E9409EB71994B9 /* DMSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FFAFA234982B43EEB9A5A3AD /* DMSans-Medium.ttf */; };
-		6587F76D38CE77A345B9B878 /* libPods-seaglass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C895E515E1F3B8F20F5732D4 /* libPods-seaglass.a */; };
-		6F0F0040F433941090DCA414 /* libPods-seaglass-seaglassTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1886C0B517C0FA41F6515C5 /* libPods-seaglass-seaglassTests.a */; };
 		7F0D92BB2A681274006D0FD2 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F0D92BA2A681274006D0FD2 /* NotificationService.swift */; };
 		7F0D92BF2A681275006D0FD2 /* NotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7F0D92B82A681274006D0FD2 /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		7F5348592A408949007A5264 /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F5348582A408949007A5264 /* libRNGoogleSignin.a */; };
 		7F9F53862A6AD0DD00F044EB /* ic_launcher.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F9F53852A6AD0DD00F044EB /* ic_launcher.png */; };
 		7FBD99D82A3847120079CB59 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7FBD99C82A3847120079CB59 /* Feather.ttf */; };
 		7FBD99D92A3847120079CB59 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7FBD99C92A3847120079CB59 /* Foundation.ttf */; };
@@ -43,7 +43,6 @@
 		7FFBEBD62A545790003B8F37 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FFBEBD52A545790003B8F37 /* ShareViewController.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A2A2FA3E528241BFB5A38C0D /* DMSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 841C2794D4A34C9EBA86726D /* DMSans-Regular.ttf */; };
-		DA59A702BBE45FE0248BB127 /* libPods-ShareExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7407000787C7CFF52B189A31 /* libPods-ShareExtension.a */; };
 		F48D306D5048425A80A7CDA6 /* DMSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1733B6BA36064CB59A10ADD3 /* DMSans-BoldItalic.ttf */; };
 /* End PBXBuildFile section */
 
@@ -99,10 +98,12 @@
 		1733B6BA36064CB59A10ADD3 /* DMSans-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DMSans-BoldItalic.ttf"; path = "../src/assets/fonts/DMSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		1ACEB26B88E94A67921B6907 /* DMSans-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DMSans-MediumItalic.ttf"; path = "../src/assets/fonts/DMSans-MediumItalic.ttf"; sourceTree = "<group>"; };
 		1BD84C9500FF4E5B88504C41 /* DMSans-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DMSans-Italic.ttf"; path = "../src/assets/fonts/DMSans-Italic.ttf"; sourceTree = "<group>"; };
+		2D47B2E7EEFEAA241673CFF3 /* Pods_seaglass_seaglassTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_seaglass_seaglassTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3886D5931F66B059402BDC21 /* Pods_seaglass.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_seaglass.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-seaglass.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-seaglass.debug.xcconfig"; path = "Target Support Files/Pods-seaglass/Pods-seaglass.debug.xcconfig"; sourceTree = "<group>"; };
+		4E6D9B2BDA96DBE09B5F0830 /* Pods_ShareExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShareExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5709B34CF0A7D63546082F79 /* Pods-seaglass.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-seaglass.release.xcconfig"; path = "Target Support Files/Pods-seaglass/Pods-seaglass.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-seaglass-seaglassTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-seaglass-seaglassTests.debug.xcconfig"; path = "Target Support Files/Pods-seaglass-seaglassTests/Pods-seaglass-seaglassTests.debug.xcconfig"; sourceTree = "<group>"; };
-		7407000787C7CFF52B189A31 /* libPods-ShareExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ShareExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F078BE52A407871007BD89E /* seaglass.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = seaglass.entitlements; path = seaglass/seaglass.entitlements; sourceTree = "<group>"; };
 		7F0D92B82A681274006D0FD2 /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F0D92BA2A681274006D0FD2 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
@@ -139,10 +140,8 @@
 		8791670C52D64013ACCA8E7C /* DMSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DMSans-Bold.ttf"; path = "../src/assets/fonts/DMSans-Bold.ttf"; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-seaglass-seaglassTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-seaglass-seaglassTests.release.xcconfig"; path = "Target Support Files/Pods-seaglass-seaglassTests/Pods-seaglass-seaglassTests.release.xcconfig"; sourceTree = "<group>"; };
 		C5C8B26159723B9B7633F585 /* Pods-ShareExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareExtension.release.xcconfig"; path = "Target Support Files/Pods-ShareExtension/Pods-ShareExtension.release.xcconfig"; sourceTree = "<group>"; };
-		C895E515E1F3B8F20F5732D4 /* libPods-seaglass.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-seaglass.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D706C116E26E542815C126F2 /* Pods-ShareExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShareExtension.debug.xcconfig"; path = "Target Support Files/Pods-ShareExtension/Pods-ShareExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F1886C0B517C0FA41F6515C5 /* libPods-seaglass-seaglassTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-seaglass-seaglassTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFAFA234982B43EEB9A5A3AD /* DMSans-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DMSans-Medium.ttf"; path = "../src/assets/fonts/DMSans-Medium.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -151,7 +150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6F0F0040F433941090DCA414 /* libPods-seaglass-seaglassTests.a in Frameworks */,
+				10D6D5B545E67BAEA64BD7D5 /* Pods_seaglass_seaglassTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,8 +158,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7F5348592A408949007A5264 /* libRNGoogleSignin.a in Frameworks */,
-				6587F76D38CE77A345B9B878 /* libPods-seaglass.a in Frameworks */,
+				405031D1D6E03441697E24F5 /* Pods_seaglass.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,7 +173,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA59A702BBE45FE0248BB127 /* libPods-ShareExtension.a in Frameworks */,
+				28C5BDEFF85C96EA4AE90C07 /* Pods_ShareExtension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,9 +217,9 @@
 			children = (
 				7F5348582A408949007A5264 /* libRNGoogleSignin.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				7407000787C7CFF52B189A31 /* libPods-ShareExtension.a */,
-				C895E515E1F3B8F20F5732D4 /* libPods-seaglass.a */,
-				F1886C0B517C0FA41F6515C5 /* libPods-seaglass-seaglassTests.a */,
+				4E6D9B2BDA96DBE09B5F0830 /* Pods_ShareExtension.framework */,
+				3886D5931F66B059402BDC21 /* Pods_seaglass.framework */,
+				2D47B2E7EEFEAA241673CFF3 /* Pods_seaglass_seaglassTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -370,10 +368,10 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				7FC4D8DE2A402A9800C028E0 /* Embed Foundation Extensions */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
 				A7DD357D85A2EBBB923B042F /* [CP-User] [RNFB] Core Configuration */,
-				7FC4D8DE2A402A9800C028E0 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -805,7 +803,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = seaglassTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -830,7 +828,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = LX46ZGPDLT;
 				INFOPLIST_FILE = seaglassTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -859,6 +857,7 @@
 				DEVELOPMENT_TEAM = LX46ZGPDLT;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = seaglass/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -889,6 +888,7 @@
 				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = LX46ZGPDLT;
 				INFOPLIST_FILE = seaglass/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1006,7 +1006,7 @@
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ShareExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1049,7 +1049,7 @@
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ShareExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1118,6 +1118,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
@@ -1190,6 +1201,17 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
