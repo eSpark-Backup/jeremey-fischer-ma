@@ -78,17 +78,12 @@ export const sendNotification = async (
   data = {},
 ) => {
   var myHeaders = new Headers();
-  myHeaders.append(
-    'Authorization',
-    'key=AAAAMdDHNHA:APA91bH1nql3R2jym1UNAKjkG6_R3ahC2FzwQ_mBqxnLw4YmripzhItSOicu9og34iMKCEpRFgbCk2LAPbcybd0DgPymudRpYfNUp4MtBNLkDt_HzlsUHzouVhouX4CSoZ7NNEySsm97',
-  );
   myHeaders.append('Content-Type', 'application/json');
   var raw = JSON.stringify({
     registration_ids: fcmTokens,
     notification: {
       body: description,
       title: title,
-      mutable_content: true,
     },
     data: data ?? {},
   });
@@ -96,9 +91,11 @@ export const sendNotification = async (
     method: 'POST',
     headers: myHeaders,
     body: raw,
-    redirect: 'follow',
   };
-  fetch('https://fcm.googleapis.com/fcm/send', requestOptions)
+  fetch(
+    'https://us-central1-seaglass-app.cloudfunctions.net/sendNotification',
+    requestOptions,
+  )
     .then(response => response.text())
     .then(result => console.log(result))
     .catch(error => console.log('error', error));
