@@ -92,6 +92,10 @@ export const sendNotification = async (
     headers: myHeaders,
     body: raw,
   };
+
+  // console.log('raw data', raw);
+  // console.log('requestOptions', requestOptions);
+
   fetch(
     'https://us-central1-seaglass-app.cloudfunctions.net/sendNotification',
     requestOptions,
