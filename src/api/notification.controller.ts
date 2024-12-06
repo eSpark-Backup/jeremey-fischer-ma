@@ -10,7 +10,7 @@ import { collections } from './constants';
  */
 export const getFcmsOfRequiredUser = async (
   receiverIds: string[],
-  postType: 'Audio' | 'Video' | 'Podcast' | 'Article' | 'FriendRequest',
+  postType: 'Audio' | 'Video' | 'Podcast' | 'Article' | 'FriendRequest' | 'Comments',
 ) => {
   try {
     const users: User[] = [];
@@ -46,6 +46,9 @@ export const getFcmsOfRequiredUser = async (
             }
             break;
           case 'FriendRequest':
+            users.push(userData);
+            break;
+          case 'Comments':
             users.push(userData);
             break;
           default:
@@ -93,7 +96,7 @@ export const sendNotification = async (
     body: raw,
   };
 
-  // console.log('raw data', raw);
+  console.log('raw data', raw);
   // console.log('requestOptions', requestOptions);
 
   fetch(
@@ -101,7 +104,7 @@ export const sendNotification = async (
     requestOptions,
   )
     .then(response => response.text())
-    .then(result => console.log(result))
+    .then(result => console.log("notification result", result))
     .catch(error => console.log('error', error));
 };
 

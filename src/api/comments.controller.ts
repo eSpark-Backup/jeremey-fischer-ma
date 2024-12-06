@@ -5,12 +5,13 @@ import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import { getGroupById } from './groups.controller';
+import { getFcmsOfRequiredUser, sendNotification } from './notification.controller';
 
 /**
  * Adding comment to specific Content
  * @param {comment}  Comment - `comment Object which user have added to content`
  */
-export const addComments = async (comment: any) => {
+export const addComments = async (comment: any, engagedUsers: (string)[]) => {
   try {
     const response = await db()
       .collection(collections.comments)
@@ -21,6 +22,16 @@ export const addComments = async (comment: any) => {
       .collection(collections.comments)
       .doc(response.id)
       .update({ id: response.id });
+
+    const fcmsTokens = await getFcmsOfRequiredUser(
+      engagedUsers,
+      'Comments',
+    );
+    sendNotification(
+      fcmsTokens,
+      `${comment?.userName} added a comment in a post where you're engaged`,
+      comment?.message ?? '',
+    );
     return { data: null, message: 'Comment added Successfully' };
   } catch (error) {
     console.log('error add comments', error);

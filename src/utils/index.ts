@@ -73,7 +73,7 @@ export const AddFriend = async (id: string, email: string) => {
   });
 };
 
-export const AddComments = async (comment: Comment) => {
+export const AddComments = async (comment: Comment, engagedUsers: string[]) => {
   const data = {
     contentID: comment.contentID,
     createdAt: comment.createdAt,
@@ -82,8 +82,9 @@ export const AddComments = async (comment: Comment) => {
     receiverId: comment.receiverId,
     replies: comment.replies,
     senderID: comment.senderID,
+    userName: comment.userName
   };
-  addComments(data).then(res => {
+  addComments(data, engagedUsers).then(res => {
     deleteCommentView(comment.contentID ?? '');
     getAllContentComments(comment?.contentID ?? '');
   });
@@ -116,14 +117,15 @@ export const getAllCommentReplies = async (commentID: string) => {
   }
 };
 
-export const AddReply = async (reply: Reply, contentID: string) => {
+export const AddReply = async (reply: Reply, contentID: string, engagedUsers: string[]) => {
   const data = {
     commentID: reply.commentID,
     createdAt: reply.createdAt,
     message: reply.message,
     senderID: reply.senderID,
+    userName: reply?.userName
   };
-  addReply(data).then(res => {
+  addReply(data, engagedUsers).then(res => {
     deleteCommentView(contentID);
     getAllCommentReplies(reply?.commentID ?? '');
   });

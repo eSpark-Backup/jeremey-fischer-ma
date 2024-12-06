@@ -2,11 +2,12 @@ import { firebase } from '@react-native-firebase/firestore';
 import { db } from '.';
 import { Comment, Reply } from '../types';
 import { collections } from './constants';
+import { getFcmsOfRequiredUser, sendNotification } from './notification.controller';
 /**
  * Adding comment to specific Content
  * @param {reply}  Reply - `reply Object which user have added to comment`
  */
-export const addReply = async (reply: any) => {
+export const addReply = async (reply: any, engagedUsers: (string)[]) => {
   try {
     const response = await db()
       .collection(collections.replies)
@@ -22,8 +23,18 @@ export const addReply = async (reply: any) => {
       .collection(collections.comments)
       .doc(reply.commentID)
       .update({
-        replies: firebase.firestore.FieldValue.arrayUnion(reply.id),
+        replies: firebase.firestore.FieldValue.arrayUnion(response.id),
       });
+
+    const fcmsTokens = await getFcmsOfRequiredUser(
+      engagedUsers,
+      'Comments',
+    );
+    sendNotification(
+      fcmsTokens,
+      `${reply?.userName} added a reply in a post where you're engaged`,
+      reply?.message ?? '',
+    );
     return { data: null, message: 'Reply added Successfully' };
   } catch (error) {
     console.log('error add reply', error);

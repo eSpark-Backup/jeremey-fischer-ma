@@ -136,7 +136,7 @@ export default function Details() {
   };
 
   const addComments = (addedComment: Comment) => {
-    AddComments(addedComment).then(res => {
+    AddComments(addedComment, getAllEngagedUsers()).then(res => {
       console.log('comment added', JSON.stringify(res));
     });
   };
@@ -201,6 +201,31 @@ export default function Details() {
     }
   }
 
+  
+  const getAllEngagedUsers = (): string[] => {
+    let users =  [contentDetails?.sender?.uid]
+    comments.forEach(val => {
+      if(!users.includes(val.senderID)) {
+        users.push(val.senderID)
+      }else if(!users.includes(val?.receiverId!)) {
+        users.push(val.receiverId ?? '')
+      }
+      val.replies?.forEach(rep => {
+        if(!users.includes(rep.senderID)) {
+          users.push(val.senderID)
+        }
+      })
+    })
+    if(users?.includes(userData?.get()?.uid)) {
+      let index = users?.findIndex(val => val == userData?.get()?.uid)
+      if(index != -1) {
+        users.splice(index, 1)
+      }
+    }
+
+    return users.filter(Boolean) as string[]
+  }
+
   const handleSendReply = async (commentID: string) => {
     const reply: Reply = {
       id: new Date().toISOString(),
@@ -219,7 +244,7 @@ export default function Details() {
     );
     setReplyingTo(null);
     setNewReply('');
-    if (newReply) AddReply(reply, contentDetails?.id!);
+    if (newReply) AddReply(reply, contentDetails?.id!, getAllEngagedUsers());
   };
 
   return (
@@ -358,8 +383,9 @@ export default function Details() {
                     borderRadius: 5,
                   }}
                 />
-                <View style={styles.sendButtonContainer}>
+                <View style={[styles.sendButtonContainer, {opacity: !newComment ? .7 : 1}]}>
                   <TouchableOpacity
+                    disabled={!newComment}
                     onPress={() => handleSendComment()}
                     style={styles.sendButton}>
                     <Icon
@@ -543,8 +569,9 @@ export default function Details() {
                           }}
                         />
                         <TouchableOpacity
+                          disabled={!newReply}
                           onPress={() => handleSendReply(comment.id ?? '')}
-                          style={styles.sendButton}>
+                          style={[styles.sendButton, {opacity: !newReply ? .7 : 1}]}>
                           <Icon
                             name="paper-plane-sharp"
                             color={colors.primary}
