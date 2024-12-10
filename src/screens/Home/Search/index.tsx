@@ -107,6 +107,7 @@ export default function Search() {
         key={index}
         contentData={item.content}
         senderData={item.sender}
+        recieverData={item.receiver}
       />
     );
   }

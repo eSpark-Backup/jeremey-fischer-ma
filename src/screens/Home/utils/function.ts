@@ -10,7 +10,6 @@ import { NativeScrollEvent } from 'react-native';
 export const getSearchedFriend = async (searchVal: string) => {
   store.loadFriends.set(true);
   searchUser(searchVal, store.userData.get()?.uid).then(res => {
-    console.log('get searched friend', JSON.stringify(res));
     store.friends.set(res.data);
     store.loadFriends.set(false);
   });
@@ -29,7 +28,6 @@ export const groupCreation = async (
   };
   store.screenLoading.set(true);
   createGroup(data).then(res => {
-    console.log('create Group', JSON.stringify(res));
     store.screenLoading.set(false);
     getGroups();
     navigation.navigate('CommunityTab', { title: 'Groups' });

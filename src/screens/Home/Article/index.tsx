@@ -31,11 +31,10 @@ export default function ArticleScreen() {
         key={index}
         contentData={item?.content}
         senderData={item?.sender}
+        recieverData={item?.receiver}
       />
     );
   }
-
-  console.log('articles user', articles[10]);
 
   return (
     <MyCanvas>

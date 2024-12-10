@@ -33,6 +33,7 @@ export default function PodcastScreen() {
         key={index}
         contentData={item?.content}
         senderData={item?.sender}
+        recieverData={item.receiver}
       />
     );
   }

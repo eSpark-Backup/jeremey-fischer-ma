@@ -50,11 +50,6 @@ function App(): JSX.Element {
   };
 
   messaging().onNotificationOpenedApp(async notification => {
-    console.log(
-      'notification',
-      notification.data,
-      `seaglass://community_nav/group_details?groudId=${notification.data?.groupId}`,
-    );
     if (userData.get() && notification.data?.contentId) {
       await getContentDetails(notification.data?.contentId! as string);
       await Linking.openURL(`seaglass://details`);
@@ -101,8 +96,6 @@ function App(): JSX.Element {
 
   useEffect(() => {
     const listener = ShareMenu.addNewShareListener(handleShare);
-    console.log('D on share');
-
     return () => {
       listener.remove();
     };
@@ -120,7 +113,6 @@ function App(): JSX.Element {
         ? item?.data[1].data
         : item?.data[0].data;
 
-    console.log('linkOpen', url, dataLoading.get(), appIntro);
     try {
       if (userData.get()) {
         const linkOpen = await Linking.openURL(

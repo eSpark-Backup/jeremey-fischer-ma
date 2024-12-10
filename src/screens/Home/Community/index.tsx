@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import React, { useState } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import FriendsList from './FriendsList';
@@ -25,7 +25,7 @@ const CommunityTab = () => {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(searchVal)) {
       getSearchedFriend(searchVal?.toLowerCase());
     } else {
-      console.log('Please enter a valid email');
+      Alert.alert('Please enter a valid email');
     }
   };
 

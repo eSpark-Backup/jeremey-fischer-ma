@@ -28,7 +28,6 @@ export const disableBackButton = () => {
 
 export const getUserData = async () => {
   const jsonValue = await AsyncStorage.getItem('@userData');
-  console.log('jsonValue', jsonValue);
   return jsonValue != null ? JSON.parse(jsonValue) : null;
 };
 export const getRefreshToken = async () => {
@@ -68,7 +67,6 @@ export const AddFriend = async (id: string, email: string) => {
   };
   store.loadFriends.set(true);
   sendRequest(data, store.userData.get()?.userName).then(res => {
-    console.log('request sent', JSON.stringify(res));
     getSearchedFriend(email);
   });
 };
@@ -85,7 +83,7 @@ export const AddComments = async (comment: Comment, engagedUsers: string[]) => {
     userName: comment.userName
   };
   addComments(data, engagedUsers).then(res => {
-    deleteCommentView(comment.contentID ?? '');
+    deleteCommentView(comment.contentID ?? '', comment.senderID);
     getAllContentComments(comment?.contentID ?? '');
   });
 };
@@ -118,15 +116,12 @@ export const getAllCommentReplies = async (commentID: string) => {
 };
 
 export const AddReply = async (reply: Reply, contentID: string, engagedUsers: string[]) => {
+  const { id, ...replyData } = reply;
   const data = {
-    commentID: reply.commentID,
-    createdAt: reply.createdAt,
-    message: reply.message,
-    senderID: reply.senderID,
-    userName: reply?.userName
+    ...replyData
   };
   addReply(data, engagedUsers).then(res => {
-    deleteCommentView(contentID);
+    deleteCommentView(contentID, replyData.senderID);
     getAllCommentReplies(reply?.commentID ?? '');
   });
 };
