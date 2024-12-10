@@ -25,6 +25,8 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
+        <string>seaglassScheme</string>
+        <string>seaglass</string>
 				<string>com.googleusercontent.apps.213956113520-hj63741f0i18frdogf2acevb83s85sb9</string>
 			</array>
 		</dict>
