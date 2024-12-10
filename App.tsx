@@ -120,13 +120,17 @@ function App(): JSX.Element {
         ? item?.data[1].data
         : item?.data[0].data;
 
-    console.log('linkOpen', url, userData.get());
-    if (userData.get()) {
-      const linkOpen = await Linking.openURL(
-        `seaglass://share?url=${encodeURIComponent(url)}`,
-      );
-    } else {
-      Alert.alert('Please Login to share content with friends!');
+    console.log('linkOpen', url, dataLoading.get(), appIntro);
+    try {
+      if (userData.get()) {
+        const linkOpen = await Linking.openURL(
+          `seaglass://share?url=${encodeURIComponent(url)}`,
+        );
+      } else {
+        Alert.alert('Please Login to share content with friends!');
+      }
+    } catch (error) {
+      console.log("handleShare error", error)
     }
   }, []);
 

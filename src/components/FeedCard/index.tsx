@@ -32,12 +32,11 @@ export default function FeedCard({
     <MyCard>
       <TouchableOpacity
         style={{ padding: 10 }}
-        onPress={() => {
+        onPress={async () => {
+          await getContentDetails(contentData?.id!);
           navigation.navigate('Details', {
             item: { contentData, senderData, groupId },
           });
-
-          getContentDetails(contentData?.id!);
         }}>
         {!contentData?.isViewed &&
           contentData?.senderId != store.userData.get()?.uid && (

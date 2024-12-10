@@ -1,7 +1,7 @@
 #import "AppDelegate.h"
 #import <Firebase.h>
 #import <RNShareMenu/ShareMenuManager.h>
-#import <RNGoogleSignin/RNGoogleSignin.h>
+#import <GoogleSignIn/GoogleSignIn.h>
 #import <React/RCTLinkingManager.h>
 
 #import <React/RCTBundleURLProvider.h>
@@ -47,7 +47,7 @@
             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
   return ([ShareMenuManager application:app openURL:url options:options] ||
-          [RNGoogleSignin application:app openURL:url options:options] ||
+          [GIDSignIn.sharedInstance handleURL:url]  ||
           [RCTLinkingManager application:app openURL:url options:options]);
 }
 

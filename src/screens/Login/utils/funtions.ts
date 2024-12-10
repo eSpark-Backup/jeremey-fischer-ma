@@ -75,7 +75,7 @@ export const _signIn = async (
     let fcmToken = await AsyncStorage.getItem('fcmToken');
     const userInfo = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(
-      userInfo.idToken,
+      userInfo?.data?.idToken ?? '',
     );
     const user_sign = auth().signInWithCredential(googleCredential);
     user_sign
