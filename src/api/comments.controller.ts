@@ -35,6 +35,10 @@ export const addComments = async (comment: any, engagedUsers: (string)[]) => {
       fcmsTokens,
       `${comment?.userName} added a comment in a post where you're engaged`,
       comment?.message ?? '',
+      {
+        type: 'NEWSFEED_NOTIFICATION',
+        contentId: comment?.contentID,
+      }
     );
     return { data: null, message: 'Comment added Successfully' };
   } catch (error) {

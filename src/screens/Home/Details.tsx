@@ -364,11 +364,11 @@ export default function Details() {
               />
               <View
                 style={{
-                  borderColor: colors.border,
-                  borderWidth: 1,
+                  // borderColor: colors.border,
+                  // borderWidth: 1,
                   marginTop: 8,
-                  borderRadius: 5,
-                  paddingRight: 10,
+                  // borderRadius: 5,
+                  // paddingRight: 10,
                 }}>
                 <TextInput
                   value={newComment}
@@ -378,15 +378,29 @@ export default function Details() {
                   placeholderTextColor="#fff"
                   style={{
                     color: colors.text,
-                    paddingTop: 10,
+                    // paddingTop: 10,
                     paddingLeft: 10,
                     paddingRight: 40,
-                    height: 'auto',
-                    backgroundColor: colors.background,
+                    minHeight: 80,
+                    // backgroundColor: colors.background,
+                    // backgroundColor: 'blue',
+                    textAlignVertical: 'top',
                     borderRadius: 5,
+                    borderColor: colors.border,
+                    borderWidth: 1,
                   }}
                 />
-                <View style={[styles.sendButtonContainer, {opacity: !newComment ? .7 : 1}]}>
+                <View
+                  style={[
+                    styles.sendButtonContainer,
+                    {
+                      opacity: !newComment ? 0.7 : 1,
+                      position: 'absolute',
+                      bottom: 0,
+                      width: undefined,
+                      right: 0,
+                    },
+                  ]}>
                   <TouchableOpacity
                     disabled={!newComment}
                     onPress={() => handleSendComment()}
@@ -442,6 +456,7 @@ export default function Details() {
                     <MyText
                       children={comment.message}
                       textStyle={{ flex: 1, marginTop: 4, fontSize: 13 }}
+                      lines={100}
                     />
 
                     <TouchableOpacity onPress={() => setReplyingTo(comment)}>
@@ -468,8 +483,14 @@ export default function Details() {
                         />
                         <View style={{ flex: 1 }}>
                           {comment?.replies?.map((reply, replyIndex) => {
-                            console.log("reply", Platform.OS, reply.message, reply.userName, reply.id);
-                            
+                            console.log(
+                              'reply',
+                              Platform.OS,
+                              reply.message,
+                              reply.userName,
+                              reply.id,
+                            );
+
                             return (
                               <View
                                 key={replyIndex}
@@ -486,7 +507,9 @@ export default function Details() {
                                       backgroundColor: colors.primary,
                                       marginRight: 10,
                                     }}
-                                    title={reply.userName.charAt(0).toUpperCase()}
+                                    title={reply.userName
+                                      .charAt(0)
+                                      .toUpperCase()}
                                   />
                                   <View style={{ flex: 1 }}>
                                     <View
@@ -508,7 +531,8 @@ export default function Details() {
                                                 typeof reply.createdAt ===
                                                   'object' &&
                                                   'seconds' in reply.createdAt
-                                                  ? reply.createdAt.seconds * 1000
+                                                  ? reply.createdAt.seconds *
+                                                      1000
                                                   : reply.createdAt,
                                               ).fromNow()
                                             : 'Unknown time'
@@ -531,7 +555,7 @@ export default function Details() {
                                   </View>
                                 </View>
                               </View>
-                            )
+                            );
                           })}
                         </View>
                       </View>
@@ -578,7 +602,10 @@ export default function Details() {
                         <TouchableOpacity
                           disabled={!newReply}
                           onPress={() => handleSendReply(comment.id ?? '')}
-                          style={[styles.sendButton, {opacity: !newReply ? .7 : 1}]}>
+                          style={[
+                            styles.sendButton,
+                            { opacity: !newReply ? 0.7 : 1 },
+                          ]}>
                           <Icon
                             name="paper-plane-sharp"
                             color={colors.primary}
