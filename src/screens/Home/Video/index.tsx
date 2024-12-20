@@ -35,7 +35,7 @@ export default function VideoScreen() {
         key={index}
         contentData={item?.content}
         senderData={item?.sender}
-        recieverData={item.receiver}
+        recieverData={item?.receiver}
       />
     );
   }

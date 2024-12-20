@@ -97,7 +97,9 @@ export default function Details() {
             }))
           : [],
       }));
-
+      mutableComments.sort(
+        (a: any, b: any) => b.createdAt?.seconds - a.createdAt?.seconds,
+      );
       setComments(mutableComments);
     }
   }, [contentCommentStore]);
@@ -134,8 +136,7 @@ export default function Details() {
   };
 
   const addComments = (addedComment: Comment) => {
-    AddComments(addedComment, getAllEngagedUsers()).then(res => {
-    });
+    AddComments(addedComment, getAllEngagedUsers()).then(res => {});
   };
 
   async function markAsSeen() {
@@ -194,60 +195,57 @@ export default function Details() {
     }
   }
 
-  
   const getAllEngagedUsers = (): string[] => {
-    let users =  [contentDetails?.sender?.uid]
+    let users = [contentDetails?.sender?.uid];
     comments.forEach(val => {
-      if(!users.includes(val.senderID)) {
-        users.push(val.senderID)
-      }else if(!users.includes(val?.receiverId!)) {
-        users.push(val.receiverId ?? '')
+      if (!users.includes(val.senderID)) {
+        users.push(val.senderID);
+      } else if (!users.includes(val?.receiverId!)) {
+        users.push(val.receiverId ?? '');
       }
       val.replies?.forEach(rep => {
-        if(!users.includes(rep.senderID)) {
-          users.push(val.senderID)
+        if (!users.includes(rep.senderID)) {
+          users.push(val.senderID);
         }
-      })
-    })
-    if(users?.includes(userData?.get()?.uid)) {
-      let index = users?.findIndex(val => val == userData?.get()?.uid)
-      if(index != -1) {
-        users.splice(index, 1)
+      });
+    });
+    if (users?.includes(userData?.get()?.uid)) {
+      let index = users?.findIndex(val => val == userData?.get()?.uid);
+      if (index != -1) {
+        users.splice(index, 1);
       }
     }
 
-    return users.filter(Boolean) as string[]
-  }
+    return users.filter(Boolean) as string[];
+  };
 
   const handleSendReply = async (commentID: string) => {
-   try {
-    const reply: Reply = {
-      id: new Date().toISOString(),
-      commentID: commentID,
-      parentId: commentID,
-      senderID: userData?.get()?.uid,
-      userName: userData?.get()?.userName,
-      message: newReply,
-      createdAt: new Date(),
-      contentID: contentDetails?.id ?? '',
-      receiverGroupId: item.groupId ? item.groupId : null,
-      receiverId: item.groupId
-        ? null
-        : getAllEngagedUsers()?.[0],
-    };
-    setComments(prevComments =>
-      prevComments?.map(comment =>
-        comment.id === commentID
-          ? { ...comment, replies: [...(comment.replies || []), reply] }
-          : comment,
-      ),
-    );
-    setReplyingTo(null);
-    setNewReply('');
-    if (newReply) AddReply(reply, contentDetails?.id!, getAllEngagedUsers());
-   } catch (error) {
-    console.log("handleSendReply error", error)
-   }
+    try {
+      const reply: Reply = {
+        id: new Date().toISOString(),
+        commentID: commentID,
+        parentId: commentID,
+        senderID: userData?.get()?.uid,
+        userName: userData?.get()?.userName,
+        message: newReply,
+        createdAt: new Date(),
+        contentID: contentDetails?.id ?? '',
+        receiverGroupId: item.groupId ? item.groupId : null,
+        receiverId: item.groupId ? null : getAllEngagedUsers()?.[0],
+      };
+      setComments(prevComments =>
+        prevComments?.map(comment =>
+          comment.id === commentID
+            ? { ...comment, replies: [...(comment.replies || []), reply] }
+            : comment,
+        ),
+      );
+      setReplyingTo(null);
+      setNewReply('');
+      if (newReply) AddReply(reply, contentDetails?.id!, getAllEngagedUsers());
+    } catch (error) {
+      console.log('handleSendReply error', error);
+    }
   };
 
   return (
@@ -459,7 +457,7 @@ export default function Details() {
                       lines={100}
                     />
 
-                    <TouchableOpacity onPress={() => setReplyingTo(comment)}>
+                    {/* <TouchableOpacity onPress={() => setReplyingTo(comment)}>
                       <MyText
                         children="Reply"
                         textStyle={{
@@ -468,9 +466,9 @@ export default function Details() {
                           fontSize: 12,
                         }}
                       />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
-                    {comment?.replies && comment?.replies?.length > 0 && (
+                    {/* {comment?.replies && comment?.replies?.length > 0 && (
                       <View style={{ flexDirection: 'row', marginTop: 10 }}>
                         <View
                           style={{
@@ -559,7 +557,7 @@ export default function Details() {
                           })}
                         </View>
                       </View>
-                    )}
+                    )} */}
 
                     {replyingTo?.id === comment.id && (
                       <View
