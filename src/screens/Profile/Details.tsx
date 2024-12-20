@@ -96,9 +96,6 @@ const SettingList = ({ data }: { data: ListProps[] }) => {
   };
 
   const setUserNotifications = () => {
-    console.log('list1', List[0].data[0]);
-    console.log('list2', List[0].data[1]);
-
     store.currentUserNotificationSetting.set({
       all: List[0].data[1].data[0].value,
       whenReceivedNewArticle: List[0].data[0].data[0].value,
@@ -112,23 +109,6 @@ const SettingList = ({ data }: { data: ListProps[] }) => {
     const storedData = await getUserData();
     let tempData = [...data];
     const NotificationSetting = storedData?.NotificationSetting;
-
-    console.log(
-      'whenReceivedNewArticle',
-      NotificationSetting?.whenReceivedNewArticle,
-    );
-    console.log(
-      'whenReceivedNewVideo',
-      NotificationSetting?.whenReceivedNewVideo,
-    );
-    console.log(
-      'whenReceivedNewMusic',
-      NotificationSetting?.whenReceivedNewMusic,
-    );
-    console.log(
-      'whenReceivedNewPodcast',
-      NotificationSetting?.whenReceivedNewPodcast,
-    );
 
     if (NotificationSetting?.all) {
       tempData[0].data[1].data[0].value = true;
@@ -193,7 +173,6 @@ const SettingList = ({ data }: { data: ListProps[] }) => {
     hideDatePicker();
   };
   const reMap = (item: CheckBoxData, index: number, index2: number) => {
-    console.log('item', item, index, index2, !item?.value);
     let tempData = [...data];
 
     if (index == 1 && index2 == 0 && !item.value == true) {

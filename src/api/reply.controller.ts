@@ -10,22 +10,15 @@ import { getFcmsOfRequiredUser, sendNotification } from './notification.controll
 export const addReply = async (reply: any, engagedUsers: (string)[]) => {
   try {
     const response = await db()
-      .collection(collections.replies)
+      .collection(collections.comments)
       .add({
         ...reply,
       });
     await db()
-      .collection(collections.replies)
+      .collection(collections.comments)
       .doc(response.id)
       .update({ id: response.id });
-
-    await db()
-      .collection(collections.comments)
-      .doc(reply.commentID)
-      .update({
-        replies: firebase.firestore.FieldValue.arrayUnion(response.id),
-      });
-
+    
     const fcmsTokens = await getFcmsOfRequiredUser(
       engagedUsers,
       'Comments',
@@ -51,8 +44,8 @@ export const getAllReplies = async (commentID: string) => {
   try {
     const comments: Reply[] = [];
     const response = await db()
-      .collection(collections.replies)
-      .where('commentID', '==', commentID)
+      .collection(collections.comments)
+      .where('parentId', '==', commentID)
       .get();
     if (response.empty) {
       return { data: null, message: 'Dont have any Replies' };

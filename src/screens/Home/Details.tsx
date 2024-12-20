@@ -9,6 +9,7 @@ import {
   Linking,
   ScrollView,
   ToastAndroid,
+  Platform,
 } from 'react-native';
 import {
   RouteProp,
@@ -36,7 +37,7 @@ import { Comment, Reply, RootStackParamList } from '../../types';
 import { CommentView } from '../../api/commentView.controller';
 import { getNewsFeedContent } from '../../api/content.controller';
 import { extractAllFeeds } from '../../utils/globalFunctions';
-import { getAllGroupInboxData } from '../../api/comments.controller';
+import { getAllUnviewedInboxUpdates } from '../../api/comments.controller';
 
 type DetailsScreenRouteProps = RouteProp<RootStackParamList, 'Details'>;
 
@@ -88,28 +89,28 @@ export default function Details() {
     if (contentComments) {
       const mutableComments = contentComments?.map(comment => ({
         ...comment,
-        userName: userData?.get()?.userName,
+        userName: comment?.userName,
         replies: comment.replies
           ? comment.replies.map(reply => ({
               ...reply,
-              userName: userData?.get()?.userName,
+              userName: reply?.userName,
             }))
           : [],
       }));
-
+      mutableComments.sort(
+        (a: any, b: any) => b.createdAt?.seconds - a.createdAt?.seconds,
+      );
       setComments(mutableComments);
     }
   }, [contentCommentStore]);
 
   async function getNewsFeed() {
     try {
-      console.log('getNewsFeedCalling');
       const data = await getNewsFeedContent(userData?.get()?.['uid'] ?? '');
       if (data?.data != null) {
         newsFeed.set(data?.data);
         extractAllFeeds(data?.data);
       } else {
-        console.log('message', data.message);
         newsFeed.set([]);
       }
     } catch (e) {
@@ -118,13 +119,12 @@ export default function Details() {
   }
 
   const handleSendComment = async () => {
-    console.log('Sent commmmmmm', JSON.stringify(contentDetails));
     const newCommentObject: Comment = {
       id: null,
       contentID: contentDetails?.id ?? '',
       senderID: userData?.get()?.uid,
       receiverGroupId: item.groupId ? item.groupId : null,
-      receiverId: item.groupId ? null : contentDetails?.senderId,
+      receiverId: item.groupId ? null : getAllEngagedUsers()?.[0],
       userName: userData?.get()?.userName,
       replies: [],
       message: newComment,
@@ -136,9 +136,7 @@ export default function Details() {
   };
 
   const addComments = (addedComment: Comment) => {
-    AddComments(addedComment, getAllEngagedUsers()).then(res => {
-      console.log('comment added', JSON.stringify(res));
-    });
+    AddComments(addedComment, getAllEngagedUsers()).then(res => {});
   };
 
   async function markAsSeen() {
@@ -149,7 +147,6 @@ export default function Details() {
 
   async function commentMarkAsSeen() {
     loader.set(true);
-    console.log('contentDetails' + JSON.stringify(contentDetails));
     await CommentView(contentDetails?.id!, userData?.get()?.uid!);
     getNewsFeed();
     getInboxGroupData();
@@ -157,14 +154,11 @@ export default function Details() {
 
   async function getInboxGroupData() {
     try {
-      console.log('getInboxGroupData');
-      const res = await getAllGroupInboxData(store.userData.get()?.uid);
+      const res = await getAllUnviewedInboxUpdates(store.userData.get()?.uid);
       loader.set(false);
-      console.log(
-        'store.groupContent' + JSON.stringify(store.groupContent.get()),
-      );
-      store.groupContent.set(res.data);
-      return res.data;
+      // @ts-ignore
+      store.groupContent.set(res?.data);
+      return res?.data;
     } catch (error) {
       loader.set(false);
       console.error(error);
@@ -201,50 +195,57 @@ export default function Details() {
     }
   }
 
-  
   const getAllEngagedUsers = (): string[] => {
-    let users =  [contentDetails?.sender?.uid]
+    let users = [contentDetails?.sender?.uid];
     comments.forEach(val => {
-      if(!users.includes(val.senderID)) {
-        users.push(val.senderID)
-      }else if(!users.includes(val?.receiverId!)) {
-        users.push(val.receiverId ?? '')
+      if (!users.includes(val.senderID)) {
+        users.push(val.senderID);
+      } else if (!users.includes(val?.receiverId!)) {
+        users.push(val.receiverId ?? '');
       }
       val.replies?.forEach(rep => {
-        if(!users.includes(rep.senderID)) {
-          users.push(val.senderID)
+        if (!users.includes(rep.senderID)) {
+          users.push(val.senderID);
         }
-      })
-    })
-    if(users?.includes(userData?.get()?.uid)) {
-      let index = users?.findIndex(val => val == userData?.get()?.uid)
-      if(index != -1) {
-        users.splice(index, 1)
+      });
+    });
+    if (users?.includes(userData?.get()?.uid)) {
+      let index = users?.findIndex(val => val == userData?.get()?.uid);
+      if (index != -1) {
+        users.splice(index, 1);
       }
     }
 
-    return users.filter(Boolean) as string[]
-  }
+    return users.filter(Boolean) as string[];
+  };
 
   const handleSendReply = async (commentID: string) => {
-    const reply: Reply = {
-      id: new Date().toISOString(),
-      commentID: commentID,
-      senderID: userData?.get()?.uid,
-      userName: userData?.get()?.userName,
-      message: newReply,
-      createdAt: new Date(),
-    };
-    setComments(prevComments =>
-      prevComments?.map(comment =>
-        comment.id === commentID
-          ? { ...comment, replies: [...(comment.replies || []), reply] }
-          : comment,
-      ),
-    );
-    setReplyingTo(null);
-    setNewReply('');
-    if (newReply) AddReply(reply, contentDetails?.id!, getAllEngagedUsers());
+    try {
+      const reply: Reply = {
+        id: new Date().toISOString(),
+        commentID: commentID,
+        parentId: commentID,
+        senderID: userData?.get()?.uid,
+        userName: userData?.get()?.userName,
+        message: newReply,
+        createdAt: new Date(),
+        contentID: contentDetails?.id ?? '',
+        receiverGroupId: item.groupId ? item.groupId : null,
+        receiverId: item.groupId ? null : getAllEngagedUsers()?.[0],
+      };
+      setComments(prevComments =>
+        prevComments?.map(comment =>
+          comment.id === commentID
+            ? { ...comment, replies: [...(comment.replies || []), reply] }
+            : comment,
+        ),
+      );
+      setReplyingTo(null);
+      setNewReply('');
+      if (newReply) AddReply(reply, contentDetails?.id!, getAllEngagedUsers());
+    } catch (error) {
+      console.log('handleSendReply error', error);
+    }
   };
 
   return (
@@ -361,11 +362,11 @@ export default function Details() {
               />
               <View
                 style={{
-                  borderColor: colors.border,
-                  borderWidth: 1,
+                  // borderColor: colors.border,
+                  // borderWidth: 1,
                   marginTop: 8,
-                  borderRadius: 5,
-                  paddingRight: 10,
+                  // borderRadius: 5,
+                  // paddingRight: 10,
                 }}>
                 <TextInput
                   value={newComment}
@@ -375,15 +376,29 @@ export default function Details() {
                   placeholderTextColor="#fff"
                   style={{
                     color: colors.text,
-                    paddingTop: 10,
+                    // paddingTop: 10,
                     paddingLeft: 10,
                     paddingRight: 40,
-                    height: 'auto',
-                    backgroundColor: colors.background,
+                    minHeight: 80,
+                    // backgroundColor: colors.background,
+                    // backgroundColor: 'blue',
+                    textAlignVertical: 'top',
                     borderRadius: 5,
+                    borderColor: colors.border,
+                    borderWidth: 1,
                   }}
                 />
-                <View style={[styles.sendButtonContainer, {opacity: !newComment ? .7 : 1}]}>
+                <View
+                  style={[
+                    styles.sendButtonContainer,
+                    {
+                      opacity: !newComment ? 0.7 : 1,
+                      position: 'absolute',
+                      bottom: 0,
+                      width: undefined,
+                      right: 0,
+                    },
+                  ]}>
                   <TouchableOpacity
                     disabled={!newComment}
                     onPress={() => handleSendComment()}
@@ -405,7 +420,7 @@ export default function Details() {
                     containerStyle={{
                       backgroundColor: colors.primary,
                     }}
-                    title={comment.userName.charAt(0)}
+                    title={comment.userName.charAt(0)?.toUpperCase()}
                   />
                   <View style={styles.commentContent}>
                     <View
@@ -439,9 +454,10 @@ export default function Details() {
                     <MyText
                       children={comment.message}
                       textStyle={{ flex: 1, marginTop: 4, fontSize: 13 }}
+                      lines={100}
                     />
 
-                    <TouchableOpacity onPress={() => setReplyingTo(comment)}>
+                    {/* <TouchableOpacity onPress={() => setReplyingTo(comment)}>
                       <MyText
                         children="Reply"
                         textStyle={{
@@ -450,9 +466,9 @@ export default function Details() {
                           fontSize: 12,
                         }}
                       />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
-                    {comment?.replies && comment?.replies?.length > 0 && (
+                    {/* {comment?.replies && comment?.replies?.length > 0 && (
                       <View style={{ flexDirection: 'row', marginTop: 10 }}>
                         <View
                           style={{
@@ -464,71 +480,84 @@ export default function Details() {
                           }}
                         />
                         <View style={{ flex: 1 }}>
-                          {comment?.replies?.map((reply, replyIndex) => (
-                            <View
-                              key={replyIndex}
-                              style={styles.replyContainer}>
+                          {comment?.replies?.map((reply, replyIndex) => {
+                            console.log(
+                              'reply',
+                              Platform.OS,
+                              reply.message,
+                              reply.userName,
+                              reply.id,
+                            );
+
+                            return (
                               <View
-                                style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                }}>
-                                <Avatar
-                                  rounded
-                                  size={30}
-                                  containerStyle={{
-                                    backgroundColor: colors.primary,
-                                    marginRight: 10,
-                                  }}
-                                  title={reply.userName.charAt(0).toUpperCase()}
-                                />
-                                <View style={{ flex: 1 }}>
-                                  <View
-                                    style={{
-                                      flexDirection: 'row',
-                                      alignItems: 'center',
-                                    }}>
+                                key={replyIndex}
+                                style={styles.replyContainer}>
+                                <View
+                                  style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                  }}>
+                                  <Avatar
+                                    rounded
+                                    size={30}
+                                    containerStyle={{
+                                      backgroundColor: colors.primary,
+                                      marginRight: 10,
+                                    }}
+                                    title={reply.userName
+                                      .charAt(0)
+                                      .toUpperCase()}
+                                  />
+                                  <View style={{ flex: 1 }}>
+                                    <View
+                                      style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                      }}>
+                                      <MyText
+                                        children={reply.userName}
+                                        textStyle={{
+                                          fontWeight: 'bold',
+                                          fontSize: 15,
+                                        }}
+                                      />
+                                      <MyText
+                                        children={
+                                          reply?.createdAt
+                                            ? moment(
+                                                typeof reply.createdAt ===
+                                                  'object' &&
+                                                  'seconds' in reply.createdAt
+                                                  ? reply.createdAt.seconds *
+                                                      1000
+                                                  : reply.createdAt,
+                                              ).fromNow()
+                                            : 'Unknown time'
+                                        }
+                                        textStyle={{
+                                          fontSize: 12,
+                                          color: colors.primary,
+                                          marginLeft: 10,
+                                        }}
+                                      />
+                                    </View>
                                     <MyText
-                                      children={reply.userName}
+                                      children={reply.message}
                                       textStyle={{
-                                        fontWeight: 'bold',
-                                        fontSize: 15,
-                                      }}
-                                    />
-                                    <MyText
-                                      children={
-                                        reply?.createdAt
-                                          ? moment(
-                                              typeof reply.createdAt ===
-                                                'object' &&
-                                                'seconds' in reply.createdAt
-                                                ? reply.createdAt.seconds * 1000
-                                                : reply.createdAt,
-                                            ).fromNow()
-                                          : 'Unknown time'
-                                      }
-                                      textStyle={{
-                                        fontSize: 12,
-                                        color: colors.primary,
-                                        marginLeft: 10,
+                                        fontSize: 13,
+                                        color: colors.text,
+                                        marginTop: 3,
                                       }}
                                     />
                                   </View>
-                                  <MyText
-                                    children={reply.message}
-                                    textStyle={{
-                                      fontSize: 13,
-                                      color: colors.text,
-                                      marginTop: 3,
-                                    }}
-                                  />
                                 </View>
                               </View>
-                            </View>
-                          ))}
+                            );
+                          })}
                         </View>
                       </View>
-                    )}
+                    )} */}
 
                     {replyingTo?.id === comment.id && (
                       <View
@@ -571,7 +600,10 @@ export default function Details() {
                         <TouchableOpacity
                           disabled={!newReply}
                           onPress={() => handleSendReply(comment.id ?? '')}
-                          style={[styles.sendButton, {opacity: !newReply ? .7 : 1}]}>
+                          style={[
+                            styles.sendButton,
+                            { opacity: !newReply ? 0.7 : 1 },
+                          ]}>
                           <Icon
                             name="paper-plane-sharp"
                             color={colors.primary}

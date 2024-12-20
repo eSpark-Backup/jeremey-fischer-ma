@@ -5,6 +5,7 @@ import {
   TextInput,
   ActivityIndicator,
   FlatList,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from '@rneui/themed';
@@ -57,7 +58,7 @@ export default function AddNewGroup() {
     if (groupName && selectedFriendIds.length > 0) {
       groupCreation(groupName, selectedFriendIds, navigation);
     } else {
-      console.log('Please type group name or select friend');
+      Alert.alert('Please type group name or select friend');
     }
   };
 

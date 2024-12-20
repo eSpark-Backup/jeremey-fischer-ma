@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, ActivityIndicator, FlatList } from 'react-native';
+import { StyleSheet, ActivityIndicator, FlatList, Platform } from 'react-native';
 import { useHookstate } from '@hookstate/core';
 
 import { colors } from '../theme';
@@ -8,7 +8,6 @@ import { NewsFeed, Content } from '../types';
 import store from '../store/store';
 import loaders from '../store/loaders';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import { getAllGroupInboxData } from '../api/comments.controller';
 
 export default function InboxScreen() {
   const [filteredContent, setFilteredContent] = useState<NewsFeed[]>([]);
@@ -27,7 +26,6 @@ export default function InboxScreen() {
 
   useFocusEffect(
     React.useCallback(() => {
-      console.log('Idhar arha hai');
       loaders.newsFeed.set(false);
       const filteredArticles = articles.filter(
         (item: NewsFeed) =>
@@ -66,6 +64,7 @@ export default function InboxScreen() {
         unreadComments={
           isNews ? item.content.isCommentViewed : item.isCommentViewed
         }
+        recieverData={(item as NewsFeed)?.receiver || undefined}
       />
     );
   }
@@ -87,9 +86,9 @@ export default function InboxScreen() {
           color={colors.primary}
           style={{ marginTop: 10 }}
         />
-      ) : combinedData.length > 0 && hasUnreadContent ? (
+      ) : groupContent?.length > 0 ? (
         <FlatList
-          data={combinedData}
+          data={groupContent ?? []}
           renderItem={renderFeed}
           ItemSeparatorComponent={() => <GapView />}
           ListFooterComponent={<GapView length={80} />}

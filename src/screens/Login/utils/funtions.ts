@@ -27,7 +27,6 @@ export const revokeUserToken = async (token: string) => {
           return response.text(); // Parse the response as text
         })
         .then(refreshToken => {
-          console.log('refreshToken', refreshToken);
         })
         .catch(error => {
           console.error('Fetch error:', error);
@@ -40,14 +39,9 @@ export const revokeUserToken = async (token: string) => {
 
 const getRefreshToken = (appleIDCredential: AppleRequestResponse) => {
   const authorizationCode = appleIDCredential.authorizationCode;
-  console.log(
-    'appleIDCredential.authorizationCode',
-    appleIDCredential.authorizationCode,
-  );
 
   const url = `https://us-central1-seaglass-app.cloudfunctions.net/getRefreshToken?code=${authorizationCode}`;
 
-  console.log('url', url);
 
   fetch(url)
     .then(response => {
@@ -57,7 +51,6 @@ const getRefreshToken = (appleIDCredential: AppleRequestResponse) => {
       return response.text(); // Parse the response as text
     })
     .then(refreshToken => {
-      console.log('refreshToken', refreshToken);
       storeRefreshToken(refreshToken);
     })
     .catch(error => {
@@ -80,7 +73,6 @@ export const _signIn = async (
     const user_sign = auth().signInWithCredential(googleCredential);
     user_sign
       .then(({ user }) => {
-        console.log('user sign', user);
         const data = <User>{
           email: user.email,
           userName: user.displayName,
@@ -125,11 +117,6 @@ export const _signInWithApp = async (
       requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
     });
 
-    console.log(
-      'appleAuthRequestResponse.identityToken Code',
-      appleAuthRequestResponse.authorizationCode,
-    );
-
     getRefreshToken(appleAuthRequestResponse);
 
     // Ensure Apple returned a user identityToken
@@ -144,7 +131,6 @@ export const _signInWithApp = async (
       nonce,
     );
 
-    console.log('Apple res', appleAuthRequestResponse);
 
     const displayName = appleAuthRequestResponse.fullName?.givenName;
 
@@ -152,8 +138,6 @@ export const _signInWithApp = async (
     const user_sign = auth().signInWithCredential(appleCredential);
     user_sign
       .then(({ user }) => {
-        console.log('user sign', user);
-        console.log('user provider', user.providerData[0]);
         const data = <User>{
           email: user.providerData[0].email,
           userName: displayName,

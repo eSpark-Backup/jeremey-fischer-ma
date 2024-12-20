@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Platform } from 'react-native';
 import { Avatar, Icon } from '@rneui/themed';
 
 import {
@@ -38,7 +38,7 @@ const CustomTabBar = ({
   const audios = useHookstate(store.audios).get();
   const podcasts = useHookstate(store.podcasts).get();
   const videos = useHookstate(store.videos).get();
-
+  
   useEffect(() => {
     getGroups();
     getFriendRequests();
@@ -157,8 +157,7 @@ const CustomTabBar = ({
               alignSelf: 'center',
               position: 'relative',
             }}>
-            {(articles.some(item => item?.content?.isCommentViewed === false) ||
-              isAnyGroupUpdate) && (
+            {(Boolean(groupsContent?.length)) && (
               <View
                 style={{
                   height: 10,

@@ -27,11 +27,12 @@ export const CommentView = async (contentId: string, userId: string) => {
   }
 };
 
-export const deleteCommentView = async (contentId: string) => {
+export const deleteCommentView = async (contentId: string, myUid: string) => {
   try {
     const querySnapshot = await db()
       .collection(collections.commentViews)
       .where('contentId', '==', contentId)
+      .where('userId', '!=', myUid)
       .get();
 
     if (querySnapshot.empty) {

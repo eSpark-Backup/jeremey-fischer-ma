@@ -120,8 +120,6 @@ export const removeToArchive = async (id: string) => {
       .doc(id)
       .delete();
 
-    console.log('removeToArchive response', response);
-
     return { data: null, message: 'Archive Removed Successfully' };
   } catch (error) {
     console.log('getAllArchive error', error);

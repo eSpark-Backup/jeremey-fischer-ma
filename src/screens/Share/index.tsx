@@ -94,7 +94,6 @@ export default function Share() {
       const linkPreviewData: any = await getLinkPreview(
         fixBrokenURL(route.params?.url) ?? '',
       );
-      console.log('xxxxx=====>>>', fetchedData?.title, linkPreviewData?.title);
 
       const obj: Content = {
         mediaType: type,
@@ -169,8 +168,6 @@ export default function Share() {
     <MyCanvas>
       <LinkPreview
         onPreviewDataFetched={(data: any) => {
-          console.log('data kia hai??', fixBrokenURL(route.params?.url));
-
           if (!fetchedData) {
             setFetchedData(data);
           }

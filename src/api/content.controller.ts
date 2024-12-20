@@ -254,49 +254,89 @@ export const getContentFromContentId = async (
       .collection(collections.contents)
       .doc(contentId)
       .get()
-      .then(async contentSnapshot => {
+      .then(async (contentSnapshot) => {
         const innerPromises: any[] = [];
         const contentData: any = contentSnapshot.data();
-        var sender: FirebaseFirestoreTypes.DocumentData | null = null;
+
+        let sender: FirebaseFirestoreTypes.DocumentData | null = null;
+        let receiver: FirebaseFirestoreTypes.DocumentData | null = null;
+
+        // Fetch Sender Data
         const senderPromise = db()
           .collection(collections.users)
           .where('uid', '==', contentData?.senderId ?? '')
           .get()
-          .then(senderSnap => {
-            senderSnap.forEach(res => (sender = res.data()));
+          .then((senderSnap) => {
+            senderSnap.forEach((res) => (sender = res.data()));
             contentData.sender = sender;
           });
 
+        // Check if Content is Viewed
         const postViewFetch = db()
           .collection(collections.postViews)
           .where('contentId', '==', contentSnapshot?.id)
           .where('userId', '==', uid)
           .get()
-          .then(PvSnap => {
-            if (!PvSnap.empty) {
-              contentData.isViewed = true;
-            } else {
-              contentData.isViewed = false;
-            }
+          .then((PvSnap) => {
+            contentData.isViewed = !PvSnap.empty;
           });
 
+        // Check if Content is Archived
         const archiveFetch = db()
           .collection(collections.archives)
           .where('contentId', '==', contentSnapshot?.id)
           .where('userId', '==', uid)
           .get()
-          .then(ArchiveSnap => {
-            if (!ArchiveSnap.empty) {
-              contentData.isArchived = true;
-            } else {
-              contentData.isArchived = false;
-            }
+          .then((ArchiveSnap) => {
+            contentData.isArchived = !ArchiveSnap.empty;
           });
+
         innerPromises.push(senderPromise, postViewFetch, archiveFetch);
-        await Promise.all([senderPromise, postViewFetch, archiveFetch]);
-        content = contentData;
+
+        const newsFeedPromise = db()
+        .collection(collections.newsFeed)
+        .where('contentId', '==', contentId)
+        .get()
+        .then(async (newsFeedSnap) => {
+          if (!newsFeedSnap.empty) {
+            // Process each newsFeed document
+            for (const doc of newsFeedSnap.docs) {
+              const newsFeedData = doc.data();
+              console.log("Fetched newsFeed data:", newsFeedData);
+
+              const receiverId = newsFeedData.receiverId;
+
+              // Check if receiverId exists
+              if (receiverId) {
+                // Fetch Receiver Data
+                await db()
+                  .collection(collections.users)
+                  .where('uid', '==', receiverId)
+                  .get()
+                  .then((receiverSnap) => {
+                    receiverSnap.forEach((res) => {
+                      receiver = res.data();
+                      console.log("Fetched receiver data:", receiver);
+                      contentData.receiver = receiver;
+                    });
+                  });
+              } else {
+                console.warn(`No receiverId found in newsFeed for contentId: ${contentId}`);
+                contentData.receiver = null;
+              }
+            }
+          } else {
+            console.warn(`No newsFeed document found for contentId: ${contentId}`);
+            contentData.receiver = null;
+          }
+        });
+        innerPromises.push(newsFeedPromise);
+
+        // Resolve all promises
         await Promise.all(innerPromises);
+        content = contentData;
       });
+
     return {
       data: content,
       message: 'Your Desired Contents',

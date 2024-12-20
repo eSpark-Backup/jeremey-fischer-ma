@@ -36,6 +36,8 @@ import { Slides } from './src/types';
 function App(): JSX.Element {
   const { userData, screenLoading, dataLoading } = useHookstate(store);
   const [appIntro, setAppIntro] = useState(true);
+  const [initialNoti, setInitialNoti] = useState<any>(null)
+
   let slider: AppIntroSlider | undefined;
 
   const setUserData = async () => {
@@ -50,11 +52,6 @@ function App(): JSX.Element {
   };
 
   messaging().onNotificationOpenedApp(async notification => {
-    console.log(
-      'notification',
-      notification.data,
-      `seaglass://community_nav/group_details?groudId=${notification.data?.groupId}`,
-    );
     if (userData.get() && notification.data?.contentId) {
       await getContentDetails(notification.data?.contentId! as string);
       await Linking.openURL(`seaglass://details`);
@@ -63,6 +60,35 @@ function App(): JSX.Element {
     }
   });
 
+  messaging()
+  .getInitialNotification()
+  .then(async (notification) => {
+    // console.log("getInitialNotification notification", notification?.data, userData.get());
+    if (userData.get() && notification?.data?.contentId) {
+      await getContentDetails(notification?.data?.contentId! as string);
+      await Linking.openURL(`seaglass://details`);
+    } else {
+      await Linking.openURL(`seaglass://`);
+    }
+
+    if(!userData.get() && notification?.data?.contentId) {
+      setInitialNoti(notification)
+    }
+  })
+
+  useEffect(() => {
+    initialNotiHanlder()
+  }, [userData.get()])
+
+  const initialNotiHanlder = async () => {
+    if (userData.get() && initialNoti?.data?.contentId) {
+      await getContentDetails(initialNoti?.data?.contentId! as string);
+      await Linking.openURL(`seaglass://details`);
+      setInitialNoti(null)
+    } else {
+      await Linking.openURL(`seaglass://`);
+    }
+  }
   const getToken = async () => {
     try {
       const fcmToken = await AsyncStorage.getItem('fcmToken');
@@ -101,8 +127,6 @@ function App(): JSX.Element {
 
   useEffect(() => {
     const listener = ShareMenu.addNewShareListener(handleShare);
-    console.log('D on share');
-
     return () => {
       listener.remove();
     };
@@ -120,7 +144,6 @@ function App(): JSX.Element {
         ? item?.data[1].data
         : item?.data[0].data;
 
-    console.log('linkOpen', url, dataLoading.get(), appIntro);
     try {
       if (userData.get()) {
         const linkOpen = await Linking.openURL(

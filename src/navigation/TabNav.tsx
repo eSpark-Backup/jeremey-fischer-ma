@@ -16,7 +16,7 @@ import store from '../store/store';
 import loaders from '../store/loaders';
 import { colors } from '../theme';
 import { extractAllFeeds } from '../utils/globalFunctions';
-import { getAllGroupInboxData } from '../api/comments.controller';
+import { getAllUnviewedInboxUpdates } from '../api/comments.controller';
 
 export default function TabNav() {
   const isFocused = useIsFocused();
@@ -51,7 +51,6 @@ export default function TabNav() {
         extractAllFeeds(data?.data);
         loadNewsFeed.set(false);
       } else {
-        console.log('message', data.message);
         newsFeed.set([]);
         loadNewsFeed.set(false);
       }
@@ -64,16 +63,16 @@ export default function TabNav() {
   async function getInboxGroupData() {
     store.loadGroups.set(true);
     try {
-      const res = await getAllGroupInboxData(store.userData.get()?.uid);
+      const res = await getAllUnviewedInboxUpdates(store.userData.get()?.uid);
       const ids = store.archiveIds.get();
-      const reduceArchived: any = res.data?.filter(
+      const reduceArchived: any = res?.data?.filter(
         item => item?.isArchived == false && !ids.includes(item?.id!),
       );
 
       ids.map(item => item);
       store.groupContent.set(reduceArchived);
       store.loadGroups.set(false);
-      return res.data;
+      return res?.data;
     } catch (error) {
       store.loadGroups.set(false);
       console.error(error);

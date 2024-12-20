@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, View, Image, Linking } from 'react-native';
+import { TouchableOpacity, View, Image, Linking, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar } from '@rneui/themed';
 
@@ -20,11 +20,13 @@ export default function FeedCard({
   senderData,
   groupId,
   unreadComments,
+  recieverData
 }: {
   contentData: Content;
   groupId?: string;
   senderData?: User;
   unreadComments?: boolean;
+  recieverData?: User
 }) {
   const navigation = useNavigation<NavProps['navigation']>();
 
@@ -35,7 +37,7 @@ export default function FeedCard({
         onPress={async () => {
           await getContentDetails(contentData?.id!);
           navigation.navigate('Details', {
-            item: { contentData, senderData, groupId },
+            item: { contentData, senderData, groupId, recieverData },
           });
         }}>
         {!contentData?.isViewed &&

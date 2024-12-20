@@ -23,7 +23,6 @@ export default function FriendsList() {
   const acceptFriendRequest = (id: string) => {
     loadRequests.set(true);
     acceptRequest(id, store.userData.get()?.userName).then(res => {
-      console.log('accept friend request', JSON.stringify(res));
       getFriends();
       getFriendRequests();
     });
@@ -32,7 +31,6 @@ export default function FriendsList() {
   const cancelFriendRequest = (id: string) => {
     loadRequests.set(true);
     rejectRequest(id, store.userData.get()?.userName).then(res => {
-      console.log('reject friend request', JSON.stringify(res));
       getFriendRequests();
     });
   };

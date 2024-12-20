@@ -9,7 +9,7 @@ export type RootStackParamList = {
     params?: undefined;
   };
   Details: {
-    item: { senderData?: User; contentData: Content; groupId?: string };
+    item: { senderData?: User; contentData: Content; groupId?: string, recieverData?: User };
   };
   Search: undefined;
   ProfileNav: undefined;
@@ -103,13 +103,18 @@ export type Comment = {
   createdAt?: Date | { seconds: number; nanoseconds: number };
   replies?: Reply[] | null;
 };
+
 export type Reply = {
   id: string;
   commentID: string;
+  parentId: string;
   senderID: string;
   userName: string;
   message: string;
   createdAt?: Date | { seconds: number; nanoseconds: number };
+  contentID?: string | null;
+  receiverGroupId?: string | null;
+  receiverId?: string | null;
 };
 
 // Content type

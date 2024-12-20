@@ -33,7 +33,6 @@ export default function App() {
         archiveData.set(res?.data);
         loader.set(false);
       } else {
-        console.log('message', res.message);
         archiveData.set([]);
         loader.set(false);
       }
@@ -48,7 +47,6 @@ export default function App() {
       loader.set(true);
       const res = await removeToArchive(id);
       getAllArchives();
-      console.log('message', res.message);
     } catch (e) {
       console.log('err at remove archiive', e);
       loader.set(false);
