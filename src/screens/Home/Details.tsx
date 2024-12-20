@@ -97,7 +97,9 @@ export default function Details() {
             }))
           : [],
       }));
-
+      mutableComments.sort(
+        (a: any, b: any) => b.createdAt?.seconds - a.createdAt?.seconds,
+      );
       setComments(mutableComments);
     }
   }, [contentCommentStore]);
@@ -134,8 +136,7 @@ export default function Details() {
   };
 
   const addComments = (addedComment: Comment) => {
-    AddComments(addedComment, getAllEngagedUsers()).then(res => {
-    });
+    AddComments(addedComment, getAllEngagedUsers()).then(res => {});
   };
 
   async function markAsSeen() {
@@ -194,60 +195,57 @@ export default function Details() {
     }
   }
 
-  
   const getAllEngagedUsers = (): string[] => {
-    let users =  [contentDetails?.sender?.uid]
+    let users = [contentDetails?.sender?.uid];
     comments.forEach(val => {
-      if(!users.includes(val.senderID)) {
-        users.push(val.senderID)
-      }else if(!users.includes(val?.receiverId!)) {
-        users.push(val.receiverId ?? '')
+      if (!users.includes(val.senderID)) {
+        users.push(val.senderID);
+      } else if (!users.includes(val?.receiverId!)) {
+        users.push(val.receiverId ?? '');
       }
       val.replies?.forEach(rep => {
-        if(!users.includes(rep.senderID)) {
-          users.push(val.senderID)
+        if (!users.includes(rep.senderID)) {
+          users.push(val.senderID);
         }
-      })
-    })
-    if(users?.includes(userData?.get()?.uid)) {
-      let index = users?.findIndex(val => val == userData?.get()?.uid)
-      if(index != -1) {
-        users.splice(index, 1)
+      });
+    });
+    if (users?.includes(userData?.get()?.uid)) {
+      let index = users?.findIndex(val => val == userData?.get()?.uid);
+      if (index != -1) {
+        users.splice(index, 1);
       }
     }
 
-    return users.filter(Boolean) as string[]
-  }
+    return users.filter(Boolean) as string[];
+  };
 
   const handleSendReply = async (commentID: string) => {
-   try {
-    const reply: Reply = {
-      id: new Date().toISOString(),
-      commentID: commentID,
-      parentId: commentID,
-      senderID: userData?.get()?.uid,
-      userName: userData?.get()?.userName,
-      message: newReply,
-      createdAt: new Date(),
-      contentID: contentDetails?.id ?? '',
-      receiverGroupId: item.groupId ? item.groupId : null,
-      receiverId: item.groupId
-        ? null
-        : getAllEngagedUsers()?.[0],
-    };
-    setComments(prevComments =>
-      prevComments?.map(comment =>
-        comment.id === commentID
-          ? { ...comment, replies: [...(comment.replies || []), reply] }
-          : comment,
-      ),
-    );
-    setReplyingTo(null);
-    setNewReply('');
-    if (newReply) AddReply(reply, contentDetails?.id!, getAllEngagedUsers());
-   } catch (error) {
-    console.log("handleSendReply error", error)
-   }
+    try {
+      const reply: Reply = {
+        id: new Date().toISOString(),
+        commentID: commentID,
+        parentId: commentID,
+        senderID: userData?.get()?.uid,
+        userName: userData?.get()?.userName,
+        message: newReply,
+        createdAt: new Date(),
+        contentID: contentDetails?.id ?? '',
+        receiverGroupId: item.groupId ? item.groupId : null,
+        receiverId: item.groupId ? null : getAllEngagedUsers()?.[0],
+      };
+      setComments(prevComments =>
+        prevComments?.map(comment =>
+          comment.id === commentID
+            ? { ...comment, replies: [...(comment.replies || []), reply] }
+            : comment,
+        ),
+      );
+      setReplyingTo(null);
+      setNewReply('');
+      if (newReply) AddReply(reply, contentDetails?.id!, getAllEngagedUsers());
+    } catch (error) {
+      console.log('handleSendReply error', error);
+    }
   };
 
   return (
@@ -386,7 +384,11 @@ export default function Details() {
                     borderRadius: 5,
                   }}
                 />
-                <View style={[styles.sendButtonContainer, {opacity: !newComment ? .7 : 1}]}>
+                <View
+                  style={[
+                    styles.sendButtonContainer,
+                    { opacity: !newComment ? 0.7 : 1 },
+                  ]}>
                   <TouchableOpacity
                     disabled={!newComment}
                     onPress={() => handleSendComment()}
@@ -444,7 +446,7 @@ export default function Details() {
                       textStyle={{ flex: 1, marginTop: 4, fontSize: 13 }}
                     />
 
-                    <TouchableOpacity onPress={() => setReplyingTo(comment)}>
+                    {/* <TouchableOpacity onPress={() => setReplyingTo(comment)}>
                       <MyText
                         children="Reply"
                         textStyle={{
@@ -453,9 +455,9 @@ export default function Details() {
                           fontSize: 12,
                         }}
                       />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
-                    {comment?.replies && comment?.replies?.length > 0 && (
+                    {/* {comment?.replies && comment?.replies?.length > 0 && (
                       <View style={{ flexDirection: 'row', marginTop: 10 }}>
                         <View
                           style={{
@@ -468,8 +470,14 @@ export default function Details() {
                         />
                         <View style={{ flex: 1 }}>
                           {comment?.replies?.map((reply, replyIndex) => {
-                            console.log("reply", Platform.OS, reply.message, reply.userName, reply.id);
-                            
+                            console.log(
+                              'reply',
+                              Platform.OS,
+                              reply.message,
+                              reply.userName,
+                              reply.id,
+                            );
+
                             return (
                               <View
                                 key={replyIndex}
@@ -486,7 +494,9 @@ export default function Details() {
                                       backgroundColor: colors.primary,
                                       marginRight: 10,
                                     }}
-                                    title={reply.userName.charAt(0).toUpperCase()}
+                                    title={reply.userName
+                                      .charAt(0)
+                                      .toUpperCase()}
                                   />
                                   <View style={{ flex: 1 }}>
                                     <View
@@ -508,7 +518,8 @@ export default function Details() {
                                                 typeof reply.createdAt ===
                                                   'object' &&
                                                   'seconds' in reply.createdAt
-                                                  ? reply.createdAt.seconds * 1000
+                                                  ? reply.createdAt.seconds *
+                                                      1000
                                                   : reply.createdAt,
                                               ).fromNow()
                                             : 'Unknown time'
@@ -531,11 +542,11 @@ export default function Details() {
                                   </View>
                                 </View>
                               </View>
-                            )
+                            );
                           })}
                         </View>
                       </View>
-                    )}
+                    )} */}
 
                     {replyingTo?.id === comment.id && (
                       <View
@@ -578,7 +589,10 @@ export default function Details() {
                         <TouchableOpacity
                           disabled={!newReply}
                           onPress={() => handleSendReply(comment.id ?? '')}
-                          style={[styles.sendButton, {opacity: !newReply ? .7 : 1}]}>
+                          style={[
+                            styles.sendButton,
+                            { opacity: !newReply ? 0.7 : 1 },
+                          ]}>
                           <Icon
                             name="paper-plane-sharp"
                             color={colors.primary}
