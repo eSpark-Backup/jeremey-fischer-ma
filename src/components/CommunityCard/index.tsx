@@ -77,20 +77,7 @@ export default function CommunityCard({
           containerStyle={{
             backgroundColor: colors.primary,
           }}
-          source={{
-            uri: image ? image : undefined,
-          }}
-          // avatarStyle={{ backgroundColor: 'pink' }}
-          titleStyle={
-            image
-              ? {}
-              : {
-                  // backgroundColor: 'teal',
-                  height: '100%',
-                  borderRadius: 100,
-                  textAlignVertical: 'center',
-                }
-          }
+          source={image ? { uri: image } : undefined}
           title={image ? undefined : name?.charAt(0)?.toUpperCase()}
         />
         <View style={styles.contentContainer}>
@@ -169,8 +156,14 @@ export default function CommunityCard({
                   rounded
                   containerStyle={{
                     left: 10 - 5 * index,
+                    backgroundColor: item?.image ? undefined : colors.primary,
                   }}
-                  source={{ uri: item?.image! }}
+                  source={item?.image ? { uri: item?.image! } : undefined}
+                  title={
+                    item?.image
+                      ? undefined
+                      : item.userName.charAt(0)?.toUpperCase()
+                  }
                 />
               ),
           )}

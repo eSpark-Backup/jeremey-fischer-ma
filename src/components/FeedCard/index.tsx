@@ -20,13 +20,13 @@ export default function FeedCard({
   senderData,
   groupId,
   unreadComments,
-  recieverData
+  recieverData,
 }: {
   contentData: Content;
   groupId?: string;
   senderData?: User;
   unreadComments?: boolean;
-  recieverData?: User
+  recieverData?: User;
 }) {
   const navigation = useNavigation<NavProps['navigation']>();
 
@@ -107,9 +107,9 @@ export default function FeedCard({
                         : colors.primary,
                     }}
                     rounded
-                    source={{
-                      uri: senderData?.image ? senderData?.image : undefined,
-                    }}
+                    source={
+                      senderData?.image ? { uri: senderData?.image } : undefined
+                    }
                     title={
                       senderData?.image
                         ? undefined
