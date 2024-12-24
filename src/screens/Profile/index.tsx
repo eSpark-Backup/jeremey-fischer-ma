@@ -91,9 +91,7 @@ export default function App() {
             borderColor: 'grey',
             backgroundColor: userData?.image ? undefined : colors.primary,
           }}
-          source={{
-            uri: userData?.image ? userData?.image : undefined,
-          }}
+          source={userData?.image ? { uri: userData?.image } : undefined}
           title={
             userData?.image
               ? undefined

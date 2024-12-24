@@ -123,8 +123,8 @@ export default function Details() {
       id: null,
       contentID: contentDetails?.id ?? '',
       senderID: userData?.get()?.uid,
-      receiverGroupId: item.groupId ? item.groupId : null,
-      receiverId: item.groupId ? null : getAllEngagedUsers()?.[0],
+      receiverGroupId: item?.groupId ? item.groupId : null,
+      receiverId: item?.groupId ? null : getAllEngagedUsers()?.[0],
       userName: userData?.get()?.userName,
       replies: [],
       message: newComment,
@@ -302,11 +302,11 @@ export default function Details() {
                   ? undefined
                   : colors.primary,
               }}
-              source={{
-                uri: contentDetails?.sender?.image
-                  ? contentDetails?.sender?.image
-                  : undefined,
-              }}
+              source={
+                contentDetails?.sender?.image
+                  ? { uri: contentDetails?.sender?.image }
+                  : undefined
+              }
               title={
                 contentDetails?.sender?.image
                   ? undefined
@@ -319,7 +319,9 @@ export default function Details() {
                 {contentDetails?.sender != null
                   ? contentDetails?.sender?.userName!
                   : 'Deleted User'}
-                :{contentDetails?.message != '' ? contentDetails?.message! : ''}
+                {contentDetails?.message != ''
+                  ? ': ' + contentDetails?.message!
+                  : ''}
               </MyText>
               <MyText
                 children={`Shared ${moment

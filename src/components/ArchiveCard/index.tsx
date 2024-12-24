@@ -36,39 +36,17 @@ export default function ArchiveCard({
                 ? undefined
                 : colors.primary,
             }}
-            source={{
-              uri: contentData.sender?.image
-                ? contentData.sender?.image
-                : undefined,
-            }}
+            source={
+              contentData.sender?.image
+                ? { uri: contentData.sender?.image }
+                : undefined
+            }
             title={
               contentData.sender?.image
                 ? undefined
                 : contentData.sender?.userName?.charAt(0)?.toUpperCase()
             }
           />
-          {/* <Avatar
-                rounded
-                containerStyle={{
-                  bottom: -10,
-                  left: 30,
-                  position: 'absolute',
-                }}
-                source={{
-                  uri: 'https://randomuser.me/api/portraits/men/21.jpg',
-                }}
-              />
-              <Avatar
-                rounded
-                containerStyle={{
-                  bottom: -10,
-                  left: 30 + 25,
-                  position: 'absolute',
-                }}
-                source={{
-                  uri: 'https://randomuser.me/api/portraits/men/29.jpg',
-                }}
-              /> */}
         </View>
         <View style={{ marginLeft: 10, flex: 1, justifyContent: 'center' }}>
           <MyText children={contentData?.title} />

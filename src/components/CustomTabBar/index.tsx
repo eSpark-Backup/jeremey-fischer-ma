@@ -38,7 +38,7 @@ const CustomTabBar = ({
   const audios = useHookstate(store.audios).get();
   const podcasts = useHookstate(store.podcasts).get();
   const videos = useHookstate(store.videos).get();
-  
+
   useEffect(() => {
     getGroups();
     getFriendRequests();
@@ -133,9 +133,7 @@ const CustomTabBar = ({
             height: 35,
             backgroundColor: userData?.image ? undefined : colors.primary,
           }}
-          source={{
-            uri: userData?.image ? userData?.image : undefined,
-          }}
+          source={userData?.image ? { uri: userData?.image } : undefined}
           title={
             userData?.image
               ? undefined
@@ -157,7 +155,7 @@ const CustomTabBar = ({
               alignSelf: 'center',
               position: 'relative',
             }}>
-            {(Boolean(groupsContent?.length)) && (
+            {Boolean(groupsContent?.length) && (
               <View
                 style={{
                   height: 10,
