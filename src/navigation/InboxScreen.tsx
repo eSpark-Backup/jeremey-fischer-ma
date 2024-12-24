@@ -94,7 +94,7 @@ export default function InboxScreen() {
           ListFooterComponent={<GapView length={80} />}
         />
       ) : (
-        <EmptyFeedLabel label="No Inbox Data Found" />
+        <EmptyFeedLabel label="No new comments" />
       )}
     </MyCanvas>
   );

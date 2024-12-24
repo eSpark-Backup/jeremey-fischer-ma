@@ -2032,7 +2032,7 @@ PODS:
   - React-Mapbuffer (0.73.2):
     - glog
     - React-debug
-  - react-native-pager-view (6.6.1):
+  - react-native-pager-view (6.5.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -2530,7 +2530,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 03644c063fc3621c9a4e8bf263a8150909129618
   React-logger: 66b168e2b2bee57bd8ce9e69f739d805732a5570
   React-Mapbuffer: f40e0ea0df8161075390332dfcb0496442c09371
-  react-native-pager-view: 5bb9d759d454f09b0789b336cb4605e999454ae5
+  react-native-pager-view: f3839deb306e7a5912319286ce717b8d47c0f232
   react-native-pure-jwt: c7aabf3e38f688922741774c5b37d1288fc64311
   react-native-safe-area-context: 4532f1a0c5d34a46b9324ccaaedcb5582a302b7d
   React-nativeconfig: 4dda3cbbdd1c4ce38450bb10b34b3e54120e4a91
@@ -2566,8 +2566,8 @@ SPEC CHECKSUMS:
   RNShareMenu: cb9dac548c8bf147d06f0bf07296ad51ea9f5fc3
   RNSVG: af3907ac5d4fa26a862b75a16d8f15bc74f2ceda
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
-  Yoga: e64aa65de36c0832d04e8c7bd614396c77a80047
+  Yoga: 13c8ef87792450193e117976337b8527b49e8c03
 
 PODFILE CHECKSUM: e66a86e97bf49f966bc0553048ee1c9b2d55c7de
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.15.2
