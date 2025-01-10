@@ -10,6 +10,7 @@ import {
   ScrollView,
   ToastAndroid,
   Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {
   RouteProp,
@@ -262,363 +263,366 @@ export default function Details() {
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
+          automaticallyAdjustKeyboardInsets={true}
           showsVerticalScrollIndicator={false}>
-          <View style={{ alignItems: 'center' }}>
+          <KeyboardAvoidingView behavior="position" style={{ flex: 1 }}>
+            <View style={{ alignItems: 'center' }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  padding: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <View style={{ alignSelf: 'flex-start', marginTop: 5 }}>
+                  <Image
+                    source={{ uri: contentDetails?.image }}
+                    style={{ width: 150, height: 100 }}
+                  />
+                </View>
+                <View
+                  style={{ marginLeft: 10, flex: 1, justifyContent: 'center' }}>
+                  <MyText children={contentDetails?.title} />
+                  <MyText
+                    children={contentDetails?.description}
+                    textStyle={{ marginTop: 10 }}
+                  />
+                </View>
+              </View>
+            </View>
+
             <View
               style={{
                 flexDirection: 'row',
-                padding: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
+                alignItems: 'flex-start',
+                marginTop: 10,
               }}>
-              <View style={{ alignSelf: 'flex-start', marginTop: 5 }}>
-                <Image
-                  source={{ uri: contentDetails?.image }}
-                  style={{ width: 150, height: 100 }}
-                />
-              </View>
-              <View
-                style={{ marginLeft: 10, flex: 1, justifyContent: 'center' }}>
-                <MyText children={contentDetails?.title} />
-                <MyText
-                  children={contentDetails?.description}
-                  textStyle={{ marginTop: 10 }}
-                />
-              </View>
-            </View>
-          </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'flex-start',
-              marginTop: 10,
-            }}>
-            <Avatar
-              rounded
-              size={40}
-              containerStyle={{
-                backgroundColor: contentDetails?.sender?.image
-                  ? undefined
-                  : colors.primary,
-              }}
-              source={
-                contentDetails?.sender?.image
-                  ? { uri: contentDetails?.sender?.image }
-                  : undefined
-              }
-              title={
-                contentDetails?.sender?.image
-                  ? undefined
-                  : contentDetails?.sender?.userName?.charAt(0)?.toUpperCase()
-              }
-            />
-            <GapView mode="horizontal" />
-            <View style={{ flex: 1, flexWrap: 'wrap' }}>
-              <MyText textStyle={{ flex: 1, flexWrap: 'wrap', fontSize: 15 }}>
-                {contentDetails?.sender != null
-                  ? contentDetails?.sender?.userName!
-                  : 'Deleted User'}
-                {contentDetails?.message != ''
-                  ? ': ' + contentDetails?.message!
-                  : ''}
-              </MyText>
-              <MyText
-                children={`Shared ${moment
-                  .unix(contentDetails?.createdAt?.seconds!)
-                  .fromNow()}`}
-                textStyle={{ fontSize: 12, color: '#808080' }}
+              <Avatar
+                rounded
+                size={40}
+                containerStyle={{
+                  backgroundColor: contentDetails?.sender?.image
+                    ? undefined
+                    : colors.primary,
+                }}
+                source={
+                  contentDetails?.sender?.image
+                    ? { uri: contentDetails?.sender?.image }
+                    : undefined
+                }
+                title={
+                  contentDetails?.sender?.image
+                    ? undefined
+                    : contentDetails?.sender?.userName?.charAt(0)?.toUpperCase()
+                }
               />
+              <GapView mode="horizontal" />
+              <View style={{ flex: 1, flexWrap: 'wrap' }}>
+                <MyText textStyle={{ flex: 1, flexWrap: 'wrap', fontSize: 15 }}>
+                  {contentDetails?.sender != null
+                    ? contentDetails?.sender?.userName!
+                    : 'Deleted User'}
+                  {contentDetails?.message != ''
+                    ? ': ' + contentDetails?.message!
+                    : ''}
+                </MyText>
+                <MyText
+                  children={`Shared ${moment
+                    .unix(contentDetails?.createdAt?.seconds!)
+                    .fromNow()}`}
+                  textStyle={{ fontSize: 12, color: '#808080' }}
+                />
+              </View>
             </View>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignSelf: 'center',
-              marginTop: 20,
-            }}>
-            <OutlineBtn
-              title="View"
-              onPress={async () => {
-                Linking.openURL(contentDetails.url!);
-              }}
-              btnStyle={{ width: 130 }}
-            />
-            <GapView mode="horizontal" />
-            {isArchived ? (
-              <MyText textStyle={{ opacity: 0.5 }} children={'Archived'} />
-            ) : (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignSelf: 'center',
+                marginTop: 20,
+              }}>
               <OutlineBtn
-                title="Move to Archive"
-                onPress={async () => await handleMoveToArchive()}
+                title="View"
+                onPress={async () => {
+                  Linking.openURL(contentDetails.url!);
+                }}
                 btnStyle={{ width: 130 }}
               />
-            )}
-          </View>
+              <GapView mode="horizontal" />
+              {isArchived ? (
+                <MyText textStyle={{ opacity: 0.5 }} children={'Archived'} />
+              ) : (
+                <OutlineBtn
+                  title="Move to Archive"
+                  onPress={async () => await handleMoveToArchive()}
+                  btnStyle={{ width: 130 }}
+                />
+              )}
+            </View>
 
-          {!isArchived && (
-            <View style={{ marginTop: 25, paddingHorizontal: 10 }}>
-              <MyText
-                children="Comments"
-                textStyle={{ fontSize: 18, fontWeight: 'bold' }}
-              />
-              <View
-                style={{
-                  // borderColor: colors.border,
-                  // borderWidth: 1,
-                  marginTop: 8,
-                  // borderRadius: 5,
-                  // paddingRight: 10,
-                }}>
-                <TextInput
-                  value={newComment}
-                  onChangeText={setNewComment}
-                  placeholder="Write a comment..."
-                  multiline
-                  placeholderTextColor="#fff"
-                  style={{
-                    color: colors.text,
-                    // paddingTop: 10,
-                    paddingLeft: 10,
-                    paddingRight: 40,
-                    minHeight: 80,
-                    // backgroundColor: colors.background,
-                    // backgroundColor: 'blue',
-                    textAlignVertical: 'top',
-                    borderRadius: 5,
-                    borderColor: colors.border,
-                    borderWidth: 1,
-                  }}
+            {!isArchived && (
+              <View style={{ marginTop: 25, paddingHorizontal: 10 }}>
+                <MyText
+                  children="Comments"
+                  textStyle={{ fontSize: 18, fontWeight: 'bold' }}
                 />
                 <View
-                  style={[
-                    styles.sendButtonContainer,
-                    {
-                      opacity: !newComment ? 0.7 : 1,
-                      position: 'absolute',
-                      bottom: 0,
-                      width: undefined,
-                      right: 0,
-                    },
-                  ]}>
-                  <TouchableOpacity
-                    disabled={!newComment}
-                    onPress={() => handleSendComment()}
-                    style={styles.sendButton}>
-                    <Icon
-                      name="paper-plane-sharp"
-                      color={colors.primary}
-                      size={18}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              {comments?.map((comment, index) => (
-                <View key={index} style={styles.commentContainer}>
-                  <Avatar
-                    rounded
-                    size={40}
-                    containerStyle={{
-                      backgroundColor: colors.primary,
+                  style={{
+                    // borderColor: colors.border,
+                    // borderWidth: 1,
+                    marginTop: 8,
+                    // borderRadius: 5,
+                    // paddingRight: 10,
+                  }}>
+                  <TextInput
+                    value={newComment}
+                    onChangeText={setNewComment}
+                    placeholder="Write a comment..."
+                    multiline
+                    placeholderTextColor="#fff"
+                    style={{
+                      color: colors.text,
+                      // paddingTop: 10,
+                      paddingLeft: 10,
+                      paddingRight: 40,
+                      minHeight: 80,
+                      // backgroundColor: colors.background,
+                      // backgroundColor: 'blue',
+                      textAlignVertical: 'top',
+                      borderRadius: 5,
+                      borderColor: colors.border,
+                      borderWidth: 1,
                     }}
-                    title={comment.userName.charAt(0)?.toUpperCase()}
                   />
-                  <View style={styles.commentContent}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}>
-                      <MyText
-                        children={comment.userName}
-                        textStyle={{ fontWeight: 'bold', fontSize: 15 }}
+                  <View
+                    style={[
+                      styles.sendButtonContainer,
+                      {
+                        opacity: !newComment ? 0.7 : 1,
+                        position: 'absolute',
+                        bottom: 0,
+                        width: undefined,
+                        right: 0,
+                      },
+                    ]}>
+                    <TouchableOpacity
+                      disabled={!newComment}
+                      onPress={() => handleSendComment()}
+                      style={styles.sendButton}>
+                      <Icon
+                        name="paper-plane-sharp"
+                        color={colors.primary}
+                        size={18}
                       />
-                      <MyText
-                        children={
-                          comment?.createdAt
-                            ? moment(
-                                typeof comment.createdAt === 'object' &&
-                                  'seconds' in comment.createdAt
-                                  ? comment.createdAt.seconds * 1000
-                                  : comment.createdAt,
-                              ).fromNow()
-                            : 'Unknown time'
-                        }
-                        textStyle={{
-                          marginTop: 5,
-                          textAlign: 'right',
-                          fontSize: 13,
-                        }}
-                      />
-                    </View>
-                    <MyText
-                      children={comment.message}
-                      textStyle={{ flex: 1, marginTop: 4, fontSize: 13 }}
-                      lines={100}
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {comments?.map((comment, index) => (
+                  <View key={index} style={styles.commentContainer}>
+                    <Avatar
+                      rounded
+                      size={40}
+                      containerStyle={{
+                        backgroundColor: colors.primary,
+                      }}
+                      title={comment.userName.charAt(0)?.toUpperCase()}
                     />
-
-                    {/* <TouchableOpacity onPress={() => setReplyingTo(comment)}>
-                      <MyText
-                        children="Reply"
-                        textStyle={{
-                          color: colors.primary,
-                          marginTop: 5,
-                          fontSize: 12,
-                        }}
-                      />
-                    </TouchableOpacity> */}
-
-                    {/* {comment?.replies && comment?.replies?.length > 0 && (
-                      <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                        <View
-                          style={{
-                            width: 1,
-                            backgroundColor: 'white',
-                            marginRight: 7,
-                            marginTop: 5,
-                            height: comment.replies.length * 60,
-                          }}
-                        />
-                        <View style={{ flex: 1 }}>
-                          {comment?.replies?.map((reply, replyIndex) => {
-                            console.log(
-                              'reply',
-                              Platform.OS,
-                              reply.message,
-                              reply.userName,
-                              reply.id,
-                            );
-
-                            return (
-                              <View
-                                key={replyIndex}
-                                style={styles.replyContainer}>
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                  }}>
-                                  <Avatar
-                                    rounded
-                                    size={30}
-                                    containerStyle={{
-                                      backgroundColor: colors.primary,
-                                      marginRight: 10,
-                                    }}
-                                    title={reply.userName
-                                      .charAt(0)
-                                      .toUpperCase()}
-                                  />
-                                  <View style={{ flex: 1 }}>
-                                    <View
-                                      style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                      }}>
-                                      <MyText
-                                        children={reply.userName}
-                                        textStyle={{
-                                          fontWeight: 'bold',
-                                          fontSize: 15,
-                                        }}
-                                      />
-                                      <MyText
-                                        children={
-                                          reply?.createdAt
-                                            ? moment(
-                                                typeof reply.createdAt ===
-                                                  'object' &&
-                                                  'seconds' in reply.createdAt
-                                                  ? reply.createdAt.seconds *
-                                                      1000
-                                                  : reply.createdAt,
-                                              ).fromNow()
-                                            : 'Unknown time'
-                                        }
-                                        textStyle={{
-                                          fontSize: 12,
-                                          color: colors.primary,
-                                          marginLeft: 10,
-                                        }}
-                                      />
-                                    </View>
-                                    <MyText
-                                      children={reply.message}
-                                      textStyle={{
-                                        fontSize: 13,
-                                        color: colors.text,
-                                        marginTop: 3,
-                                      }}
-                                    />
-                                  </View>
-                                </View>
-                              </View>
-                            );
-                          })}
-                        </View>
-                      </View>
-                    )} */}
-
-                    {replyingTo?.id === comment.id && (
+                    <View style={styles.commentContent}>
                       <View
                         style={{
                           flexDirection: 'row',
+                          justifyContent: 'space-between',
                           alignItems: 'center',
-                          marginTop: 8,
-                          padding: 10,
-                          borderRadius: 5,
                         }}>
-                        <Avatar
-                          rounded
-                          size={40}
-                          containerStyle={{
-                            backgroundColor: colors.primary,
-                          }}
-                          title={userData
-                            ?.get()
-                            ?.['userName']?.charAt(0)
-                            ?.toUpperCase()}
+                        <MyText
+                          children={comment.userName}
+                          textStyle={{ fontWeight: 'bold', fontSize: 15 }}
                         />
-                        <TextInput
-                          value={newReply}
-                          onChangeText={setNewReply}
-                          placeholder="Write your reply..."
-                          placeholderTextColor="#fff"
-                          multiline
-                          style={{
-                            flex: 1,
-                            color: colors.text,
-                            marginLeft: 10,
-                            padding: 10,
-                            borderColor: colors.border,
-                            borderWidth: 1,
-                            borderRadius: 5,
-                            height: 50,
-                            maxHeight: 100,
+                        <MyText
+                          children={
+                            comment?.createdAt
+                              ? moment(
+                                  typeof comment.createdAt === 'object' &&
+                                    'seconds' in comment.createdAt
+                                    ? comment.createdAt.seconds * 1000
+                                    : comment.createdAt,
+                                ).fromNow()
+                              : 'Unknown time'
+                          }
+                          textStyle={{
+                            marginTop: 5,
+                            textAlign: 'right',
+                            fontSize: 13,
                           }}
                         />
-                        <TouchableOpacity
-                          disabled={!newReply}
-                          onPress={() => handleSendReply(comment.id ?? '')}
-                          style={[
-                            styles.sendButton,
-                            { opacity: !newReply ? 0.7 : 1 },
-                          ]}>
-                          <Icon
-                            name="paper-plane-sharp"
-                            color={colors.primary}
-                            size={20}
-                          />
-                        </TouchableOpacity>
                       </View>
-                    )}
+                      <MyText
+                        children={comment.message}
+                        textStyle={{ flex: 1, marginTop: 4, fontSize: 13 }}
+                        lines={100}
+                      />
+
+                      {/* <TouchableOpacity onPress={() => setReplyingTo(comment)}>
+                        <MyText
+                          children="Reply"
+                          textStyle={{
+                            color: colors.primary,
+                            marginTop: 5,
+                            fontSize: 12,
+                          }}
+                        />
+                      </TouchableOpacity> */}
+
+                      {/* {comment?.replies && comment?.replies?.length > 0 && (
+                        <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                          <View
+                            style={{
+                              width: 1,
+                              backgroundColor: 'white',
+                              marginRight: 7,
+                              marginTop: 5,
+                              height: comment.replies.length * 60,
+                            }}
+                          />
+                          <View style={{ flex: 1 }}>
+                            {comment?.replies?.map((reply, replyIndex) => {
+                              console.log(
+                                'reply',
+                                Platform.OS,
+                                reply.message,
+                                reply.userName,
+                                reply.id,
+                              );
+
+                              return (
+                                <View
+                                  key={replyIndex}
+                                  style={styles.replyContainer}>
+                                  <View
+                                    style={{
+                                      flexDirection: 'row',
+                                      alignItems: 'center',
+                                    }}>
+                                    <Avatar
+                                      rounded
+                                      size={30}
+                                      containerStyle={{
+                                        backgroundColor: colors.primary,
+                                        marginRight: 10,
+                                      }}
+                                      title={reply.userName
+                                        .charAt(0)
+                                        .toUpperCase()}
+                                    />
+                                    <View style={{ flex: 1 }}>
+                                      <View
+                                        style={{
+                                          flexDirection: 'row',
+                                          alignItems: 'center',
+                                        }}>
+                                        <MyText
+                                          children={reply.userName}
+                                          textStyle={{
+                                            fontWeight: 'bold',
+                                            fontSize: 15,
+                                          }}
+                                        />
+                                        <MyText
+                                          children={
+                                            reply?.createdAt
+                                              ? moment(
+                                                  typeof reply.createdAt ===
+                                                    'object' &&
+                                                    'seconds' in reply.createdAt
+                                                    ? reply.createdAt.seconds *
+                                                        1000
+                                                    : reply.createdAt,
+                                                ).fromNow()
+                                              : 'Unknown time'
+                                          }
+                                          textStyle={{
+                                            fontSize: 12,
+                                            color: colors.primary,
+                                            marginLeft: 10,
+                                          }}
+                                        />
+                                      </View>
+                                      <MyText
+                                        children={reply.message}
+                                        textStyle={{
+                                          fontSize: 13,
+                                          color: colors.text,
+                                          marginTop: 3,
+                                        }}
+                                      />
+                                    </View>
+                                  </View>
+                                </View>
+                              );
+                            })}
+                          </View>
+                        </View>
+                      )} */}
+
+                      {replyingTo?.id === comment.id && (
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginTop: 8,
+                            padding: 10,
+                            borderRadius: 5,
+                          }}>
+                          <Avatar
+                            rounded
+                            size={40}
+                            containerStyle={{
+                              backgroundColor: colors.primary,
+                            }}
+                            title={userData
+                              ?.get()
+                              ?.['userName']?.charAt(0)
+                              ?.toUpperCase()}
+                          />
+                          <TextInput
+                            value={newReply}
+                            onChangeText={setNewReply}
+                            placeholder="Write your reply..."
+                            placeholderTextColor="#fff"
+                            multiline
+                            style={{
+                              flex: 1,
+                              color: colors.text,
+                              marginLeft: 10,
+                              padding: 10,
+                              borderColor: colors.border,
+                              borderWidth: 1,
+                              borderRadius: 5,
+                              height: 50,
+                              maxHeight: 100,
+                            }}
+                          />
+                          <TouchableOpacity
+                            disabled={!newReply}
+                            onPress={() => handleSendReply(comment.id ?? '')}
+                            style={[
+                              styles.sendButton,
+                              { opacity: !newReply ? 0.7 : 1 },
+                            ]}>
+                            <Icon
+                              name="paper-plane-sharp"
+                              color={colors.primary}
+                              size={20}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      )}
+                    </View>
                   </View>
-                </View>
-              ))}
-            </View>
-          )}
+                ))}
+              </View>
+            )}
+          </KeyboardAvoidingView>
         </ScrollView>
       )}
     </MyCanvas>
