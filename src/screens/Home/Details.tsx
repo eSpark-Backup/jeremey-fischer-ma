@@ -318,7 +318,7 @@ export default function Details() {
                 />
                 <GapView mode="horizontal" />
                 <View style={{ flex: 1, flexWrap: 'wrap' }}>
-                  <MyText textStyle={{ flex: 1, flexWrap: 'wrap', fontSize: 15 }}>
+                  <MyText isExpandable lines={3} textStyle={{ flex: 1, flexWrap: 'wrap', fontSize: 15, width: "100%" }}>
                     {contentDetails?.sender != null
                       ? contentDetails?.sender?.userName!
                       : 'Deleted User'}
