@@ -24,7 +24,7 @@ export default function MyText({
   };
 
   return (
-    <View style={{ width: "100%" }}>
+    <>
       <Text
         selectable={selectable}
         style={[styles.text, { color: colors.text }, textStyle]}
@@ -44,7 +44,7 @@ export default function MyText({
           </Text>
         </Pressable>
       )}
-    </View>
+    </>
   );
 }
 
